@@ -10,10 +10,7 @@
       theme: {
         extend: {
           colors: {
-            green: {
-              800: '#1a5c38',
-              900: '#0f3d24',
-            },
+            green: { 800: '#1a5c38', 900: '#0f3d24' },
             gold: '#d4a017',
             cream: '#f7f3ea',
           }
@@ -22,11 +19,17 @@
     }
   </script>
   <style>
-    .modal { display: none; }
-    .modal.active { display: flex; }
-    .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
-    .accordion.open .accordion-content { max-height: 800px; }
-    .accordion.open .chevron { transform: rotate(180deg); }
+    .sidebar { transform: translateX(-100%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); }
+    .sidebar.open { transform: translateX(0); }
+    .overlay { opacity: 0; visibility: hidden; transition: opacity 0.3s ease; }
+    .overlay.open { opacity: 1; visibility: visible; }
+    .dropdown-content { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+    .dropdown.open .dropdown-content { max-height: 2000px; }
+    .dropdown.open .chevron { transform: rotate(180deg); }
+    .course-card { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+    .course-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(15,61,36,0.15); }
+    .fade-in { animation: fadeIn 0.6s ease both; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body class="bg-cream text-gray-900 font-sans">
@@ -35,62 +38,63 @@
   <header class="bg-green-900 text-white sticky top-0 z-40 shadow-lg">
     <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
       <div class="flex items-center gap-4">
-        <!-- Rounded Logo -->
-        <div class="w-14 h-14 rounded-full bg-gold flex items-center justify-center text-green-900 font-bold text-xl shadow-md">
-          CVTC
-        </div>
+        <div class="w-14 h-14 rounded-full bg-gold flex items-center justify-center text-green-900 font-bold text-xl shadow-md">CVTC</div>
         <div>
           <h1 class="text-xl font-bold leading-tight">Cheptarit Vocational Training Center</h1>
           <p class="text-sm text-green-200">Nandi County, Kenya • TVETA Registered</p>
         </div>
       </div>
-      <nav class="hidden md:flex gap-2">
-        <button onclick="openModal('courses')" class="px-4 py-2 rounded-lg hover:bg-white/10 transition">Courses</button>
-        <button onclick="openModal('fees')" class="px-4 py-2 rounded-lg hover:bg-white/10 transition">Fees</button>
-        <button onclick="openModal('boarding')" class="px-4 py-2 rounded-lg hover:bg-white/10 transition">Boarding</button>
-        <button onclick="openModal('admissions')" class="px-4 py-2 rounded-lg hover:bg-white/10 transition">Admissions</button>
-        <button onclick="openModal('contact')" class="px-4 py-2 rounded-lg hover:bg-white/10 transition">Contact</button>
-      </nav>
+      <button onclick="toggleSidebar()" class="p-2 rounded-lg hover:bg-white/10 transition" aria-label="Open menu">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
     </div>
   </header>
 
+  <!-- AD BANNER (image 6) -->
+  <section class="max-w-6xl mx-auto px-4 pt-6">
+    <img src="https://i.ibb.co/qLKP2PZJ/Screenshot-2026-10-03-17-48-28-77.jpg" alt="Cheptarit VTC Courses Advertisement" class="w-full rounded-2xl shadow-lg object-cover max-h-80">
+  </section>
+
   <!-- HERO -->
   <section class="max-w-6xl mx-auto px-4 py-16">
-    <div class="bg-gradient-to-br from-green-800 to-green-900 text-white rounded-3xl p-10 md:p-16 shadow-2xl">
+    <div class="bg-gradient-to-br from-green-800 to-green-900 text-white rounded-3xl p-10 md:p-16 shadow-2xl fade-in">
       <h2 class="text-3xl md:text-5xl font-bold mb-6">Welcome to Cheptarit VTC</h2>
       <p class="text-lg md:text-xl text-green-100 max-w-3xl leading-relaxed">
         A public TVETA-registered vocational college in Nandi County offering artisan and trade test courses in Motor Vehicle Mechanics, Masonry, Electrical Installation, Carpentry, Plumbing, Welding, Fashion Design, Hairdressing, Food & Beverage, and more.
       </p>
       <div class="mt-10 flex flex-wrap gap-4">
-        <button onclick="openModal('courses')" class="bg-gold text-green-900 font-semibold px-8 py-3 rounded-xl hover:bg-yellow-400 transition shadow-lg">
-          View Courses
-        </button>
-        <button onclick="openModal('fees')" class="bg-white/20 text-white font-semibold px-8 py-3 rounded-xl hover:bg-white/30 transition">
-          View Fees
-        </button>
-        <button onclick="openModal('admissions')" class="bg-white/20 text-white font-semibold px-8 py-3 rounded-xl hover:bg-white/30 transition">
-          Admissions
-        </button>
+        <button onclick="openDropdown('courses')" class="bg-gold text-green-900 font-semibold px-8 py-3 rounded-xl hover:bg-yellow-400 transition shadow-lg">View Courses</button>
+        <button onclick="openDropdown('fees')" class="bg-white/20 text-white font-semibold px-8 py-3 rounded-xl hover:bg-white/30 transition">View Fees</button>
+        <button onclick="openDropdown('admissions')" class="bg-white/20 text-white font-semibold px-8 py-3 rounded-xl hover:bg-white/30 transition">Admissions</button>
       </div>
     </div>
   </section>
 
   <!-- QUICK INFO CARDS -->
   <section class="max-w-6xl mx-auto px-4 pb-20 grid md:grid-cols-3 gap-6">
-    <div class="bg-white rounded-2xl p-8 shadow-lg border border-green-100">
+    <div class="bg-white rounded-2xl p-8 shadow-lg border border-green-100 course-card">
       <div class="text-4xl mb-4">🎓</div>
       <h3 class="text-xl font-bold text-green-800 mb-2">Subsidized Fees</h3>
       <p class="text-gray-600">The school is sponsored. Fees are highly subsidized for both boarding and day scholars.</p>
     </div>
-    <div class="bg-white rounded-2xl p-8 shadow-lg border border-green-100">
+    <div class="bg-white rounded-2xl p-8 shadow-lg border border-green-100 course-card">
       <div class="text-4xl mb-4">🛠️</div>
       <h3 class="text-xl font-bold text-green-800 mb-2">Practical Skills</h3>
       <p class="text-gray-600">Hands-on training in high-demand trades that prepare students for immediate employment.</p>
     </div>
-    <div class="bg-white rounded-2xl p-8 shadow-lg border border-green-100">
+    <div class="bg-white rounded-2xl p-8 shadow-lg border border-green-100 course-card">
       <div class="text-4xl mb-4">📍</div>
       <h3 class="text-xl font-bold text-green-800 mb-2">Easy Location</h3>
-      <p class="text-gray-600">Located on Eldoret-Kapsabet Road, next to the DO’s office, Mosoriot, Nandi County.</p>
+      <p class="text-gray-600">Located on Eldoret-Kapsabet Road, next to the DO's office, Mosoriot, Nandi County.</p>
+    </div>
+  </section>
+
+  <!-- GRADUATION PHOTOS (images 7 & 8) -->
+  <section class="max-w-6xl mx-auto px-4 pb-20">
+    <h2 class="text-3xl font-bold text-green-800 mb-8 text-center">Graduation Ceremonies</h2>
+    <div class="grid md:grid-cols-2 gap-6">
+      <img src="https://i.ibb.co/Q37VqRnt/FB-IMG-17910388378768951.jpg" alt="Graduation Ceremony" class="w-full rounded-2xl shadow-lg object-cover h-80">
+      <img src="https://i.ibb.co/rRT0M3mf/FB-IMG-17910388326692727.jpg" alt="Graduation Ceremony" class="w-full rounded-2xl shadow-lg object-cover h-80">
     </div>
   </section>
 
@@ -100,290 +104,296 @@
     <p class="mt-2 text-sm">All rights reserved. Developed by Darius Kipchoge</p>
   </footer>
 
-  <!-- ===================== MODALS ===================== -->
-
-  <!-- COURSES MODAL -->
-  <div id="modal-courses" class="modal fixed inset-0 bg-black/60 z-50 items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-      <div class="sticky top-0 bg-green-900 text-white px-8 py-5 flex justify-between items-center rounded-t-3xl">
-        <h2 class="text-2xl font-bold">Our Courses</h2>
-        <button onclick="closeModal('courses')" class="text-3xl leading-none hover:text-gold">&times;</button>
-      </div>
-      <div class="p-8 space-y-4">
-
-        <!-- Accordion Items -->
-        <div class="accordion border border-gray-200 rounded-xl overflow-hidden">
-          <button class="w-full flex justify-between items-center px-6 py-4 bg-cream font-semibold text-green-800 hover:bg-green-50" onclick="toggleAccordion(this)">
-            Hairdressing <span class="chevron transition-transform">▼</span>
-          </button>
-          <div class="accordion-content bg-white">
-            <ol class="list-decimal list-inside px-8 py-5 space-y-2 text-gray-700">
-              <li>Towels — small, medium, big (two)</li>
-              <li>Assorted combs (three)</li>
-              <li>Apron</li>
-              <li>Pins, styling pins</li>
-              <li>Pedicure and manicure set</li>
-              <li>Plastic chair, white</li>
-              <li>One hair dummy</li>
-              <li>Clips</li>
-              <li>Makeup kit</li>
-              <li>Nail polish, assorted</li>
-              <li>Top coat and base coat</li>
-            </ol>
-          </div>
-        </div>
-
-        <div class="accordion border border-gray-200 rounded-xl overflow-hidden">
-          <button class="w-full flex justify-between items-center px-6 py-4 bg-cream font-semibold text-green-800 hover:bg-green-50" onclick="toggleAccordion(this)">
-            Masonry / Plumbing / Carpentry & Joinery <span class="chevron transition-transform">▼</span>
-          </button>
-          <div class="accordion-content bg-white">
-            <ol class="list-decimal list-inside px-8 py-5 space-y-2 text-gray-700">
-              <li>Tri-square, six inch — carpentry and joinery</li>
-              <li>Jua kali safety boots</li>
-              <li>Tape measure</li>
-              <li>Trowel and plumb bob — masonry</li>
-              <li>Pipe wrench, small — plumbing</li>
-              <li>Hacksaw — plumbing</li>
-            </ol>
-          </div>
-        </div>
-
-        <div class="accordion border border-gray-200 rounded-xl overflow-hidden">
-          <button class="w-full flex justify-between items-center px-6 py-4 bg-cream font-semibold text-green-800 hover:bg-green-50" onclick="toggleAccordion(this)">
-            Electrical Installation / Motor Vehicle Mechanics / Metal Work <span class="chevron transition-transform">▼</span>
-          </button>
-          <div class="accordion-content bg-white">
-            <ol class="list-decimal list-inside px-8 py-5 space-y-2 text-gray-700">
-              <li>Two screwdrivers, flat and star — electrical installation</li>
-              <li>Pliers — motor vehicle mechanics</li>
-              <li>Phase tester — electrical installation</li>
-              <li>Goggles — welding</li>
-              <li>Two engineering files, rough and smooth — welding</li>
-              <li>Tri-square — welding</li>
-              <li>Tape measure</li>
-            </ol>
-          </div>
-        </div>
-
-        <div class="accordion border border-gray-200 rounded-xl overflow-hidden">
-          <button class="w-full flex justify-between items-center px-6 py-4 bg-cream font-semibold text-green-800 hover:bg-green-50" onclick="toggleAccordion(this)">
-            Fashion and Design / Dressmaking <span class="chevron transition-transform">▼</span>
-          </button>
-          <div class="accordion-content bg-white">
-            <ol class="list-decimal list-inside px-8 py-5 space-y-2 text-gray-700">
-              <li>A pair of scissors, number nine</li>
-              <li>Tape measure</li>
-              <li>One dozen needles, round, number fourteen</li>
-              <li>Hand needle</li>
-              <li>Bobbin and bobbin case</li>
-              <li>Dressmaking pins</li>
-            </ol>
-          </div>
-        </div>
-
-        <div class="accordion border border-gray-200 rounded-xl overflow-hidden">
-          <button class="w-full flex justify-between items-center px-6 py-4 bg-cream font-semibold text-green-800 hover:bg-green-50" onclick="toggleAccordion(this)">
-            Food and Beverage <span class="chevron transition-transform">▼</span>
-          </button>
-          <div class="accordion-content bg-white">
-            <ol class="list-decimal list-inside px-8 py-5 space-y-2 text-gray-700">
-              <li>Chef jacket, white</li>
-              <li>Apron, white</li>
-              <li>Black windbreaker</li>
-              <li>Black skirt — girls / Black trousers — boys</li>
-              <li>Chef hat</li>
-              <li>Chef knife</li>
-              <li>Kitchen cloth, towel, tea towel, dishcloth</li>
-              <li>Two buckets with lids (20 litres)</li>
-              <li>White long sleeve shirt or blouse</li>
-              <li>Glass cloth, waiter's cloth, bow tie</li>
-              <li>Slip cloth (damask red), linen red, scarf (red neck)</li>
-            </ol>
-          </div>
-        </div>
-
-        <div class="accordion border border-gray-200 rounded-xl overflow-hidden">
-          <button class="w-full flex justify-between items-center px-6 py-4 bg-cream font-semibold text-green-800 hover:bg-green-50" onclick="toggleAccordion(this)">
-            Welding and Fabrication <span class="chevron transition-transform">▼</span>
-          </button>
-          <div class="accordion-content bg-white">
-            <ol class="list-decimal list-inside px-8 py-5 space-y-2 text-gray-700">
-              <li>Goggles</li>
-              <li>Two engineering files, rough and smooth</li>
-              <li>Tri-square</li>
-              <li>Tape measure</li>
-            </ol>
-          </div>
-        </div>
-
-        <div class="mt-8 p-6 bg-yellow-50 border-l-4 border-gold rounded-r-xl">
-          <h4 class="font-bold text-green-800 mb-3">General Requirements — All Courses</h4>
-          <ol class="list-decimal list-inside space-y-1 text-sm text-gray-700">
-            <li>Oxford geometrical set, HB and 2H pencils, two spring files</li>
-            <li>30 cm ruler, T-square, set squares (60° & 45°)</li>
-            <li>Drawing book + exercise books (A3 size)</li>
-            <li>Rim of photocopy paper</li>
-            <li>Five exercise books, 120 pages, A4</li>
-            <li>Enough biro pens and pencils</li>
-            <li>Printed games kit — KSh 1,000</li>
-            <li>Printed dust coat — KSh 1,100 or overall — KSh 1,300 (at school)</li>
-          </ol>
-        </div>
-      </div>
+  <!-- SLIDING SIDEBAR -->
+  <div id="sidebar-overlay" class="overlay fixed inset-0 bg-black/50 z-50" onclick="toggleSidebar()"></div>
+  <aside id="sidebar" class="sidebar fixed top-0 left-0 h-full w-80 bg-white z-50 shadow-2xl overflow-y-auto">
+    <div class="bg-green-900 text-white px-6 py-5 flex justify-between items-center">
+      <h2 class="text-xl font-bold">Menu</h2>
+      <button onclick="toggleSidebar()" class="text-3xl leading-none hover:text-gold">&times;</button>
     </div>
-  </div>
+    <div class="p-4 space-y-2">
 
-  <!-- FEES MODAL -->
-  <div id="modal-fees" class="modal fixed inset-0 bg-black/60 z-50 items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-      <div class="sticky top-0 bg-green-900 text-white px-8 py-5 flex justify-between items-center rounded-t-3xl">
-        <h2 class="text-2xl font-bold">Fees Structure</h2>
-        <button onclick="closeModal('fees')" class="text-3xl leading-none hover:text-gold">&times;</button>
-      </div>
-      <div class="p-8">
-        <div class="bg-yellow-50 border-l-4 border-gold p-4 rounded-r-xl mb-8">
-          <p class="font-medium text-green-900">Fees are subsidized — the school is sponsored.</p>
+      <!-- ADMISSIONS -->
+      <div class="dropdown border border-gray-200 rounded-xl overflow-hidden">
+        <button class="w-full flex justify-between items-center px-5 py-4 bg-cream font-semibold text-green-800 hover:bg-green-50" onclick="toggleDropdown(this)">
+          Admissions <span class="chevron transition-transform">▼</span>
+        </button>
+        <div class="dropdown-content bg-white px-5 py-4 space-y-4 text-gray-700">
+          <p>Download the required forms below:</p>
+          <a href="#" class="block text-center bg-green-800 text-white font-semibold py-3 rounded-xl hover:bg-green-900 transition">Download Admission Form</a>
+          <a href="#" class="block text-center bg-green-700 text-white font-semibold py-3 rounded-xl hover:bg-green-800 transition">Download Medical Form</a>
         </div>
+      </div>
 
-        <div class="grid md:grid-cols-2 gap-6">
-          <div class="bg-cream rounded-2xl p-6 text-center border border-green-100">
-            <h3 class="text-xl font-bold text-green-800 mb-2">Boarding</h3>
-            <p class="text-3xl font-bold text-green-900 mb-4">KSh 32,000 <span class="text-base font-normal text-gray-500">/ year</span></p>
-            <ul class="text-left space-y-2 text-gray-700">
-              <li class="flex justify-between"><span>Term 1</span> <strong>KSh 18,500</strong></li>
-              <li class="flex justify-between"><span>Term 2</span> <strong>KSh 10,500</strong></li>
-              <li class="flex justify-between"><span>Term 3</span> <strong>KSh 3,000</strong></li>
-            </ul>
+      <!-- COURSES -->
+      <div class="dropdown border border-gray-200 rounded-xl overflow-hidden">
+        <button class="w-full flex justify-between items-center px-5 py-4 bg-cream font-semibold text-green-800 hover:bg-green-50" onclick="toggleDropdown(this)">
+          Courses <span class="chevron transition-transform">▼</span>
+        </button>
+        <div class="dropdown-content bg-white px-5 py-4 space-y-3">
+
+          <!-- Computer / IT -->
+          <div class="course-card border border-gray-200 rounded-xl overflow-hidden">
+            <button class="w-full flex items-center gap-4 px-4 py-3 bg-cream hover:bg-green-50 text-left" onclick="toggleDropdown(this)">
+              <img src="https://i.ibb.co/fYTW90GG/FB-IMG-17898479198166045.jpg" alt="Computer/IT" class="w-14 h-14 rounded-lg object-cover">
+              <span class="font-semibold text-green-800 flex-1">Computer / IT</span>
+              <span class="chevron transition-transform text-sm">▼</span>
+            </button>
+            <div class="dropdown-content px-4 py-4 space-y-4 text-sm text-gray-700">
+              <p>Hands-on training in computer applications, software, and IT fundamentals for the modern workplace.</p>
+              <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg">
+                <p class="font-bold text-green-800 mb-1">Entry Requirements</p>
+                <p>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
+              </div>
+              <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg">
+                <p class="font-bold text-green-800 mb-1">Admission Requirements</p>
+                <p>Completed admission form, medical form, and payment of Term 1 fees.</p>
+              </div>
+            </div>
           </div>
 
-          <div class="bg-cream rounded-2xl p-6 text-center border border-green-100">
-            <h3 class="text-xl font-bold text-green-800 mb-2">Day Scholar</h3>
-            <p class="text-3xl font-bold text-green-900 mb-4">KSh 24,000 <span class="text-base font-normal text-gray-500">/ year</span></p>
-            <ul class="text-left space-y-2 text-gray-700">
-              <li class="flex justify-between"><span>Term 1</span> <strong>KSh 16,000</strong></li>
-              <li class="flex justify-between"><span>Term 2</span> <strong>KSh 6,500</strong></li>
-              <li class="flex justify-between"><span>Term 3</span> <strong>KSh 1,000</strong></li>
-            </ul>
+          <!-- Fashion and Design -->
+          <div class="course-card border border-gray-200 rounded-xl overflow-hidden">
+            <button class="w-full flex items-center gap-4 px-4 py-3 bg-cream hover:bg-green-50 text-left" onclick="toggleDropdown(this)">
+              <img src="https://i.ibb.co/ZpjdJkKF/FB-IMG-17898480060796655.jpg" alt="Fashion and Design" class="w-14 h-14 rounded-lg object-cover">
+              <span class="font-semibold text-green-800 flex-1">Fashion and Design / Dressmaking</span>
+              <span class="chevron transition-transform text-sm">▼</span>
+            </button>
+            <div class="dropdown-content px-4 py-4 space-y-4 text-sm text-gray-700">
+              <p>Learn garment construction, pattern drafting, and design skills for a career in fashion.</p>
+              <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg">
+                <p class="font-bold text-green-800 mb-1">Entry Requirements</p>
+                <p>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
+              </div>
+              <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg">
+                <p class="font-bold text-green-800 mb-1">Admission Requirements</p>
+                <p>Completed admission form, medical form, and payment of Term 1 fees.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Masonry -->
+          <div class="course-card border border-gray-200 rounded-xl overflow-hidden">
+            <button class="w-full flex items-center gap-4 px-4 py-3 bg-cream hover:bg-green-50 text-left" onclick="toggleDropdown(this)">
+              <img src="https://i.ibb.co/QFTwMsY0/FB-IMG-17898480247074386.jpg" alt="Masonry" class="w-14 h-14 rounded-lg object-cover">
+              <span class="font-semibold text-green-800 flex-1">Masonry</span>
+              <span class="chevron transition-transform text-sm">▼</span>
+            </button>
+            <div class="dropdown-content px-4 py-4 space-y-4 text-sm text-gray-700">
+              <p>Build skills in bricklaying, plastering, and construction techniques for the building industry.</p>
+              <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg">
+                <p class="font-bold text-green-800 mb-1">Entry Requirements</p>
+                <p>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
+              </div>
+              <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg">
+                <p class="font-bold text-green-800 mb-1">Admission Requirements</p>
+                <p>Completed admission form, medical form, and payment of Term 1 fees.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sports -->
+          <div class="course-card border border-gray-200 rounded-xl overflow-hidden">
+            <button class="w-full flex items-center gap-4 px-4 py-3 bg-cream hover:bg-green-50 text-left" onclick="toggleDropdown(this)">
+              <img src="https://i.ibb.co/LKsLrcc/FB-IMG-17898481683500763.jpg" alt="Sports" class="w-14 h-14 rounded-lg object-cover">
+              <span class="font-semibold text-green-800 flex-1">Sports</span>
+              <span class="chevron transition-transform text-sm">▼</span>
+            </button>
+            <div class="dropdown-content px-4 py-4 space-y-4 text-sm text-gray-700">
+              <p>Develop athletic skills, coaching fundamentals, and sports management for a career in sports.</p>
+              <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg">
+                <p class="font-bold text-green-800 mb-1">Entry Requirements</p>
+                <p>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
+              </div>
+              <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg">
+                <p class="font-bold text-green-800 mb-1">Admission Requirements</p>
+                <p>Completed admission form, medical form, and payment of Term 1 fees.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sports (second) -->
+          <div class="course-card border border-gray-200 rounded-xl overflow-hidden">
+            <button class="w-full flex items-center gap-4 px-4 py-3 bg-cream hover:bg-green-50 text-left" onclick="toggleDropdown(this)">
+              <img src="https://i.ibb.co/7tpgb7Zh/FB-IMG-17898481565676636.jpg" alt="Sports" class="w-14 h-14 rounded-lg object-cover">
+              <span class="font-semibold text-green-800 flex-1">Sports (Advanced)</span>
+              <span class="chevron transition-transform text-sm">▼</span>
+            </button>
+            <div class="dropdown-content px-4 py-4 space-y-4 text-sm text-gray-700">
+              <p>Advanced training in sports performance, fitness, and specialized athletic development.</p>
+              <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg">
+                <p class="font-bold text-green-800 mb-1">Entry Requirements</p>
+                <p>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
+              </div>
+              <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg">
+                <p class="font-bold text-green-800 mb-1">Admission Requirements</p>
+                <p>Completed admission form, medical form, and payment of Term 1 fees.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hairdressing -->
+          <div class="course-card border border-gray-200 rounded-xl overflow-hidden">
+            <button class="w-full flex justify-between items-center px-4 py-3 bg-cream hover:bg-green-50 text-left" onclick="toggleDropdown(this)">
+              <span class="font-semibold text-green-800">Hairdressing</span>
+              <span class="chevron transition-transform text-sm">▼</span>
+            </button>
+            <div class="dropdown-content px-4 py-4 space-y-4 text-sm text-gray-700">
+              <p>Master cutting, styling, coloring, and salon management for a career in hairdressing.</p>
+              <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg">
+                <p class="font-bold text-green-800 mb-1">Entry Requirements</p>
+                <p>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
+              </div>
+              <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg">
+                <p class="font-bold text-green-800 mb-1">Admission Requirements</p>
+                <p>Completed admission form, medical form, and payment of Term 1 fees.</p>
+              </div>
+            </div>
+          </div>
+
+                    <!-- Masonry / Plumbing / Carpentry & Joinery -->
+          <div class="course-card border border-gray-200 rounded-xl overflow-hidden">
+            <button class="w-full flex justify-between items-center px-4 py-3 bg-cream hover:bg-green-50 text-left" onclick="toggleDropdown(this)">
+              <span class="font-semibold text-green-800">Masonry / Plumbing / Carpentry &amp; Joinery</span>
+              <span class="chevron transition-transform text-sm">▼</span>
+            </button>
+            <div class="dropdown-content px-4 py-4 space-y-4 text-sm text-gray-700">
+              <p>Build skills in bricklaying, plastering, pipe installation, and woodworking for construction and maintenance careers.</p>
+              <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg">
+                <p class="font-bold text-green-800 mb-1">Entry Requirements</p>
+                <p>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
+              </div>
+              <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg">
+                <p class="font-bold text-green-800 mb-1">Admission Requirements</p>
+                <p>Completed admission form, medical form, and payment of Term 1 fees.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Motor Vehicle Mechanics -->
+          <div class="course-card border border-gray-200 rounded-xl overflow-hidden">
+            <button class="w-full flex justify-between items-center px-4 py-3 bg-cream hover:bg-green-50 text-left" onclick="toggleDropdown(this)">
+              <span class="font-semibold text-green-800">Motor Vehicle Mechanics</span>
+              <span class="chevron transition-transform text-sm">▼</span>
+            </button>
+            <div class="dropdown-content px-4 py-4 space-y-4 text-sm text-gray-700">
+              <p>Diagnose, repair, and maintain vehicles — engines, brakes, electrical systems, and diagnostics.</p>
+              <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg">
+                <p class="font-bold text-green-800 mb-1">Entry Requirements</p>
+                <p>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
+              </div>
+              <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg">
+                <p class="font-bold text-green-800 mb-1">Admission Requirements</p>
+                <p>Completed admission form, medical form, and payment of Term 1 fees.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Electrical Installation -->
+          <div class="course-card border border-gray-200 rounded-xl overflow-hidden">
+            <button class="w-full flex justify-between items-center px-4 py-3 bg-cream hover:bg-green-50 text-left" onclick="toggleDropdown(this)">
+              <span class="font-semibold text-green-800">Electrical Installation</span>
+              <span class="chevron transition-transform text-sm">▼</span>
+            </button>
+            <div class="dropdown-content px-4 py-4 space-y-4 text-sm text-gray-700">
+              <p>Learn wiring, circuit installation, and electrical maintenance for homes and commercial buildings.</p>
+              <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg">
+                <p class="font-bold text-green-800 mb-1">Entry Requirements</p>
+                <p>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
+              </div>
+              <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg">
+                <p class="font-bold text-green-800 mb-1">Admission Requirements</p>
+                <p>Completed admission form, medical form, and payment of Term 1 fees.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Welding & Fabrication -->
+          <div class="course-card border border-gray-200 rounded-xl overflow-hidden">
+            <button class="w-full flex justify-between items-center px-4 py-3 bg-cream hover:bg-green-50 text-left" onclick="toggleDropdown(this)">
+              <span class="font-semibold text-green-800">Welding &amp; Fabrication</span>
+              <span class="chevron transition-transform text-sm">▼</span>
+            </button>
+            <div class="dropdown-content px-4 py-4 space-y-4 text-sm text-gray-700">
+              <p>Master arc welding, gas welding, and metal fabrication for construction and manufacturing.</p>
+              <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg">
+                <p class="font-bold text-green-800 mb-1">Entry Requirements</p>
+                <p>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
+              </div>
+              <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg">
+                <p class="font-bold text-green-800 mb-1">Admission Requirements</p>
+                <p>Completed admission form, medical form, and payment of Term 1 fees.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Food & Beverage -->
+          <div class="course-card border border-gray-200 rounded-xl overflow-hidden">
+            <button class="w-full flex justify-between items-center px-4 py-3 bg-cream hover:bg-green-50 text-left" onclick="toggleDropdown(this)">
+              <span class="font-semibold text-green-800">Food &amp; Beverage</span>
+              <span class="chevron transition-transform text-sm">▼</span>
+            </button>
+            <div class="dropdown-content px-4 py-4 space-y-4 text-sm text-gray-700">
+              <p>Train in food preparation, hygiene, and hospitality service for hotels and restaurants.</p>
+              <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg">
+                <p class="font-bold text-green-800 mb-1">Entry Requirements</p>
+                <p>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
+              </div>
+              <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg">
+                <p class="font-bold text-green-800 mb-1">Admission Requirements</p>
+                <p>Completed admission form, medical form, and payment of Term 1 fees.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- FEES -->
+      <div class="dropdown border border-gray-200 rounded-xl overflow-hidden">
+        <button class="w-full flex justify-between items-center px-5 py-4 bg-cream font-semibold text-green-800 hover:bg-green-50" onclick="toggleDropdown(this)">
+          Fees <span class="chevron transition-transform">▼</span>
+        </button>
+        <div class="dropdown-content bg-white px-5 py-4 space-y-4 text-gray-700">
+          <p>Fees are highly subsidized since the school is sponsored. Exact amounts vary by course and boarding status — contact the office for the current fee structure.</p>
+          <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg text-sm">
+            <p class="font-bold text-green-800 mb-1">Payment</p>
+            <p>Term 1 fees are required at admission. Payment plans may be available — ask the bursar.</p>
           </div>
         </div>
-
-        <a href="#" class="mt-8 block text-center bg-green-800 text-white font-semibold py-3 rounded-xl hover:bg-green-900 transition">
-          Download Fee Structure (PDF)
-        </a>
       </div>
+
+      <!-- CONTACT -->
+      <div class="dropdown border border-gray-200 rounded-xl overflow-hidden">
+        <button class="w-full flex justify-between items-center px-5 py-4 bg-cream font-semibold text-green-800 hover:bg-green-50" onclick="toggleDropdown(this)">
+          Contact <span class="chevron transition-transform">▼</span>
+        </button>
+        <div class="dropdown-content bg-white px-5 py-4 space-y-3 text-gray-700 text-sm">
+          <p><span class="font-bold text-green-800">Location:</span> Eldoret-Kapsabet Road, next to the DO's office, Mosoriot, Nandi County.</p>
+          <p><span class="font-bold text-green-800">Registration:</span> TVETA Registered</p>
+        </div>
+      </div>
+
     </div>
-  </div>
+  </aside>
 
-  <!-- BOARDING REQUIREMENTS MODAL -->
-  <div id="modal-boarding" class="modal fixed inset-0 bg-black/60 z-50 items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-      <div class="sticky top-0 bg-green-900 text-white px-8 py-5 flex justify-between items-center rounded-t-3xl">
-        <h2 class="text-2xl font-bold">Boarding Requirements</h2>
-        <button onclick="closeModal('boarding')" class="text-3xl leading-none hover:text-gold">&times;</button>
-      </div>
-      <div class="p-8">
-        <ol class="list-decimal list-inside space-y-3 text-gray-700">
-          <li>Mattress — 3 inch</li>
-          <li>Two blankets</li>
-          <li>Two bedsheets</li>
-          <li>A towel</li>
-          <li>A bed cover</li>
-          <li>A plate</li>
-          <li>A cup</li>
-          <li>A spoon</li>
-          <li>Two basins</li>
-          <li>A black pair of shoes</li>
-          <li>Washing soap</li>
-          <li>Bathing soap</li>
-          <li>Tissue paper — 3 rolls per term</li>
-          <li>Toothpaste</li>
-          <li>Toothbrush</li>
-          <li>White rubber shoes for games</li>
-        </ol>
-      </div>
-    </div>
-  </div>
-
-  <!-- ADMISSIONS MODAL -->
-  <div id="modal-admissions" class="modal fixed inset-0 bg-black/60 z-50 items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl">
-      <div class="bg-green-900 text-white px-8 py-5 flex justify-between items-center rounded-t-3xl">
-        <h2 class="text-2xl font-bold">Admissions</h2>
-        <button onclick="closeModal('admissions')" class="text-3xl leading-none hover:text-gold">&times;</button>
-      </div>
-      <div class="p-8 space-y-6">
-        <p class="text-gray-600">Download the required forms below:</p>
-        <a href="#" class="block text-center bg-green-800 text-white font-semibold py-3 rounded-xl hover:bg-green-900 transition">
-          Download Admission Form
-        </a>
-        <a href="#" class="block text-center bg-green-700 text-white font-semibold py-3 rounded-xl hover:bg-green-800 transition">
-          Download Medical Form
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <!-- CONTACT MODAL -->
-  <div id="modal-contact" class="modal fixed inset-0 bg-black/60 z-50 items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl">
-      <div class="bg-green-900 text-white px-8 py-5 flex justify-between items-center rounded-t-3xl">
-        <h2 class="text-2xl font-bold">Contact Us</h2>
-        <button onclick="closeModal('contact')" class="text-3xl leading-none hover:text-gold">&times;</button>
-      </div>
-      <div class="p-8 space-y-5 text-gray-700">
-        <div>
-          <p class="font-semibold text-green-800">Phone</p>
-          <p>0718 008 580</p>
-        </div>
-        <div>
-          <p class="font-semibold text-green-800">Email</p>
-          <p>cheptaritpoly65@yahoo.com</p>
-        </div>
-        <div>
-          <p class="font-semibold text-green-800">Address</p>
-          <p>P.O. Box 45 – 30304, Mosoriot, Nandi County</p>
-        </div>
-        <div>
-          <p class="font-semibold text-green-800">Location</p>
-          <p>Eldoret-Kapsabet Road, next to the DO’s office, Plot 216</p>
-        </div>
-        <div class="pt-4 border-t">
-          <p class="font-semibold text-green-800 mb-2">KCB Foundation Scholarship</p>
-          <a href="https://foundation.kcbgroup.com" target="_blank" class="text-blue-600 hover:underline">
-            foundation.kcbgroup.com
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- JAVASCRIPT -->
   <script>
-    function openModal(id) {
-      document.getElementById('modal-' + id).classList.add('active');
-      document.body.style.overflow = 'hidden';
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('sidebar-overlay').classList.toggle('open');
     }
-
-    function closeModal(id) {
-      document.getElementById('modal-' + id).classList.remove('active');
-      document.body.style.overflow = '';
+    function toggleDropdown(btn) {
+      btn.closest('.dropdown').classList.toggle('open');
     }
-
-    // Close modal when clicking outside
-    document.querySelectorAll('.modal').forEach(modal => {
-      modal.addEventListener('click', function(e) {
-        if (e.target === this) {
-          this.classList.remove('active');
-          document.body.style.overflow = '';
-        }
-      });
-    });
-
-    function toggleAccordion(button) {
-      const accordion = button.parentElement;
-      accordion.classList.toggle('open');
+    function openDropdown(name) {
+      toggleSidebar();
+      setTimeout(() => {
+        const btns = document.querySelectorAll('.dropdown > button');
+        btns.forEach(b => {
+          if (b.textContent.toLowerCase().includes(name)) b.closest('.dropdown').classList.add('open');
+        });
+      }, 400);
     }
   </script>
 </body>
-  </html>
+                  </html>
