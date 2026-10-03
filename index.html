@@ -3,41 +3,455 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cheptarit VTC</title>
+<title>Cheptarit Vocational Training Center</title>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,sans-serif}
-  body{background:#f0f4f8;color:#1a2332}
-  .hero{background:linear-gradient(135deg,#0a4f3e,#0f6e56);color:#fff;padding:100px 20px;text-align:center}
-  .hero h1{font-size:clamp(2rem,5vw,3rem);margin-bottom:12px}
-  .hero p{opacity:.9;max-width:600px;margin:0 auto}
-  .wrap{max-width:1100px;margin:0 auto;padding:40px 20px}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
-  .card{background:#fff;border-radius:14px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.06);transition:transform .2s}
-  .card:hover{transform:translateY(-4px)}
-  .card h3{color:#0a4f3e;margin-bottom:8px}
-  .stats{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;padding:40px 20px;background:#fff}
-  .stat{text-align:center}.stat b{display:block;font-size:2rem;color:#0f6e56}
-  .btn{display:inline-block;background:#0f6e56;color:#fff;padding:12px 28px;border-radius:10px;font-weight:600;margin-top:20px}
+:root {
+  --green: #1a5c38;
+  --green-dark: #0f3d24;
+  --gold: #d4a017;
+  --cream: #f7f3ea;
+  --ink: #1c1c1c;
+  --muted: #5a5a5a;
+  --card: #ffffff;
+  --shadow: 0 8px 24px rgba(0,0,0,.08);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  line-height: 1.6;
+}
+.layout { display:flex; min-height:100vh; }
+.sidebar {
+  width: 280px;
+  background: var(--green-dark);
+  color: #fff;
+  padding: 28px 20px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+.sidebar h1 { font-size: 1.3rem; margin-bottom: 4px; }
+.sidebar .tagline { font-size: .85rem; color: #b8d4c4; margin-bottom: 28px; }
+.sidebar nav a {
+  display: block;
+  color: #e8f2ec;
+  text-decoration: none;
+  padding: 12px 14px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  transition: background .2s;
+}
+.sidebar nav a:hover { background: rgba(255,255,255,.12); }
+.main { flex:1; padding: 40px 48px; max-width: 1100px; }
+.hero {
+  background: linear-gradient(135deg, var(--green), var(--green-dark));
+  color: #fff;
+  border-radius: 16px;
+  padding: 56px 48px;
+  margin-bottom: 36px;
+  box-shadow: var(--shadow);
+}
+.hero h2 { font-size: 2.2rem; margin-bottom: 12px; }
+.hero p { color: #cfe8da; max-width: 640px; }
+.section { margin-bottom: 44px; }
+.section h3 {
+  font-size: 1.5rem;
+  color: var(--green);
+  border-bottom: 3px solid var(--gold);
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+}
+.card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+  margin-bottom: 16px;
+}
+.card h4 { color: var(--green); margin-bottom: 8px; }
+.muted { color: var(--muted); font-size: .9rem; }
+.fees-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 20px; }
+.fee-card { text-align: center; }
+.fee-card .amount { font-size: 2rem; font-weight: 700; color: var(--green); }
+.fee-card .per { color: var(--muted); }
+.term-list { list-style: none; margin-top: 14px; }
+.term-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+.note {
+  background: #fff8e6;
+  border-left: 4px solid var(--gold);
+  padding: 14px 18px;
+  border-radius: 8px;
+  margin-top: 16px;
+  font-size: .92rem;
+}
+.dropdown { margin-bottom: 12px; }
+.dropdown-btn {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 16px 20px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--green);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all .2s;
+}
+.dropdown-btn:hover { border-color: var(--green); box-shadow: var(--shadow); }
+.dropdown-btn .chevron { transition: transform .25s; }
+.dropdown.open .chevron { transform: rotate(180deg); }
+.dropdown-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .3s ease;
+  background: #faf8f3;
+  border-radius: 0 0 10px 10px;
+  border: 1px solid transparent;
+}
+.dropdown.open .dropdown-content {
+  max-height: 800px;
+  border-color: #e0e0e0;
+  border-top: none;
+}
+.dropdown-content ul { list-style: none; padding: 16px 24px; }
+.dropdown-content li {
+  padding: 6px 0;
+  padding-left: 22px;
+  position: relative;
+}
+.dropdown-content li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--green);
+  font-weight: 700;
+}
+.placeholder {
+  background: #f0f0f0;
+  border: 2px dashed #bbb;
+  border-radius: 10px;
+  padding: 28px;
+  text-align: center;
+  color: var(--muted);
+  font-style: italic;
+}
+.contact-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 20px; }
+.contact-item { display: flex; gap: 14px; align-items: flex-start; }
+.contact-item .icon { font-size: 1.4rem; }
+.footer {
+  background: var(--green-dark);
+  color: #b8d4c4;
+  text-align: center;
+  padding: 28px 20px;
+  font-size: .9rem;
+}
+.footer strong { color: #fff; }
+@media (max-width: 900px) {
+  .layout { flex-direction: column; }
+  .sidebar { width: 100%; height: auto; position: relative; }
+  .main { padding: 24px 20px; }
+  .hero { padding: 36px 24px; }
+  .hero h2 { font-size: 1.7rem; }
+}
 </style>
 </head>
 <body>
-  <section class="hero">
-    <h1>Cheptarit Vocational Training Center</h1>
-    <p>Practical skills training for a brighter future in Nandi County</p>
-    <a class="btn" href="#courses">Explore Courses</a>
-  </section>
-  <div class="stats">
-    <div class="stat"><b>6</b>Courses</div>
-    <div class="stat"><b>500+</b>Trainees</div>
-    <div class="stat"><b>95%</b>Employment Rate</div>
-  </div>
-  <div class="wrap">
-    <div class="grid">
-      <div class="card"><h3>Motor Vehicle Mechanics</h3><p>Engine systems, servicing, diagnostics.</p></div>
-      <div class="card"><h3>Electrical Installation</h3><p>Domestic and industrial wiring.</p></div>
-      <div class="card"><h3>Fashion Design</h3><p>Pattern drafting and garment making.</p></div>
-      <div class="card"><h3>Building Technology</h3><p>Masonry and construction skills.</p></div>
+<div class="layout">
+  <aside class="sidebar">
+    <h1>Cheptarit VTC</h1>
+    <p class="tagline">Nandi County, Kenya</p>
+    <nav>
+      <a href="#courses">Courses</a>
+      <a href="#fees">Fees</a>
+      <a href="#admissions">Admissions</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </aside>
+  <main class="main">
+    <div class="hero">
+      <h2>Cheptarit Vocational Training Center</h2>
+      <p>A public TVETA-registered vocational college in Nandi County, offering artisan and trade test courses in motor vehicle mechanics, masonry, electrical installation, carpentry, plumbing, welding, fashion design, hairdressing, food and beverage, and more.</p>
+ </div>
+ <section id="fees">
+  <h2>Fees</h2>
+  <p class="note">Fees are subsidized — the school is sponsored.</p>
+  <div class="fee-cards">
+    <div class="card">
+      <h3>Boarding</h3>
+      <p class="total">KSh 32,000 per year</p>
+      <ul>
+        <li>Term 1: KSh 18,500</li>
+        <li>Term 2: KSh 10,500</li>
+        <li>Term 3: KSh 3,000</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Day Scholar</h3>
+      <p class="total">KSh 24,000 per year</p>
+      <ul>
+        <li>Term 1: KSh 16,000</li>
+        <li>Term 2: KSh 6,500</li>
+        <li>Term 3: KSh 1,000</li>
+      </ul>
     </div>
   </div>
+  <a href="#" class="btn">Download Fee Structure (PDF)</a>
+</section>
+
+<section id="boarding">
+  <h2>Boarding Requirements</h2>
+  <ol>
+    <li>Mattress — 3 inch</li>
+    <li>Two blankets</li>
+    <li>Two bedsheets</li>
+    <li>A towel</li>
+    <li>A bed cover</li>
+    <li>A plate</li>
+    <li>A cup</li>
+    <li>A spoon</li>
+    <li>Two basins</li>
+    <li>A black pair of shoes</li>
+    <li>Washing soap</li>
+    <li>Bathing soap</li>
+    <li>Tissue paper — 3 rolls per term</li>
+    <li>Toothpaste</li>
+    <li>Toothbrush</li>
+    <li>White rubber shoes for games</li>
+  </ol>
+ </section>
+ <ol>
+<li>Mattress — three inch</li>
+<li>Two blankets</li>
+<li>Two bedsheets</li>
+<li>A towel</li>
+<li>A bed cover</li>
+<li>A plate</li>
+<li>A cup</li>
+<li>A spoon</li>
+<li>Two basins</li>
+<li>A black pair of shoes</li>
+<li>Washing soap</li>
+<li>Bathing soap</li>
+<li>Tissue paper — three rolls per term</li>
+<li>Toothpaste</li>
+<li>Toothbrush</li>
+<li>White rubber shoes for games</li>
+</ol>
+</section>
+
+<section id=courses>
+<h2>Courses</h2>
+
+<div class=course>
+<button class=course-toggle>Hairdressing <span class=chevron>▼</span></button>
+<div class=course-body>
+<ol>
+<li>Towels — small, medium, big (two)</li>
+<li>Assorted combs (three)</li>
+<li>Apron</li>
+<li>Pins, styling pins</li>
+<li>Pedicure and manicure set</li>
+<li>Plastic chair, white</li>
+<li>One hair dummy</li>
+<li>Clips</li>
+<li>Makeup kit</li>
+<li>Nail polish, assorted</li>
+<li>Top coat and base coat</li>
+</ol>
+</div>
+</div>
+
+<div class=course>
+<button class=course-toggle>Masonry / Plumbing / Carpentry and Joinery <span class=chevron>▼</span></button>
+<div class=course-body>
+<ol>
+<li>Tri-square, six inch — carpentry and joinery</li>
+<li>Jua kali safety boots</li>
+<li>Tape measure</li>
+<li>Trowel and plumb bob — masonry</li>
+<li>Pipe wrench, small — plumbing</li>
+<li>Hacksaw — plumbing</li>
+</ol>
+</div>
+</div>
+
+<div class=course>
+<button class=course-toggle>Electrical Installation / Motor Vehicle Mechanics / Metal Work <span class=chevron>▼</span></button>
+<div class=course-body>
+<ol>
+<li>Two screwdrivers, flat and star — electrical installation</li>
+<li>Pliers — motor vehicle mechanics</li>
+<li>Phase tester — electrical installation</li>
+<li>Goggles — welding</li>
+<li>Two engineering files, rough and smooth — welding</li>
+<li>Tri-square — welding</li>
+<li>Tape measure</li>
+</ol>
+</div>
+</div>
+
+<div class=course>
+<button class=course-toggle>Fashion and Design <span class=chevron>▼</span></button>
+<div class=course-body>
+<ol>
+<li>A pair of scissors, number nine</li>
+<li>Tape measure</li>
+<li>One dozen needles, round, number fourteen</li>
+<li>Hand needle</li>
+<li>Bobbin and bobbin case</li>
+<li>Dressmaking pins</li>
+</ol>
+</div>
+</div>
+
+<div class=course>
+<button class=course-toggle>Food and Beverage <span class=chevron>▼</span></button>
+<div class=course-body>
+<ol>
+<li>Chef jacket, white</li>
+<li>Apron, white</li>
+<li>Black windbreaker</li>
+<li>Black skirt — girls</li>
+<li>Black pair of trousers — boys</li>
+<li>Chef hat</li>
+<li>Checked black pair of trousers — boys</li>
+<li>Black skirts — girls</li>
+<li>Chef knife</li>
+<li>Kitchen cloth, towel, tea towel, dishcloth</li>
+<li>Two buckets with lids, twenty liters</li>
+<li>White long sleeve shirt or blouse</li>
+<li>One glass cloth</li>
+<li>Waiter's cloth</li>
+<li>Bow tie</li>
+<li>Slip cloth, damask red</li>
+<li>Linen, red</li>
+<li>Scarf, red neck</li>
+</ol>
+</div>
+ </div>
+ <div class=course>
+<button class=course-toggle>Welding and Fabrication <span class=chevron>▼</span></button>
+<div class=course-body>
+<ol>
+<li>Goggles</li>
+<li>Two engineering files, rough and smooth</li>
+<li>Tri-square</li>
+<li>Tape measure</li>
+</ol>
+</div>
+</div>
+
+<div class=course>
+<button class=course-toggle>Dressmaking <span class=chevron>▼</span></button>
+<div class=course-body>
+<ol>
+<li>A pair of scissors, number nine</li>
+<li>Tape measure</li>
+<li>One dozen needles, round, number fourteen</li>
+<li>Hand needle</li>
+<li>Bobbin and bobbin case</li>
+<li>Dressmaking pins</li>
+</ol>
+</div>
+</div>
+
+<div class=course>
+<button class=course-toggle>Carpentry and Joinery <span class=chevron>▼</span></button>
+<div class=course-body>
+<ol>
+<li>Tri-square, six inch</li>
+<li>Jua kali safety boots</li>
+<li>Tape measure</li>
+</ol>
+</div>
+</div>
+
+<div class=course>
+<button class=course-toggle>Plumbing <span class=chevron>▼</span></button>
+<div class=course-body>
+<ol>
+<li>Pipe wrench, small</li>
+<li>Hacksaw</li>
+<li>Tape measure</li>
+</ol>
+</div>
+</div>
+
+<div class=course>
+<button class=course-toggle>Motor Vehicle Mechanics <span class=chevron>▼</span></button>
+<div class=course-body>
+<ol>
+<li>Pliers</li>
+<li>Two screwdrivers, flat and star</li>
+<li>Tape measure</li>
+</ol>
+</div>
+</div>
+
+</section>
+   <section id=general>
+<h2>General Requirements — All Courses</h2>
+<ol>
+<li>Oxford geometrical set, HB and 2H pencils, two spring files</li>
+<li>30 centimeter ruler</li>
+<li>Drawing book, exercise books — A3 size</li>
+<li>Rim of photocopy paper</li>
+<li>T-square</li>
+<li>Set square, 60 degrees and 45 degrees</li>
+<li>Five exercise books, 120 pages, A4</li>
+<li>Enough biro pens and pencils</li>
+<li>Printed games kit — cash, one thousand shillings</li>
+<li>Printed dust coat — eleven hundred shillings, or printed overall — thirteen hundred shillings, at school</li>
+</ol>
+</section>
+
+<section id=admissions>
+<h2>Admissions</h2>
+<p>Download the admission form here:</p>
+<a href=# class=btn>Download Admission Form</a>
+</section>
+
+<section id=medical>
+<h2>Medical Form</h2>
+<p>Download the medical form here:</p>
+<a href=# class=btn>Download Medical Form</a>
+</section>
+
+<section id=contact>
+<h2>Contact Us</h2>
+<p>Phone: 0718 008 580</p>
+<p>Email: cheptaritpoly65@yahoo.com</p>
+<p>Address: P.O. Box 45 – 30304, Mosoriot, Nandi County</p>
+<p>Location: Eldoret-Kapsabet Road, next to the DO's office, Plot 216</p>
+<p>KCB Foundation Scholarship: <a href=https://foundation.kcbgroup.com target=_blank>foundation.kcbgroup.com target=_blank>foundation.kcbgroup.com</a></p>
+</section>
+
+<script>
+document.querySelectorAll('.course-toggle').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var body = this.nextElementSibling;
+    var open = body.style.display === 'block';
+    body.style.display = open ? 'none' : 'block';
+    this.querySelector('.chevron').textContent = open ? '▼' : '▲';
+  });
+});
+</script>
+
+<footer>
+<p>© 2026 Cheptarit Vocational Training Center. All rights reserved. Developed by Darius Kipchoge.</p>
+</footer>
+
 </body>
-</html>
+  </html>
+   
