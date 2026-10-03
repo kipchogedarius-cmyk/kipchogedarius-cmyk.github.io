@@ -75,3 +75,226 @@ footer{background:#1a5276;color:#fff;text-align:center;padding:15px;margin-top:2
 
 </body>
   </html>
+border-radius:999px;font-size:.85rem;}
+
+  /* Hamburger button */
+  .menu-btn{
+    position:fixed;top:18px;left:18px;z-index:1001;
+    width:44px;height:44px;background:var(--accent-2);border:none;border-radius:10px;
+    cursor:pointer;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;
+    box-shadow:0 2px 10px rgba(0,0,0,.25);transition:background .2s;
+  }
+  .menu-btn:hover{background:var(--accent);}
+  .menu-btn span{display:block;width:22px;height:2.5px;background:#fff;border-radius:2px;transition:transform .3s,opacity .3s;}
+  .menu-btn.open span:nth-child(1){transform:translateY(7.5px) rotate(45deg);}
+  .menu-btn.open span:nth-child(2){opacity:0;}
+  .menu-btn.open span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg);}
+
+  /* Overlay */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;}
+  .overlay.show{opacity:1;visibility:visible;}
+
+  /* Sidebar */
+  .sidebar{
+    position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);
+    background:#fff;z-index:1002;transform:translateX(-100%);
+    transition:transform .3s ease;display:flex;flex-direction:column;
+    box-shadow:4px 0 20px rgba(0,0,0,.15);
+  }
+  .sidebar.open{transform:translateX(0);}
+  .sidebar-header{padding:22px 20px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;}
+  .sidebar-header h2{font-size:1.05rem;color:var(--accent-2);}
+  .sidebar-close{background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--muted);line-height:1;}
+  .sidebar-close:hover{color:var(--ink);}
+  .sidebar nav{flex:1;overflow-y:auto;padding:8px 0;}
+  .sidebar nav a{
+    display:block;padding:13px 22px;color:var(--ink);font-size:.95rem;font-weight:500;
+    border-left:3px solid transparent;transition:background .15s,border-color .15s;
+  }
+  .sidebar nav a:hover{background:#f0f7f4;border-left-color:var(--accent);text-decoration:none;}
+  .sidebar-section{padding:16px 22px;border-top:1px solid var(--line);}
+  .sidebar-section h3{font-size:.8rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px;}
+  .sidebar-section ul{list-style:none;}
+  .sidebar-section li{padding:6px 0;font-size:.9rem;color:var(--muted);}
+  .sidebar .btn{display:block;text-align:center;background:var(--accent);color:#fff;padding:12px;border-radius:10px;
+    font-weight:600;margin-top:10px;transition:background .15s;}
+  .sidebar .btn:hover{background:var(--accent-2);text-decoration:none;}
+  .sidebar .btn.ghost{background:transparent;color:var(--accent);border:2px solid var(--accent);}
+  .sidebar .btn.ghost:hover{background:var(--accent);color:#fff;}
+
+  /* Main content */
+  .wrap{max-width:900px;margin:0 auto;padding:32px 20px 64px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+  .card h2{font-size:1.25rem;margin-bottom:14px;color:var(--accent-2);border-bottom:2px solid var(--line);padding-bottom:8px;}
+  .card p{color:var(--muted);margin-bottom:12px;}
+
+  .courses{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;}
+  .course{border:1px solid var(--line);border-radius:10px;padding:18px;transition:transform .15s,box-shadow .15s;}
+  .course:hover{transform:translateY(-3px);box-shadow:0 6px 16px rgba(0,0,0,.08);}
+  .course h3{font-size:1.05rem;margin-bottom:6px;}
+  .course .meta{font-size:.8rem;color:var(--accent);font-weight:600;margin-bottom:8px;}
+  .course p{font-size:.9rem;color:var(--muted);margin:0;}
+
+  .contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;}
+  .contact-item{font-size:.95rem;color:var(--muted);}
+  .contact-item strong{display:block;color:var(--ink);margin-bottom:2px;}
+
+  footer{text-align:center;padding:24px;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line);}
+</style>
+</head>
+<body>
+  <button class="menu-btn" id="menuBtn" aria-label="Open menu">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+
+<div class="overlay" id="overlay"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h2>Menu</h2>
+    <button class="sidebar-close" id="closeBtn" aria-label="Close menu">&times;</button>
+  </div>
+  <nav>
+    <a href="#about">About</a>
+    <a href="#courses">Courses</a>
+    <a href="#why">Why Train With Us</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <div class="sidebar-section">
+    <h3>Admissions</h3>
+    <ul>
+      <li>KCPE / KCSE certificate</li>
+      <li>National ID or Birth Certificate</li>
+      <li>2 passport photos</li>
+      <li>Next intake: January &amp; July</li>
+    </ul>
+  </div>
+  <div class="sidebar-section">
+    <h3>Apply Now</h3>
+    <a class="btn" href="https://forms.gle/YOUR-GOOGLE-FORM-LINK" target="_blank" rel="noopener">Open Application Form</a>
+  </div>
+</aside>
+
+<header>
+  <h1>Cheptarit Vocational Training Center</h1>
+  <p>Practical skills training for a brighter future in Nandi County and beyond</p>
+  <div class="badge">Quality Technical Education</div>
+</header>
+
+<main class="wrap">
+  <section class="card" id="about">
+    <h2>About Us</h2>
+    <p>Cheptarit Vocational Training Center is dedicated to equipping young people and adults with hands-on technical and vocational skills that lead to employment, self-employment, and community development.</p>
+    <p>We focus on practical learning, industry-relevant courses, and a supportive environment that helps every trainee succeed.</p>
+  </section>
+
+  <section class="card" id="courses">
+    <h2>Our Courses</h2>
+    <div class="courses">
+      <div class="course">
+        <h3>Motor Vehicle Mechanics</h3>
+        <div class="meta">Duration: 1–2 years</div>
+        <p>Engine systems, servicing, diagnostics and basic repairs.</p>
+      </div>
+      <div class="course">
+        <h3>Electrical Installation</h3>
+        <div class="meta">Duration: 1–2 years</div>
+        <p>Domestic and industrial wiring, safety and maintenance.</p>
+      </div>
+      <div class="course">
+        <h3>Fashion Design &amp; Garment Making</h3>
+        <div class="meta">Duration: 1–2 years</div>
+        <p>Pattern drafting, sewing, and finishing of garments.</p>
+      </div>
+      <div class="course">
+        <h3>Building Technology</h3>
+        <div class="meta">Duration: 1–2 years</div>
+        <p>Masonry, concrete work, and basic construction skills.</p>
+      </div>
+      <div class="course">
+        <h3>Food &amp; Beverage Production</h3>
+        <div class="meta">Duration: 1 year</div>
+        <p>Cooking, baking, hygiene and kitchen operations.</p>
+      </div>
+      <div class="course">
+        <h3>Hairdressing &amp; Beauty Therapy</h3>
+        <div class="meta">Duration: 1 year</div>
+        <p>Hair care, styling, and basic beauty treatments.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="why">
+    <h2>Why Train With Us</h2>
+    <p>• Hands-on practical training with qualified instructors</p>
+    <p>• Affordable fees and flexible payment options</p>
+    <p>• Supportive learning environment</p>
+    <p>• Pathways to employment and self-employment</p>
+  </section>
+
+  <section class="card" id="contact">
+    <h2>Contact Us</h2>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <strong>Location</strong>
+        Cheptarit, Nandi County, Kenya
+      </div>
+      <div class="contact-item">
+        <strong>Phone</strong>
+        +254 7XX XXX XXX
+      </div>
+      <div class="contact-item">
+        <strong>Email</strong>
+        info@cheptaritvtc.ac.ke
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  &copy; 2025 Cheptarit Vocational Training Center. All rights reserved.
+</footer>
+  <script>
+  const menuBtn = document.getElementById('menuBtn');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  const closeBtn = document.getElementById('closeBtn');
+
+  function openSidebar() {
+    sidebar.classList.add('open');
+    overlay.classList.add('show');
+    menuBtn.classList.add('open');
+  }
+
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('show');
+    menuBtn.classList.remove('open');
+  }
+
+  menuBtn.addEventListener('click', () => {
+    if (sidebar.classList.contains('open')) {
+      closeSidebar();
+    } else {
+      openSidebar();
+    }
+  });
+
+  closeBtn.addEventListener('click', closeSidebar);
+  overlay.addEventListener('click', closeSidebar);
+
+  // Close when any sidebar link is clicked
+  document.querySelectorAll('.sidebar nav a').forEach(link => {
+    link.addEventListener('click', closeSidebar);
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeSidebar();
+  });
+</script>
+
+</body>
+</html>
