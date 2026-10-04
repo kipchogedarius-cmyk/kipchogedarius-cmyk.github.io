@@ -1,399 +1,333 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cheptarit Vocational Training Center</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            green: { 800: '#1a5c38', 900: '#0f3d24' },
-            gold: '#d4a017',
-            cream: '#f7f3ea',
-          }
-        }
-      }
-    }
-  </script>
-  <style>
-    .sidebar { transform: translateX(-100%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); }
-    .sidebar.open { transform: translateX(0); }
-    .overlay { opacity: 0; visibility: hidden; transition: opacity 0.3s ease; }
-    .overlay.open { opacity: 1; visibility: visible; }
-    .dropdown-content { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
-    .dropdown.open .dropdown-content { max-height: 2000px; }
-    .dropdown.open .chevron { transform: rotate(180deg); }
-    .course-card { transition: transform 0.25s ease, box-shadow 0.25s ease; }
-    .course-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(15,61,36,0.15); }
-    .fade-in { animation: fadeIn 0.6s ease both; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheptarit Vocational Training Center</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root { --gold: #f59e0b; --green: #166534; }
+  body { background: #fefce8; }
+  .tab-btn.active { background: var(--green); color: #fff; }
+  .course-card { transition: transform .2s, box-shadow .2s; }
+  .course-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,.12); }
+  .detail-panel { display: none; }
+  .detail-panel.active { display: block; }
+  .sidebar-overlay { display: none; }
+  @media (max-width: 1023px) {
+    .sidebar-overlay.open { display: block; }
+    aside.open { transform: translateX(0); }
+  }
+</style>
 </head>
-<body class="bg-cream text-gray-900 font-sans">
+<body class="text-gray-800">
 
-  <!-- HEADER -->
-  <header class="bg-green-900 text-white sticky top-0 z-40 shadow-lg">
-    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-      <div class="flex items-center gap-4">
-        <div class="w-14 h-14 rounded-full bg-gold flex items-center justify-center text-green-900 font-bold text-xl shadow-md">CVTC</div>
-        <div>
-          <h1 class="text-xl font-bold leading-tight">Cheptarit Vocational Training Center</h1>
-          <p class="text-sm text-green-200">Nandi County, Kenya • TVETA Registered</p>
-        </div>
-      </div>
-      <button onclick="toggleSidebar()" class="p-2 rounded-lg hover:bg-white/10 transition" aria-label="Open menu">
-        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-      </button>
-    </div>
-  </header>
-
-  <!-- AD BANNER (image 6) -->
-  <section class="max-w-6xl mx-auto px-4 pt-6">
-    <img src="https://i.ibb.co/qLKP2PZJ/Screenshot-2026-10-03-17-48-28-77.jpg" alt="Cheptarit VTC Courses Advertisement" class="w-full rounded-2xl shadow-lg object-cover max-h-80">
-  </section>
-
-  <!-- HERO -->
-  <section class="max-w-6xl mx-auto px-4 py-16">
-    <div class="bg-gradient-to-br from-green-800 to-green-900 text-white rounded-3xl p-10 md:p-16 shadow-2xl fade-in">
-      <h2 class="text-3xl md:text-5xl font-bold mb-6">Welcome to Cheptarit VTC</h2>
-      <p class="text-lg md:text-xl text-green-100 max-w-3xl leading-relaxed">
-        A public TVETA-registered vocational college in Nandi County offering artisan and trade test courses in Motor Vehicle Mechanics, Masonry, Electrical Installation, Carpentry, Plumbing, Welding, Fashion Design, Hairdressing, Food & Beverage, and more.
-      </p>
-      <div class="mt-10 flex flex-wrap gap-4">
-        <button onclick="openDropdown('courses')" class="bg-gold text-green-900 font-semibold px-8 py-3 rounded-xl hover:bg-yellow-400 transition shadow-lg">View Courses</button>
-        <button onclick="openDropdown('fees')" class="bg-white/20 text-white font-semibold px-8 py-3 rounded-xl hover:bg-white/30 transition">View Fees</button>
-        <button onclick="openDropdown('admissions')" class="bg-white/20 text-white font-semibold px-8 py-3 rounded-xl hover:bg-white/30 transition">Admissions</button>
+<header class="bg-green-800 text-white shadow-lg sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 bg-gold rounded-full flex items-center justify-center font-bold text-green-900 text-xl">CV</div>
+      <div>
+        <h1 class="text-xl md:text-2xl font-bold leading-tight">Cheptarit Vocational Training Center</h1>
+        <p class="text-sm text-green-200">Eldoret-Kapsabet Road, Mosoriot, Nandi County</p>
       </div>
     </div>
-  </section>
+    <button class="lg:hidden text-3xl" onclick="toggleSidebar()">☰</button>
+  </div>
+</header>
 
-  <!-- QUICK INFO CARDS -->
-  <section class="max-w-6xl mx-auto px-4 pb-20 grid md:grid-cols-3 gap-6">
-    <div class="bg-white rounded-2xl p-8 shadow-lg border border-green-100 course-card">
-      <div class="text-4xl mb-4">🎓</div>
-      <h3 class="text-xl font-bold text-green-800 mb-2">Subsidized Fees</h3>
-      <p class="text-gray-600">The school is sponsored. Fees are highly subsidized for both boarding and day scholars.</p>
-    </div>
-    <div class="bg-white rounded-2xl p-8 shadow-lg border border-green-100 course-card">
-      <div class="text-4xl mb-4">🛠️</div>
-      <h3 class="text-xl font-bold text-green-800 mb-2">Practical Skills</h3>
-      <p class="text-gray-600">Hands-on training in high-demand trades that prepare students for immediate employment.</p>
-    </div>
-    <div class="bg-white rounded-2xl p-8 shadow-lg border border-green-100 course-card">
-      <div class="text-4xl mb-4">📍</div>
-      <h3 class="text-xl font-bold text-green-800 mb-2">Easy Location</h3>
-      <p class="text-gray-600">Located on Eldoret-Kapsabet Road, next to the DO's office, Mosoriot, Nandi County.</p>
-    </div>
-  </section>
+<div id="sidebar-overlay" class="sidebar-overlay fixed inset-0 bg-black/50 z-40" onclick="toggleSidebar()"></div>
 
-  <!-- GRADUATION PHOTOS (images 7 & 8) -->
-  <section class="max-w-6xl mx-auto px-4 pb-20">
-    <h2 class="text-3xl font-bold text-green-800 mb-8 text-center">Graduation Ceremonies</h2>
-    <div class="grid md:grid-cols-2 gap-6">
-      <img src="https://i.ibb.co/Q37VqRnt/FB-IMG-17910388378768951.jpg" alt="Graduation Ceremony" class="w-full rounded-2xl shadow-lg object-cover h-80">
-      <img src="https://i.ibb.co/rRT0M3mf/FB-IMG-17910388326692727.jpg" alt="Graduation Ceremony" class="w-full rounded-2xl shadow-lg object-cover h-80">
-    </div>
-  </section>
+<div class="max-w-7xl mx-auto flex">
 
-  <!-- FOOTER -->
-  <footer class="bg-green-900 text-green-200 py-10 text-center">
-    <p class="font-semibold text-white">© 2026 Cheptarit Vocational Training Center</p>
-    <p class="mt-2 text-sm">All rights reserved. Developed by Darius Kipchoge</p>
-  </footer>
-
-  <!-- SLIDING SIDEBAR -->
-  <div id="sidebar-overlay" class="overlay fixed inset-0 bg-black/50 z-50" onclick="toggleSidebar()"></div>
-  <aside id="sidebar" class="sidebar fixed top-0 left-0 h-full w-80 bg-white z-50 shadow-2xl overflow-y-auto">
-    <div class="bg-green-900 text-white px-6 py-5 flex justify-between items-center">
-      <h2 class="text-xl font-bold">Menu</h2>
-      <button onclick="toggleSidebar()" class="text-3xl leading-none hover:text-gold">&times;</button>
-    </div>
-    <div class="p-4 space-y-2">
-
-      <!-- ADMISSIONS -->
-      <div class="dropdown border border-gray-200 rounded-xl overflow-hidden">
-        <button class="w-full flex justify-between items-center px-5 py-4 bg-cream font-semibold text-green-800 hover:bg-green-50" onclick="toggleDropdown(this)">
-          Admissions <span class="chevron transition-transform">▼</span>
-        </button>
-        <div class="dropdown-content bg-white px-5 py-4 space-y-4 text-gray-700">
-          <p>Download the required forms below:</p>
-          <a href="#" class="block text-center bg-green-800 text-white font-semibold py-3 rounded-xl hover:bg-green-900 transition">Download Admission Form</a>
-          <a href="#" class="block text-center bg-green-700 text-white font-semibold py-3 rounded-xl hover:bg-green-800 transition">Download Medical Form</a>
-        </div>
+  <!-- SIDEBAR: quick overview only -->
+  <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 z-50 w-72 bg-white border-r border-gray-200 transform -translate-x-full lg:translate-x-0 transition-transform overflow-y-auto">
+    <div class="p-5 space-y-3">
+      <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Quick Overview</p>
+      <a href="#courses" class="block px-4 py-2 rounded-lg hover:bg-green-50 text-green-800 font-medium" onclick="toggleSidebar()">Courses</a>
+      <a href="#about" class="block px-4 py-2 rounded-lg hover:bg-green-50 text-green-800 font-medium" onclick="toggleSidebar()">About</a>
+      <a href="#admissions" class="block px-4 py-2 rounded-lg hover:bg-green-50 text-green-800 font-medium" onclick="toggleSidebar()">Admissions</a>
+      <a href="#fees" class="block px-4 py-2 rounded-lg hover:bg-green-50 text-green-800 font-medium" onclick="toggleSidebar()">Fees</a>
+      <a href="#contact" class="block px-4 py-2 rounded-lg hover:bg-green-50 text-green-800 font-medium" onclick="toggleSidebar()">Contact</a>
+      <div class="pt-4 border-t border-gray-200 text-sm text-gray-600">
+        <p class="font-bold text-green-800">TVETA Registered</p>
+        <p>Reg: TVETA/PUBLIC/VTC/0157/2016</p>
+        <p class="mt-2">0718008580</p>
+        <p>cheptaritpoly65@yahoo.com</p>
       </div>
-
-      <!-- COURSES -->
-      <div class="dropdown border border-gray-200 rounded-xl overflow-hidden">
-        <button class="w-full flex justify-between items-center px-5 py-4 bg-cream font-semibold text-green-800 hover:bg-green-50" onclick="toggleDropdown(this)">
-          Courses <span class="chevron transition-transform">▼</span>
-        </button>
-        <div class="dropdown-content bg-white px-5 py-4 space-y-3">
-
-          <!-- Computer / IT -->
-          <div class="course-card border border-gray-200 rounded-xl overflow-hidden">
-            <button class="w-full flex items-center gap-4 px-4 py-3 bg-cream hover:bg-green-50 text-left" onclick="toggleDropdown(this)">
-              <img src="https://i.ibb.co/fYTW90GG/FB-IMG-17898479198166045.jpg" alt="Computer/IT" class="w-14 h-14 rounded-lg object-cover">
-              <span class="font-semibold text-green-800 flex-1">Computer / IT</span>
-              <span class="chevron transition-transform text-sm">▼</span>
-            </button>
-            <div class="dropdown-content px-4 py-4 space-y-4 text-sm text-gray-700">
-              <p>Hands-on training in computer applications, software, and IT fundamentals for the modern workplace.</p>
-              <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg">
-                <p class="font-bold text-green-800 mb-1">Entry Requirements</p>
-                <p>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
-              </div>
-              <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg">
-                <p class="font-bold text-green-800 mb-1">Admission Requirements</p>
-                <p>Completed admission form, medical form, and payment of Term 1 fees.</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Fashion and Design -->
-          <div class="course-card border border-gray-200 rounded-xl overflow-hidden">
-            <button class="w-full flex items-center gap-4 px-4 py-3 bg-cream hover:bg-green-50 text-left" onclick="toggleDropdown(this)">
-              <img src="https://i.ibb.co/ZpjdJkKF/FB-IMG-17898480060796655.jpg" alt="Fashion and Design" class="w-14 h-14 rounded-lg object-cover">
-              <span class="font-semibold text-green-800 flex-1">Fashion and Design / Dressmaking</span>
-              <span class="chevron transition-transform text-sm">▼</span>
-            </button>
-            <div class="dropdown-content px-4 py-4 space-y-4 text-sm text-gray-700">
-              <p>Learn garment construction, pattern drafting, and design skills for a career in fashion.</p>
-              <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg">
-                <p class="font-bold text-green-800 mb-1">Entry Requirements</p>
-                <p>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
-              </div>
-              <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg">
-                <p class="font-bold text-green-800 mb-1">Admission Requirements</p>
-                <p>Completed admission form, medical form, and payment of Term 1 fees.</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Masonry -->
-          <div class="course-card border border-gray-200 rounded-xl overflow-hidden">
-            <button class="w-full flex items-center gap-4 px-4 py-3 bg-cream hover:bg-green-50 text-left" onclick="toggleDropdown(this)">
-              <img src="https://i.ibb.co/QFTwMsY0/FB-IMG-17898480247074386.jpg" alt="Masonry" class="w-14 h-14 rounded-lg object-cover">
-              <span class="font-semibold text-green-800 flex-1">Masonry</span>
-              <span class="chevron transition-transform text-sm">▼</span>
-            </button>
-            <div class="dropdown-content px-4 py-4 space-y-4 text-sm text-gray-700">
-              <p>Build skills in bricklaying, plastering, and construction techniques for the building industry.</p>
-              <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg">
-                <p class="font-bold text-green-800 mb-1">Entry Requirements</p>
-                <p>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
-              </div>
-              <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg">
-                <p class="font-bold text-green-800 mb-1">Admission Requirements</p>
-                <p>Completed admission form, medical form, and payment of Term 1 fees.</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Sports -->
-          <div class="course-card border border-gray-200 rounded-xl overflow-hidden">
-            <button class="w-full flex items-center gap-4 px-4 py-3 bg-cream hover:bg-green-50 text-left" onclick="toggleDropdown(this)">
-              <img src="https://i.ibb.co/LKsLrcc/FB-IMG-17898481683500763.jpg" alt="Sports" class="w-14 h-14 rounded-lg object-cover">
-              <span class="font-semibold text-green-800 flex-1">Sports</span>
-              <span class="chevron transition-transform text-sm">▼</span>
-            </button>
-            <div class="dropdown-content px-4 py-4 space-y-4 text-sm text-gray-700">
-              <p>Develop athletic skills, coaching fundamentals, and sports management for a career in sports.</p>
-              <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg">
-                <p class="font-bold text-green-800 mb-1">Entry Requirements</p>
-                <p>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
-              </div>
-              <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg">
-                <p class="font-bold text-green-800 mb-1">Admission Requirements</p>
-                <p>Completed admission form, medical form, and payment of Term 1 fees.</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Sports (second) -->
-          <div class="course-card border border-gray-200 rounded-xl overflow-hidden">
-            <button class="w-full flex items-center gap-4 px-4 py-3 bg-cream hover:bg-green-50 text-left" onclick="toggleDropdown(this)">
-              <img src="https://i.ibb.co/7tpgb7Zh/FB-IMG-17898481565676636.jpg" alt="Sports" class="w-14 h-14 rounded-lg object-cover">
-              <span class="font-semibold text-green-800 flex-1">Sports (Advanced)</span>
-              <span class="chevron transition-transform text-sm">▼</span>
-            </button>
-            <div class="dropdown-content px-4 py-4 space-y-4 text-sm text-gray-700">
-              <p>Advanced training in sports performance, fitness, and specialized athletic development.</p>
-              <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg">
-                <p class="font-bold text-green-800 mb-1">Entry Requirements</p>
-                <p>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
-              </div>
-              <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg">
-                <p class="font-bold text-green-800 mb-1">Admission Requirements</p>
-                <p>Completed admission form, medical form, and payment of Term 1 fees.</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Hairdressing -->
-          <div class="course-card border border-gray-200 rounded-xl overflow-hidden">
-            <button class="w-full flex justify-between items-center px-4 py-3 bg-cream hover:bg-green-50 text-left" onclick="toggleDropdown(this)">
-              <span class="font-semibold text-green-800">Hairdressing</span>
-              <span class="chevron transition-transform text-sm">▼</span>
-            </button>
-            <div class="dropdown-content px-4 py-4 space-y-4 text-sm text-gray-700">
-              <p>Master cutting, styling, coloring, and salon management for a career in hairdressing.</p>
-              <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg">
-                <p class="font-bold text-green-800 mb-1">Entry Requirements</p>
-                <p>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
-              </div>
-              <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg">
-                <p class="font-bold text-green-800 mb-1">Admission Requirements</p>
-                <p>Completed admission form, medical form, and payment of Term 1 fees.</p>
-              </div>
-            </div>
-          </div>
-
-                    <!-- Masonry / Plumbing / Carpentry & Joinery -->
-          <div class="course-card border border-gray-200 rounded-xl overflow-hidden">
-            <button class="w-full flex justify-between items-center px-4 py-3 bg-cream hover:bg-green-50 text-left" onclick="toggleDropdown(this)">
-              <span class="font-semibold text-green-800">Masonry / Plumbing / Carpentry &amp; Joinery</span>
-              <span class="chevron transition-transform text-sm">▼</span>
-            </button>
-            <div class="dropdown-content px-4 py-4 space-y-4 text-sm text-gray-700">
-              <p>Build skills in bricklaying, plastering, pipe installation, and woodworking for construction and maintenance careers.</p>
-              <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg">
-                <p class="font-bold text-green-800 mb-1">Entry Requirements</p>
-                <p>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
-              </div>
-              <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg">
-                <p class="font-bold text-green-800 mb-1">Admission Requirements</p>
-                <p>Completed admission form, medical form, and payment of Term 1 fees.</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Motor Vehicle Mechanics -->
-          <div class="course-card border border-gray-200 rounded-xl overflow-hidden">
-            <button class="w-full flex justify-between items-center px-4 py-3 bg-cream hover:bg-green-50 text-left" onclick="toggleDropdown(this)">
-              <span class="font-semibold text-green-800">Motor Vehicle Mechanics</span>
-              <span class="chevron transition-transform text-sm">▼</span>
-            </button>
-            <div class="dropdown-content px-4 py-4 space-y-4 text-sm text-gray-700">
-              <p>Diagnose, repair, and maintain vehicles — engines, brakes, electrical systems, and diagnostics.</p>
-              <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg">
-                <p class="font-bold text-green-800 mb-1">Entry Requirements</p>
-                <p>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
-              </div>
-              <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg">
-                <p class="font-bold text-green-800 mb-1">Admission Requirements</p>
-                <p>Completed admission form, medical form, and payment of Term 1 fees.</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Electrical Installation -->
-          <div class="course-card border border-gray-200 rounded-xl overflow-hidden">
-            <button class="w-full flex justify-between items-center px-4 py-3 bg-cream hover:bg-green-50 text-left" onclick="toggleDropdown(this)">
-              <span class="font-semibold text-green-800">Electrical Installation</span>
-              <span class="chevron transition-transform text-sm">▼</span>
-            </button>
-            <div class="dropdown-content px-4 py-4 space-y-4 text-sm text-gray-700">
-              <p>Learn wiring, circuit installation, and electrical maintenance for homes and commercial buildings.</p>
-              <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg">
-                <p class="font-bold text-green-800 mb-1">Entry Requirements</p>
-                <p>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
-              </div>
-              <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg">
-                <p class="font-bold text-green-800 mb-1">Admission Requirements</p>
-                <p>Completed admission form, medical form, and payment of Term 1 fees.</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Welding & Fabrication -->
-          <div class="course-card border border-gray-200 rounded-xl overflow-hidden">
-            <button class="w-full flex justify-between items-center px-4 py-3 bg-cream hover:bg-green-50 text-left" onclick="toggleDropdown(this)">
-              <span class="font-semibold text-green-800">Welding &amp; Fabrication</span>
-              <span class="chevron transition-transform text-sm">▼</span>
-            </button>
-            <div class="dropdown-content px-4 py-4 space-y-4 text-sm text-gray-700">
-              <p>Master arc welding, gas welding, and metal fabrication for construction and manufacturing.</p>
-              <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg">
-                <p class="font-bold text-green-800 mb-1">Entry Requirements</p>
-                <p>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
-              </div>
-              <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg">
-                <p class="font-bold text-green-800 mb-1">Admission Requirements</p>
-                <p>Completed admission form, medical form, and payment of Term 1 fees.</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Food & Beverage -->
-          <div class="course-card border border-gray-200 rounded-xl overflow-hidden">
-            <button class="w-full flex justify-between items-center px-4 py-3 bg-cream hover:bg-green-50 text-left" onclick="toggleDropdown(this)">
-              <span class="font-semibold text-green-800">Food &amp; Beverage</span>
-              <span class="chevron transition-transform text-sm">▼</span>
-            </button>
-            <div class="dropdown-content px-4 py-4 space-y-4 text-sm text-gray-700">
-              <p>Train in food preparation, hygiene, and hospitality service for hotels and restaurants.</p>
-              <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg">
-                <p class="font-bold text-green-800 mb-1">Entry Requirements</p>
-                <p>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
-              </div>
-              <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg">
-                <p class="font-bold text-green-800 mb-1">Admission Requirements</p>
-                <p>Completed admission form, medical form, and payment of Term 1 fees.</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- FEES -->
-      <div class="dropdown border border-gray-200 rounded-xl overflow-hidden">
-        <button class="w-full flex justify-between items-center px-5 py-4 bg-cream font-semibold text-green-800 hover:bg-green-50" onclick="toggleDropdown(this)">
-          Fees <span class="chevron transition-transform">▼</span>
-        </button>
-        <div class="dropdown-content bg-white px-5 py-4 space-y-4 text-gray-700">
-          <p>Fees are highly subsidized since the school is sponsored. Exact amounts vary by course and boarding status — contact the office for the current fee structure.</p>
-          <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg text-sm">
-            <p class="font-bold text-green-800 mb-1">Payment</p>
-            <p>Term 1 fees are required at admission. Payment plans may be available — ask the bursar.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- CONTACT -->
-      <div class="dropdown border border-gray-200 rounded-xl overflow-hidden">
-        <button class="w-full flex justify-between items-center px-5 py-4 bg-cream font-semibold text-green-800 hover:bg-green-50" onclick="toggleDropdown(this)">
-          Contact <span class="chevron transition-transform">▼</span>
-        </button>
-        <div class="dropdown-content bg-white px-5 py-4 space-y-3 text-gray-700 text-sm">
-          <p><span class="font-bold text-green-800">Location:</span> Eldoret-Kapsabet Road, next to the DO's office, Mosoriot, Nandi County.</p>
-          <p><span class="font-bold text-green-800">Registration:</span> TVETA Registered</p>
-        </div>
-      </div>
-
     </div>
   </aside>
 
-  <script>
-    function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('open');
-      document.getElementById('sidebar-overlay').classList.toggle('open');
+  <!-- MAIN CONTENT -->
+  <main class="flex-1 p-4 md:p-8">
+
+    <!-- HERO -->
+    <section class="bg-gradient-to-r from-green-800 to-green-600 text-white rounded-2xl p-8 md:p-12 mb-8">
+      <h2 class="text-3xl md:text-4xl font-bold mb-3">Skills for Life</h2>
+      <p class="text-green-100 text-lg mb-6 max-w-2xl">Artisan and trade test courses in welding, motor vehicle mechanics, electrical installation, hairdressing, fashion design, and more — TVETA registered since 2016.</p>
+      <div class="flex flex-wrap gap-3">
+        <a href="#courses" class="bg-gold text-green-900 font-bold px-6 py-3 rounded-lg hover:bg-yellow-400">Explore Courses</a>
+        <a href="#admissions" class="border-2 border-white px-6 py-3 rounded-lg hover:bg-white hover:text-green-800">Apply Now</a>
+      </div>
+    </section>
+
+    <!-- COURSES: full catalog with cards -->
+    <section id="courses" class="mb-12">
+      <h2 class="text-2xl font-bold text-green-800 mb-6">Our Courses</h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <div class="course-card bg-white border border-gray-200 rounded-xl overflow-hidden cursor-pointer" onclick="showDetail('welding')">
+          <div class="h-40 bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center text-6xl">🔥</div>
+          <div class="p-5">
+            <h3 class="font-bold text-green-800 text-lg">Welding & Fabrication</h3>
+          <p class="text-gray-600 text-sm mb-4">Master arc welding, gas welding, and metal fabrication for construction and manufacturing.</p>
+          <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg mb-3">
+            <p class="font-bold text-green-800 text-sm mb-1">Entry Requirements</p>
+            <p class="text-sm text-gray-700">KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
+          </div>
+          <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg mb-4">
+            <p class="font-bold text-green-800 text-sm mb-1">Admission Requirements</p>
+            <p class="text-sm text-gray-700">Completed admission form, medical form, and payment of Term 1 fees.</p>
+          </div>
+          <button onclick="openCourseDetail('welding')" class="w-full bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition">View Details</button>
+        </div>
+      </div>
+
+      <!-- Food & Beverage -->
+      <div class="course-card bg-white rounded-2xl overflow-hidden border border-gray-200">
+        <div class="h-48 bg-gradient-to-br from-orange-600 to-orange-900 flex items-center justify-center">
+          <span class="text-6xl">🍽️</span>
+        </div>
+        <div class="p-6">
+          <h3 class="text-xl font-bold text-green-800 mb-2">Food & Beverage</h3>
+          <p class="text-gray-600 text-sm mb-4">Train in food preparation, hygiene, and hospitality service for hotels and restaurants.</p>
+          <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg mb-3">
+            <p class="font-bold text-green-800 text-sm mb-1">Entry Requirements</p>
+            <p class="text-sm text-gray-700">KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
+          </div>
+          <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg mb-4">
+            <p class="font-bold text-green-800 text-sm mb-1">Admission Requirements</p>
+            <p class="text-sm text-gray-700">Completed admission form, medical form, and payment of Term 1 fees.</p>
+          </div>
+          <button onclick="openCourseDetail('food')" class="w-full bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition">View Details</button>
+        </div>
+      </div>
+
+      <!-- Electrical Installation -->
+      <div class="course-card bg-white rounded-2xl overflow-hidden border border-gray-200">
+        <div class="h-48 bg-gradient-to-br from-yellow-500 to-yellow-800 flex items-center justify-center">
+          <span class="text-6xl">⚡</span>
+        </div>
+        <div class="p-6">
+          <h3 class="text-xl font-bold text-green-800 mb-2">Electrical Installation</h3>
+          <p class="text-gray-600 text-sm mb-4">Learn wiring, circuit design, and electrical systems for residential and commercial buildings.</p>
+          <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg mb-3">
+            <p class="font-bold text-green-800 text-sm mb-1">Entry Requirements</p>
+            <p class="text-sm text-gray-700">KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
+          </div>
+          <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg mb-4">
+            <p class="font-bold text-green-800 text-sm mb-1">Admission Requirements</p>
+            <p class="text-sm text-gray-700">Completed admission form, medical form, and payment of Term 1 fees.</p>
+          </div>
+          <button onclick="openCourseDetail('electrical')" class="w-full bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition">View Details</button>
+        </div>
+      </div>
+
+      <!-- Motor Vehicle Mechanics -->
+      <div class="course-card bg-white rounded-2xl overflow-hidden border border-gray-200">
+        <div class="h-48 bg-gradient-to-br from-blue-700 to-blue-950 flex items-center justify-center">
+          <span class="text-6xl">🔧</span>
+        </div>
+        <div class="p-6">
+          <h3 class="text-xl font-bold text-green-800 mb-2">Motor Vehicle Mechanics</h3>
+          <p class="text-gray-600 text-sm mb-4">Diagnose, repair, and maintain vehicles — engines, brakes, and electrical systems.</p>
+          <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg mb-3">
+            <p class="font-bold text-green-800 text-sm mb-1">Entry Requirements</p>
+            <p class="text-sm text-gray-700">KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
+          </div>
+          <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg mb-4">
+            <p class="font-bold text-green-800 text-sm mb-1">Admission Requirements</p>
+            <p class="text-sm text-gray-700">Completed admission form, medical form, and payment of Term 1 fees.</p>
+          </div>
+          <button onclick="openCourseDetail('motor')" class="w-full bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition">View Details</button>
+        </div>
+      </div>
+
+      <!-- Masonry -->
+      <div class="course-card bg-white rounded-2xl overflow-hidden border border-gray-200">
+        <div class="h-48 bg-gradient-to-br from-stone-500 to-stone-800 flex items-center justify-center">
+          <span class="text-6xl">🧱</span>
+        </div>
+        <div class="p-6">
+          <h3 class="text-xl font-bold text-green-800 mb-2">Masonry</h3>
+          <p class="text-gray-600 text-sm mb-4">Build with brick, block, and concrete — foundations, walls, and structural work.</p>
+          <div class="bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg mb-3">
+            <p class="font-bold text-green-800 text-sm mb-1">Entry Requirements</p>
+            <p class="text-sm text-gray-700">KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
+          </div>
+          <div class="bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg mb-4">
+            <p class="font-bold text-green-800 text-sm mb-1">Admission Requirements</p>
+            <p class="text-sm text-gray-700">Completed admission form, medical form, and payment of Term 1 fees.</p>
+          </div>
+          <button onclick="openCourseDetail('masonry')" class="w-full bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition">View Details</button>
+        </div>
+      </div>
+
+      <!-- Hairdressing & Beauty Therapy -->
+<div class=course-card bg-white rounded-2xl overflow-hidden border border-gray-200>
+  <div class=h-48 bg-gradient-to-br from-pink-500 to-rose-700 flex items-center justify-center>
+    <span class=text-6xl>✂️</span>
+  </div>
+  <div class=p-6>
+    <h3 class=text-xl font-bold text-green-800 mb-2>Hairdressing & Beauty Therapy</h3>
+    <p class=text-gray-600 text-sm mb-4>Professional hair cutting, styling, coloring, and beauty treatments for the salon industry.</p>
+    <div class=bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg mb-3>
+      <p class=font-bold text-green-800 text-sm mb-1>Entry Requirements</p>
+      <p class=text-sm text-gray-700>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
+    </div>
+    <div class=bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg mb-4>
+      <p class=font-bold text-green-800 text-sm mb-1>Admission Requirements</p>
+      <p class=text-sm text-gray-700>Completed admission form, medical form, and payment of Term 1 fees.</p>
+    </div>
+    <button onclick=openCourseDetail('hairdressing') class=w-full bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition>View Details</button>
+  </div>
+</div>
+
+<!-- Electrical Installation -->
+<div class=course-card bg-white rounded-2xl overflow-hidden border border-gray-200>
+  <div class=h-48 bg-gradient-to-br from-yellow-500 to-amber-700 flex items-center justify-center>
+    <span class=text-6xl>⚡</span>
+  </div>
+  <div class=p-6>
+    <h3 class=text-xl font-bold text-green-800 mb-2>Electrical Installation</h3>
+    <p class=text-gray-600 text-sm mb-4>Wiring, circuit installation, and electrical systems for homes and commercial buildings.</p>
+    <div class=bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg mb-3>
+      <p class=font-bold text-green-800 text-sm mb-1>Entry Requirements</p>
+      <p class=text-sm text-gray-700>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
+    </div>
+    <div class=bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg mb-4>
+      <p class=font-bold text-green-800 text-sm mb-1>Admission Requirements</p>
+      <p class=text-sm text-gray-700>Completed admission form, medical form, and payment of Term 1 fees.</p>
+    </div>
+    <button onclick=openCourseDetail('electrical') class=w-full bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition>View Details</button>
+  </div>
+</div>
+
+<!-- Masonry -->
+<div class=course-card bg-white rounded-2xl overflow-hidden border border-gray-200>
+  <div class=h-48 bg-gradient-to-br from-stone-500 to-stone-800 flex items-center justify-center>
+    <span class=text-6xl>🧱</span>
+  </div>
+  <div class=p-6>
+    <h3 class=text-xl font-bold text-green-800 mb-2>Masonry</h3>
+    <p class=text-gray-600 text-sm mb-4>Bricklaying, blockwork, plastering, and construction techniques for building projects.</p>
+    <div class=bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg mb-3>
+      <p class=font-bold text-green-800 text-sm mb-1>Entry Requirements</p>
+      <p class=text-sm text-gray-700>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
+    </div>
+    <div class=bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg mb-4>
+      <p class=font-bold text-green-800 text-sm mb-1>Admission Requirements</p>
+      <p class=text-sm text-gray-700>Completed admission form, medical form, and payment of Term 1 fees.</p>
+    </div>
+    <button onclick=openCourseDetail('masonry') class=w-full bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition>View Details</button>
+  </div>
+</div>
+
+<!-- Carpentry & Joinery -->
+<div class=course-card bg-white rounded-2xl overflow-hidden border border-gray-200>
+  <div class=h-48 bg-gradient-to-br from-amber-700 to-yellow-900 flex items-center justify-center>
+    <span class=text-6xl>🪵</span>
+  </div>
+  <div class=p-6>
+    <h3 class=text-xl font-bold text-green-800 mb-2>Carpentry & Joinery</h3>
+    <p class=text-gray-600 text-sm mb-4>Woodworking, furniture making, and structural timber construction.</p>
+    <div class=bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg mb-3>
+      <p class=font-bold text-green-800 text-sm mb-1>Entry Requirements</p>
+      <p class=text-sm text-gray-700>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
+    </div>
+    <div class=bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg mb-4>
+      <p class=font-bold text-green-800 text-sm mb-1>Admission Requirements</p>
+      <p class=text-sm text-gray-700>Completed admission form, medical form, and payment of Term 1 fees.</p>
+    </div>
+    <button onclick=openCourseDetail('carpentry') class=w-full bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition>View Details</button>
+  </div>
+</div>
+
+<!-- Plumbing -->
+<div class=course-card bg-white rounded-2xl overflow-hidden border border-gray-200>
+  <div class=h-48 bg-gradient-to-br from-blue-500 to-blue-800 flex items-center justify-center>
+    <span class=text-6xl>🔧</span>
+  </div>
+  <div class=p-6>
+    <h3 class=text-xl font-bold text-green-800 mb-2>Plumbing</h3>
+    <p class=text-gray-600 text-sm mb-4>Pipe installation, drainage systems, and water supply for residential and commercial buildings.</p>
+    <div class=bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg mb-3>
+      <p class=font-bold text-green-800 text-sm mb-1>Entry Requirements</p>
+      <p class=text-sm text-gray-700>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
+    </div>
+    <div class=bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg mb-4>
+      <p class=font-bold text-green-800 text-sm mb-1>Admission Requirements</p>
+      <p class=text-sm text-gray-700>Completed admission form, medical form, and payment of Term 1 fees.</p>
+    </div>
+    <button onclick=openCourseDetail('plumbing') class=w-full bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition>View Details</button>
+  </div>
+</div>
+
+<!-- Fashion Design -->
+<div class=course-card bg-white rounded-2xl overflow-hidden border border-gray-200>
+  <div class=h-48 bg-gradient-to-br from-purple-500 to-purple-800 flex items-center justify-center>
+    <span class=text-6xl>👗</span>
+  </div>
+  <div class=p-6>
+    <h3 class=text-xl font-bold text-green-800 mb-2>Fashion Design</h3>
+    <p class=text-gray-600 text-sm mb-4>Garment making, pattern drafting, and textile design for the fashion industry.</p>
+    <div class=bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg mb-3>
+      <p class=font-bold text-green-800 text-sm mb-1>Entry Requirements</p>
+      <p class=text-sm text-gray-700>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
+    </div>
+    <div class=bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg mb-4>
+      <p class=font-bold text-green-800 text-sm mb-1>Admission Requirements</p>
+      <p class=text-sm text-gray-700>Completed admission form, medical form, and payment of Term 1 fees.</p>
+    </div>
+    <button onclick=openCourseDetail('fashion') class=w-full bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition>View Details</button>
+  </div>
+</div>
+
+<!-- Motor Vehicle Mechanics -->
+<div class=course-card bg-white rounded-2xl overflow-hidden border border-gray-200>
+  <div class=h-48 bg-gradient-to-br from-red-600 to-red-900 flex items-center justify-center>
+    <span class=text-6xl>🚗</span>
+  </div>
+  <div class=p-6>
+    <h3 class=text-xl font-bold text-green-800 mb-2>Motor Vehicle Mechanics</h3>
+    <p class=text-gray-600 text-sm mb-4>Engine repair, diagnostics, and vehicle maintenance for the automotive industry.</p>
+    <div class=bg-yellow-50 border-l-4 border-gold p-3 rounded-r-lg mb-3>
+      <p class=font-bold text-green-800 text-sm mb-1>Entry Requirements</p>
+      <p class=text-sm text-gray-700>KCPE certificate or KCSE certificate with a minimum grade of D minus.</p>
+    </div>
+    <div class=bg-green-50 border-l-4 border-green-800 p-3 rounded-r-lg mb-4>
+      <p class=font-bold text-green-800 text-sm mb-1>Admission Requirements</p>
+      <p class=text-sm text-gray-700>Completed admission form, medical form, and payment of Term 1 fees.</p>
+    </div>
+    <button onclick=openCourseDetail('motor') class=w-full bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition>View Details</button>
+  </div>
+</div>
+
+</div>
+</div>
+</section>
+
+<script>
+  function openCourseDetail(course) {
+    const panels = document.querySelectorAll('.detail-panel');
+    panels.forEach(p => p.classList.remove('active'));
+    const panel = document.getElementById('detail-' + course);
+    if (panel) {
+      panel.classList.add('active');
+      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-    function toggleDropdown(btn) {
-      btn.closest('.dropdown').classList.toggle('open');
-    }
-    function openDropdown(name) {
-      toggleSidebar();
-      setTimeout(() => {
-        const btns = document.querySelectorAll('.dropdown > button');
-        btns.forEach(b => {
-          if (b.textContent.toLowerCase().includes(name)) b.closest('.dropdown').classList.add('open');
-        });
-      }, 400);
-    }
-  </script>
+  }
+</script>
+
 </body>
-                  </html>
+  </html>
+                                                                                                          
