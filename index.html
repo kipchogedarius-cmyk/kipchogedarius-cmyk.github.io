@@ -1,1702 +1,800 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#166534">
 <title>Cheptarit Vocational Training Center</title>
-
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
-  :root {
-    --gold: #f59e0b;
-    --green: #166534;
-    --dark-green: #14532d;
-  }
-
-  body {
-    background: #fefce8;
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
-  .course-card {
-    transition: transform .2s, box-shadow .2s;
-  }
-
-  .course-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(0,0,0,.12);
-  }
-
-  .detail-panel {
-    display: none;
-  }
-
-  .detail-panel.active {
-    display: block;
-  }
-
-  .sidebar-overlay {
-    display: none;
-  }
-
-  .sidebar-overlay.open {
-    display: block;
-  }
-
-  #sidebar {
-    transition: transform .3s ease;
-  }
-
-  @media (max-width: 1023px) {
-    #sidebar.open {
-      transform: translateX(0);
-    }
-  }
-
-  @media (min-width: 1024px) {
-    #sidebar {
-      transform: translateX(0) !important;
-    }
-  }
-
-  .course-image {
-    width: 100%;
-    height: 190px;
-    object-fit: cover;
-  }
-
-  .section-image {
-    width: 100%;
-    max-height: 420px;
-    object-fit: cover;
-  }
-
-  .requirements-box {
-    background: #f0fdf4;
-    border-left: 4px solid #166534;
-  }
-
-  .boarding-box {
-    background: #fff7ed;
-    border-left: 4px solid #f59e0b;
-  }
-
-  .info-card {
-    transition: transform .2s, box-shadow .2s;
-  }
-
-  .info-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(0,0,0,.1);
-  }
+:root {
+  --green: #166534;
+  --dark-green: #064e3b;
+  --gold: #f59e0b;
+  --cream: #fefce8;
+}
+* { box-sizing: border-box; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--cream);
+  color: #1f2937;
+}
+img { max-width: 100%; }
+button, a { -webkit-tap-highlight-color: transparent; }
+a { text-decoration: none; }
+.site-header {
+  position: sticky; top: 0; z-index: 1000;
+  background: var(--green); color: white;
+  box-shadow: 0 4px 16px #0002;
+}
+.header-inner {
+  max-width: 1200px; margin: auto; padding: 12px 18px;
+  display: flex; align-items: center; gap: 14px;
+}
+.logo-mark {
+  background: var(--gold); color: #14532d; width: 48px; height: 48px;
+  border-radius: 14px; display: grid; place-items: center;
+  font-size: 21px; font-weight: 900; flex-shrink: 0;
+}
+.brand { flex: 1; min-width: 0; }
+.brand h1 { font-size: clamp(16px, 2.5vw, 23px); margin: 0; font-weight: 900; }
+.brand p { margin: 4px 0 0; font-size: 12px; color: #dcfce7; }
+.menu-btn {
+  border: 0; background: var(--gold); color: #14532d;
+  border-radius: 12px; padding: 12px 15px; font-size: 22px;
+  font-weight: bold; cursor: pointer;
+}
+.sidebar-overlay {
+  position: fixed; inset: 0; z-index: 1100;
+  background: #0008; opacity: 0; visibility: hidden;
+  transition: .3s;
+}
+.sidebar-overlay.show { opacity: 1; visibility: visible; }
+.sidebar {
+  position: fixed; z-index: 1200; left: 0; top: 0; bottom: 0;
+  width: min(310px, 86vw); background: #064e3b; color: white;
+  padding: 24px 18px; transform: translateX(-105%);
+  transition: transform .3s ease; overflow-y: auto;
+  box-shadow: 8px 0 28px #0003;
+}
+.sidebar.open { transform: translateX(0); }
+.sidebar-top { display: flex; align-items: center; justify-content: space-between; }
+.sidebar h2 { color: var(--gold); font-size: 21px; font-weight: 900; }
+.close-btn { background: transparent; color: white; border: 0; font-size: 30px; cursor: pointer; }
+.sidebar nav { display: grid; gap: 9px; margin-top: 22px; }
+.sidebar nav a {
+  display: block; padding: 14px; border-radius: 12px;
+  color: white; background: #ffffff12; font-weight: bold;
+}
+.sidebar nav a:hover { background: var(--gold); color: #14532d; }
+.sidebar-note { font-size: 13px; line-height: 1.7; color: #d1fae5; margin-top: 24px; }
+.hero {
+  background: linear-gradient(120deg, #064e3b, #166534 65%, #15803d);
+  color: white; padding: 56px 20px 62px; text-align: center;
+}
+.hero-content { max-width: 900px; margin: auto; }
+.eyebrow {
+  display: inline-block; background: #f59e0b20; color: #fcd34d;
+  border: 1px solid #fcd34d88; border-radius: 100px;
+  padding: 8px 15px; font-size: 12px; font-weight: bold; letter-spacing: 1px;
+}
+.hero h2 { font-size: clamp(34px, 7vw, 60px); line-height: 1.08; margin: 22px 0 15px; font-weight: 900; }
+.hero h2 span { color: var(--gold); }
+.hero p { max-width: 720px; margin: 0 auto; line-height: 1.8; color: #ecfdf5; font-size: 16px; }
+.hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 27px; }
+.btn {
+  display: inline-flex; justify-content: center; align-items: center;
+  padding: 14px 21px; border-radius: 12px; font-weight: 800;
+  border: 2px solid transparent; cursor: pointer; transition: .2s;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn-gold { background: var(--gold); color: #14532d; }
+.btn-light { background: white; color: var(--green); }
+.btn-green { background: var(--green); color: white; }
+.section { max-width: 1200px; padding: 52px 18px; margin: auto; }
+.section-heading { text-align: center; margin-bottom: 28px; }
+.section-heading .tag {
+  color: #b45309; font-size: 12px; letter-spacing: 2px;
+  text-transform: uppercase; font-weight: 900;
+}
+.section-heading h2 { color: var(--dark-green); font-size: clamp(27px, 5vw, 39px); margin: 9px 0; font-weight: 900; }
+.section-heading p { color: #64748b; line-height: 1.7; max-width: 720px; margin: 0 auto; }
+.banner-photo {
+  width: 100%; max-height: 510px; object-fit: cover; display: block;
+  border-radius: 20px; box-shadow: 0 14px 36px #064e3b20;
+}
+.banner-caption { text-align: center; color: #64748b; font-size: 13px; margin-top: 10px; }
+.info-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 18px; }
+.info-card {
+  background: white; border: 1px solid #e5e7eb; border-radius: 18px;
+  padding: 23px; box-shadow: 0 7px 20px #064e3b09;
+}
+.info-card h3 { color: var(--green); font-size: 19px; margin: 0 0 10px; font-weight: 900; }
+.info-card p { line-height: 1.75; color: #64748b; margin: 0; }
+.course-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(235px,1fr)); gap: 22px; }
+.course-card {
+  background: white; border: 1px solid #e5e7eb; border-radius: 19px;
+  overflow: hidden; box-shadow: 0 6px 22px #00000009;
+  transition: transform .25s, box-shadow .25s;
+}
+.course-card:hover { transform: translateY(-4px); box-shadow: 0 15px 30px #064e3b18; }
+.course-image { width: 100%; height: 190px; object-fit: cover; display: block; background: #dcfce7; }
+.course-image-placeholder {
+  height: 190px; display: grid; place-items: center;
+  background: linear-gradient(135deg,#dcfce7,#fef3c7); font-size: 56px;
+}
+.course-content { padding: 19px; }
+.course-content h3 { margin: 0 0 9px; font-size: 19px; color: var(--dark-green); font-weight: 900; }
+.course-content p { color: #64748b; font-size: 14px; line-height: 1.65; min-height: 45px; }
+.view-btn { width: 100%; margin-top: 8px; }
+.detail-panel {
+  display: none; margin-top: 25px; padding: 24px;
+  background: white; border: 1px solid #d1fae5; border-radius: 20px;
+  box-shadow: 0 10px 30px #064e3b10;
+}
+.detail-panel.active { display: block; animation: reveal .25s ease; }
+@keyframes reveal { from {opacity:0;transform:translateY(8px)} to {opacity:1;transform:translateY(0)} }
+.detail-panel h3 { color: var(--green); font-size: 26px; font-weight: 900; margin: 0 0 12px; }
+.detail-panel h4 { color: var(--dark-green); font-size: 18px; font-weight: 800; margin: 22px 0 9px; }
+.detail-panel p, .detail-panel li { line-height: 1.75; }
+.detail-panel li { margin-bottom: 5px; }
+.detail-photo { width: 100%; max-height: 390px; object-fit: cover; border-radius: 15px; margin: 12px 0; }
+.detail-close { float: right; border: 0; background: #fee2e2; color: #991b1b; padding: 9px 13px; border-radius: 9px; cursor: pointer; font-weight: bold; }
+.requirement-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap: 18px; }
+.requirement-card { background: white; border-radius: 16px; padding: 22px; border: 1px solid #e5e7eb; }
+.requirement-card h3 { color: var(--green); font-size: 19px; margin-top: 0; font-weight: 900; }
+.requirement-card li { line-height: 1.8; }
+.gold-section { background: #fef3c7; }
+.notice { padding: 15px; background: #fffbeb; border-left: 4px solid var(--gold); border-radius: 8px; line-height: 1.7; }
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(230px,1fr)); gap: 18px; }
+.gallery-grid img { width: 100%; height: 245px; object-fit: cover; border-radius: 17px; box-shadow: 0 8px 22px #0002; }
+footer { background: #052e16; color: white; padding: 32px 18px; text-align: center; }
+footer p { line-height: 1.8; margin: 7px 0; color: #d1fae5; }
+footer a { color: #fcd34d; font-weight: bold; }
+.footer-title { font-size: 21px; color: white; font-weight: 900; }
+@media (max-width: 600px) {
+  .header-inner { padding: 10px 12px; gap: 9px; }
+  .logo-mark { width: 42px; height: 42px; }
+  .brand p { font-size: 10px; }
+  .menu-btn { padding: 9px 12px; }
+  .hero { padding: 42px 17px 48px; }
+  .section { padding: 39px 14px; }
+  .course-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+  .course-image, .course-image-placeholder { height: 135px; }
+  .course-content { padding: 12px; }
+  .course-content h3 { font-size: 15px; }
+  .course-content p { font-size: 12px; min-height: 0; }
+  .course-content .btn { font-size: 12px; padding: 11px 7px; }
+  .detail-panel { padding: 17px; }
+}
+@media (max-width: 360px) {
+  .course-grid { grid-template-columns: 1fr; }
+  .course-image, .course-image-placeholder { height: 190px; }
+}
 </style>
 </head>
 
-<body class="text-gray-800">
+<body>
 
-<!-- HEADER -->
-<header class="bg-green-800 text-white shadow-lg sticky top-0 z-50">
-  <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar(false)"></div>
 
-    <div class="flex items-center gap-3">
-      <div class="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center font-bold text-green-900 text-xl">
-        CV
-      </div>
+<aside class="sidebar" id="sidebar" aria-label="Main navigation">
+  <div class="sidebar-top">
+    <h2>CVTC MENU</h2>
+    <button class="close-btn" onclick="toggleSidebar(false)" aria-label="Close menu">&times;</button>
+  </div>
+  <nav>
+    <a href="#home" onclick="toggleSidebar(false)">Home</a>
+    <a href="#courses" onclick="toggleSidebar(false)">Our Courses</a>
+    <a href="#about" onclick="toggleSidebar(false)">About Us</a>
+    <a href="#admissions" onclick="toggleSidebar(false)">Admissions</a>
+    <a href="#general-requirements" onclick="toggleSidebar(false)">General Requirements</a>
+    <a href="#boarding" onclick="toggleSidebar(false)">Boarding Requirements</a>
+    <a href="#fees" onclick="toggleSidebar(false)">Fees / Fee Structure</a>
+    <a href="#gallery" onclick="toggleSidebar(false)">Graduation & Ceremonies</a>
+    <a href="#contact" onclick="toggleSidebar(false)">Contact Us</a>
+  </nav>
+  <div class="sidebar-note">
+    <strong>Cheptarit Vocational Training Center</strong><br>
+    TVETA Registration: TVETA/PUBLIC/VTC/0157/2016<br>
+    Phone: 0718008580
+  </div>
+</aside>
 
-      <div>
-        <h1 class="text-xl md:text-2xl font-bold leading-tight">
-          Cheptarit Vocational Training Center
-        </h1>
-
-        <p class="text-sm text-green-200">
-          Eldoret-Kapsabet Road, Mosoriot, Nandi County
-        </p>
-      </div>
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo-mark">CV</div>
+    <div class="brand">
+      <h1>Cheptarit Vocational Training Center</h1>
+      <p>Eldoret–Kapsabet Road, Mosoriot, Nandi County</p>
     </div>
-
-    <!-- MOBILE MENU BUTTON -->
-    <button
-      class="lg:hidden text-3xl focus:outline-none"
-      onclick="toggleSidebar()"
-      aria-label="Open menu">
-      ☰
-    </button>
-
+    <button class="menu-btn" onclick="toggleSidebar(true)" aria-label="Open menu">☰</button>
   </div>
 </header>
 
-
-<!-- SIDEBAR OVERLAY -->
-<div
-  id="sidebar-overlay"
-  class="sidebar-overlay fixed inset-0 bg-black/50 z-40"
-  onclick="toggleSidebar()">
-</div>
-
-
-<div class="max-w-7xl mx-auto flex">
-
-  <!-- SIDEBAR -->
-  <aside
-    id="sidebar"
-    class="fixed lg:static inset-y-0 left-0 z-50 w-72 bg-white border-r border-gray-200 transform -translate-x-full lg:translate-x-0 overflow-y-auto">
-
-    <div class="p-5">
-
-      <!-- CLOSE BUTTON ON MOBILE -->
-      <div class="flex items-center justify-between mb-5 lg:hidden">
-        <h2 class="font-bold text-green-800 text-lg">
-          Menu
-        </h2>
-
-        <button
-          onclick="toggleSidebar()"
-          class="text-2xl text-gray-600">
-          ✕
-        </button>
-      </div>
-
-
-      <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
-        Quick Overview
+<main id="home">
+  <section class="hero">
+    <div class="hero-content">
+      <span class="eyebrow">SKILLS • TRAINING • OPPORTUNITY</span>
+      <h2>Skills for <span>Life</span></h2>
+      <p>
+        Build practical skills for your future at Cheptarit Vocational Training Center.
+        Explore technical, creative, hospitality and trade courses designed to help
+        learners develop confidence and workplace-ready abilities.
       </p>
-
-
-      <!-- COURSES -->
-      <a
-        href="#courses"
-        class="block px-4 py-3 rounded-lg hover:bg-green-50 text-green-800 font-medium"
-        onclick="closeSidebar()">
-        📚 Courses
-      </a>
-
-
-      <!-- ADMISSIONS -->
-      <a
-        href="#admissions"
-        class="block px-4 py-3 rounded-lg hover:bg-green-50 text-green-800 font-medium"
-        onclick="closeSidebar()">
-        📝 Admissions
-      </a>
-
-
-      <!-- FEES -->
-      <a
-        href="#fees"
-        class="block px-4 py-3 rounded-lg hover:bg-green-50 text-green-800 font-medium"
-        onclick="closeSidebar()">
-        💰 Fees
-      </a>
-
-
-      <!-- BOARDING -->
-      <a
-        href="#boarding"
-        class="block px-4 py-3 rounded-lg hover:bg-green-50 text-green-800 font-medium"
-        onclick="closeSidebar()">
-        🛏️ Boarding Requirements
-      </a>
-
-
-      <!-- ABOUT -->
-      <a
-        href="#about"
-        class="block px-4 py-3 rounded-lg hover:bg-green-50 text-green-800 font-medium"
-        onclick="closeSidebar()">
-        ℹ️ About Us
-      </a>
-
-
-      <!-- CONTACT -->
-      <a
-        href="#contact"
-        class="block px-4 py-3 rounded-lg hover:bg-green-50 text-green-800 font-medium"
-        onclick="closeSidebar()">
-        📞 Contact
-      </a>
-
-
-      <div class="pt-5 mt-4 border-t border-gray-200 text-sm text-gray-600">
-
-        <p class="font-bold text-green-800">
-          TVETA Registered
-        </p>
-
-        <p>
-          Reg: TVETA/PUBLIC/VTC/0157/2016
-        </p>
-
-        <p class="mt-2">
-          0718008580
-        </p>
-
-        <p>
-          cheptaritpoly65@yahoo.com
-        </p>
-
+      <div class="hero-actions">
+        <a class="btn btn-gold" href="#courses">Explore Courses ↓</a>
+        <a class="btn btn-light" href="#admissions">Apply for Admission</a>
       </div>
+    </div>
+  </section>
+
+  <section class="section" aria-label="College banner">
+    <img class="banner-photo"
+      src="https://i.ibb.co/dJfp18xS/Screenshot-2026-10-09-17-03-07-09.jpg"
+      alt="Cheptarit Vocational Training Center banner"
+      loading="eager">
+    <p class="banner-caption">Welcome to Cheptarit Vocational Training Center.</p>
+  </section>
+
+  <section class="section" id="about">
+    <div class="section-heading">
+      <span class="tag">Welcome to CVTC</span>
+      <h2>Learn Skills. Build Your Future.</h2>
+      <p>Practical training can open doors to employment, entrepreneurship and lifelong learning.</p>
+    </div>
+    <div class="info-grid">
+      <article class="info-card">
+        <h3>Practical Training</h3>
+        <p>Explore hands-on learning across technical trades, hospitality, beauty, design and computing.</p>
+      </article>
+      <article class="info-card">
+        <h3>Career Development</h3>
+        <p>Develop useful skills and prepare for opportunities in the workplace or self-employment.</p>
+      </article>
+      <article class="info-card">
+        <h3>TVETA Registration</h3>
+        <p>Registration reference: TVETA/PUBLIC/VTC/0157/2016.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="courses">
+    <div class="section-heading">
+      <span class="tag">Find Your Course</span>
+      <h2>Our Courses</h2>
+      <p>Select a course to view its description and the available course-specific requirements.</p>
+    </div>
+
+    <div class="course-grid">
+      <!-- Welding -->
+      <article class="course-card">
+        <img class="course-image" src="https://i.ibb.co/DHHYhRxK/Screenshot-2026-10-09-17-03-32-78.jpg" alt="Welding and fabrication training" loading="lazy">
+        <div class="course-content">
+          <h3>Welding &amp; Fabrication</h3>
+          <p>Learn metal joining, fabrication techniques and workshop safety.</p>
+          <button class="btn btn-green view-btn" onclick="openCourseDetail('welding')">View More</button>
+        </div>
+      </article>
+
+      <!-- Food and Beverage -->
+      <article class="course-card">
+        <img class="course-image" src="https://i.ibb.co/W4NYZWL3/Screenshot-2026-10-09-17-03-45-59.jpg" alt="Food and beverage training" loading="lazy">
+        <div class="course-content">
+          <h3>Food &amp; Beverage</h3>
+          <p>Explore food preparation, kitchen practice and hospitality service.</p>
+          <button class="btn btn-green view-btn" onclick="openCourseDetail('food')">View More</button>
+        </div>
+      </article>
+
+      <!-- Electrical Installation -->
+      <article class="course-card">
+        <div class="course-image-placeholder" role="img" aria-label="Electrical installation course">⚡</div>
+        <div class="course-content">
+          <h3>Electrical Installation</h3>
+          <p>Discover electrical wiring, installation practices and safety principles.</p>
+          <button class="btn btn-green view-btn" onclick="openCourseDetail('electrical')">View More</button>
+        </div>
+      </article>
+
+      <!-- Motor Vehicle Mechanics -->
+      <article class="course-card">
+        <div class="course-image-placeholder" role="img" aria-label="Motor vehicle mechanics course">🚗</div>
+        <div class="course-content">
+          <h3>Motor Vehicle Mechanics</h3>
+          <p>Learn about vehicle systems, maintenance and workshop practice.</p>
+          <button class="btn btn-green view-btn" onclick="openCourseDetail('motor')">View More</button>
+        </div>
+      </article>
+
+      <!-- Masonry -->
+      <article class="course-card">
+        <img class="course-image" src="https://i.ibb.co/QFTwMsY0/Masonry.jpg" alt="Masonry course" loading="lazy" onerror="this.outerHTML='<div class=&quot;course-image-placeholder&quot; role=&quot;img&quot; aria-label=&quot;Masonry course&quot;>🧱</div>'">
+        <div class="course-content">
+          <h3>Masonry</h3>
+          <p>Explore brickwork, blockwork, concrete and construction skills.</p>
+          <button class="btn btn-green view-btn" onclick="openCourseDetail('masonry')">View More</button>
+        </div>
+      </article>
+
+      <!-- Hairdressing -->
+      <article class="course-card">
+        <img class="course-image" src="https://i.ibb.co/cSy4Pd95/images.jpg" alt="Hairdressing and beauty therapy training" loading="lazy">
+        <div class="course-content">
+          <h3>Hairdressing &amp; Beauty Therapy</h3>
+          <p>Discover hair care, styling, beauty treatments and salon practice.</p>
+          <button class="btn btn-green view-btn" onclick="openCourseDetail('hair')">View More</button>
+        </div>
+      </article>
+      
+      <!-- Carpentry and Joinery -->
+      <article class="course-card">
+        <div class="course-image-placeholder" role="img" aria-label="Carpentry and joinery course">🪚</div>
+        <div class="course-content">
+          <h3>Carpentry &amp; Joinery</h3>
+          <p>Explore woodworking, measuring, cutting and joining techniques.</p>
+          <button class="btn btn-green view-btn" onclick="openCourseDetail('carpentry')">View More</button>
+        </div>
+      </article>
+
+      <!-- Plumbing -->
+      <article class="course-card">
+        <img class="course-image" src="https://i.ibb.co/cSJZ4337/images-2.jpg" alt="Plumbing training" loading="lazy">
+        <div class="course-content">
+          <h3>Plumbing</h3>
+          <p>Learn about pipes, fittings, plumbing tools and water systems.</p>
+          <button class="btn btn-green view-btn" onclick="openCourseDetail('plumbing')">View More</button>
+        </div>
+      </article>
+
+      <!-- Fashion and Design -->
+      <article class="course-card">
+        <img class="course-image" src="https://i.ibb.co/ZpjdJkKF/FB-IMG-17898480060796655.jpg" alt="Fashion and design training" loading="lazy">
+        <div class="course-content">
+          <h3>Fashion &amp; Design</h3>
+          <p>Explore garment construction, sewing, measurements and design.</p>
+          <button class="btn btn-green view-btn" onclick="openCourseDetail('fashion')">View More</button>
+        </div>
+      </article>
+
+      <!-- Computer and IT -->
+      <article class="course-card">
+        <img class="course-image" src="https://i.ibb.co/fYTW90GG/FB-IMG-17898479198166045.jpg" alt="Computer and information technology training" loading="lazy">
+        <div class="course-content">
+          <h3>Computer &amp; IT</h3>
+          <p>Discover computer basics, digital skills and information technology.</p>
+          <button class="btn btn-green view-btn" onclick="openCourseDetail('computer')">View More</button>
+        </div>
+      </article>
+
+      <!-- Metal Works -->
+      <article class="course-card">
+        <img class="course-image" src="https://i.ibb.co/v6g1Cb3b/pallisa-dlg-young-woman-welder.jpg" alt="Metal works practical training" loading="lazy">
+        <div class="course-content">
+          <h3>Metal Works</h3>
+          <p>Explore metalworking, fabrication and safe workshop practice.</p>
+          <button class="btn btn-green view-btn" onclick="openCourseDetail('metal')">View More</button>
+        </div>
+      </article>
+    </div>
+
+    <!-- Course detail panels -->
+    <div id="courseDetails">
+
+      <article class="detail-panel" id="detail-welding">
+        <button class="detail-close" onclick="closeCourseDetails()">✕ Close</button>
+        <h3>Welding &amp; Fabrication</h3>
+        <img class="detail-photo" src="https://i.ibb.co/DHHYhRxK/Screenshot-2026-10-09-17-03-32-78.jpg" alt="Welding and fabrication students" loading="lazy">
+        <h4>About the Course</h4>
+        <p>Welding and Fabrication introduces learners to joining metals, workshop tools, fabrication techniques and safe working practices. Training can prepare learners for work in metal workshops, fabrication businesses and related technical trades.</p>
+        <h4>Course-Specific Requirements</h4>
+        <ul>
+          <li>Goggles — welding</li>
+          <li>Two engineering files, rough and smooth — welding</li>
+          <li>Tri-square — welding</li>
+          <li>Tape measure</li>
+        </ul>
+        <p class="notice">See the General Requirements section below for additional information.</p>
+        <a class="btn btn-gold" href="#admissions">Apply Now</a>
+      </article>
+
+      <article class="detail-panel" id="detail-food">
+        <button class="detail-close" onclick="closeCourseDetails()">✕ Close</button>
+        <h3>Food &amp; Beverage</h3>
+        <img class="detail-photo" src="https://i.ibb.co/W4NYZWL3/Screenshot-2026-10-09-17-03-45-59.jpg" alt="Food and beverage students" loading="lazy">
+        <h4>About the Course</h4>
+        <p>This course introduces food preparation, kitchen organization, hygiene, table setting and hospitality service. Learners explore practical skills used in kitchens, restaurants and hospitality establishments.</p>
+        <h4>Course-Specific Requirements</h4>
+        <ul>
+          <li>Chef jacket, white</li>
+          <li>Apron, white</li>
+          <li>Black windbreaker</li>
+          <li>Black skirt — girls</li>
+          <li>Black pair of trousers — boys</li>
+          <li>Chef hat</li>
+          <li>Checked black pair of trousers — boys</li>
+          <li>Black skirts — girls</li>
+          <li>Chef knife</li>
+          <li>Kitchen cloth, towel, tea towel, dishcloth</li>
+          <li>Two buckets with lids, twenty liters</li>
+          <li>White long sleeve shirt or blouse</li>
+          <li>One glass cloth</li>
+          <li>Waiter's cloth</li>
+          <li>Bow tie</li>
+          <li>Slip cloth, damask red</li>
+          <li>Linen, red</li>
+          <li>Scarf, red neck</li>
+        </ul>
+        <a class="btn btn-gold" href="#admissions">Apply Now</a>
+      </article>
+
+      <article class="detail-panel" id="detail-electrical">
+        <button class="detail-close" onclick="closeCourseDetails()">✕ Close</button>
+        <h3>Electrical Installation</h3>
+        <div class="course-image-placeholder">⚡</div>
+        <h4>About the Course</h4>
+        <p>Electrical Installation introduces learners to electrical wiring, installation tools, basic electrical systems and safe working practices.</p>
+        <h4>Course-Specific Requirements</h4>
+        <ul>
+          <li>Two screwdrivers, flat and star — electrical installation</li>
+          <li>Phase tester — electrical installation</li>
+          <li>Tape measure</li>
+        </ul>
+        <a class="btn btn-gold" href="#admissions">Apply Now</a>
+      </article>
+
+      <article class="detail-panel" id="detail-motor">
+        <button class="detail-close" onclick="closeCourseDetails()">✕ Close</button>
+        <h3>Motor Vehicle Mechanics</h3>
+        <div class="course-image-placeholder">🚗</div>
+        <h4>About the Course</h4>
+        <p>This course introduces learners to vehicle components, maintenance, mechanical systems, fault identification and workshop safety.</p>
+        <h4>Course-Specific Requirements</h4>
+        <ul>
+          <li>Pliers — motor vehicle mechanics</li>
+        </ul>
+        <a class="btn btn-gold" href="#admissions">Apply Now</a>
+      </article>
+
+      <article class="detail-panel" id="detail-masonry">
+        <button class="detail-close" onclick="closeCourseDetails()">✕ Close</button>
+        <h3>Masonry</h3>
+        <img class="detail-photo" src="https://i.ibb.co/QFTwMsY0/Masonry.jpg" alt="Masonry training" loading="lazy" onerror="this.style.display='none'">
+        <h4>About the Course</h4>
+        <p>Masonry introduces learners to bricklaying, blockwork, concrete work, measuring and basic construction practices. The entry information previously provided for this course was KCPE or KCSE with a minimum grade of D minus; confirm current admission requirements with the college.</p>
+        <h4>Course-Specific Requirements</h4>
+        <ul>
+          <li>Jua kali safety boots</li>
+          <li>Tape measure</li>
+          <li>Trowel and plumb bob — masonry</li>
+        </ul>
+        <a class="btn btn-gold" href="#admissions">Apply Now</a>
+      </article>
+
+      <article class="detail-panel" id="detail-hair">
+        <button class="detail-close" onclick="closeCourseDetails()">✕ Close</button>
+        <h3>Hairdressing &amp; Beauty Therapy</h3>
+        <img class="detail-photo" src="https://i.ibb.co/cSy4Pd95/images.jpg" alt="Hairdressing and beauty therapy" loading="lazy">
+        <h4>About the Course</h4>
+        <p>Learn about hair care, styling, salon practice and beauty treatments. Practical learning can help prepare students for salon work or starting a beauty business.</p>
+        <h4>Course-Specific Requirements</h4>
+        <ul>
+          <li>Towels — small, medium, big (two)</li>
+          <li>Assorted combs (three)</li>
+          <li>Apron</li>
+          <li>Pins, styling pins</li>
+          <li>Pedicure and manicure set</li>
+          <li>Plastic chair, white</li>
+          <li>One hair dummy</li>
+          <li>Clips</li>
+          <li>Makeup kit</li>
+          <li>Nail polish, assorted</li>
+          <li>Top coat and base coat</li>
+        </ul>
+        <a class="btn btn-gold" href="#admissions">Apply Now</a>
+      </article>
+
+      <article class="detail-panel" id="detail-carpentry">
+        <button class="detail-close" onclick="closeCourseDetails()">✕ Close</button>
+        <h3>Carpentry &amp; Joinery</h3>
+        <div class="course-image-placeholder">🪚</div>
+        <h4>About the Course</h4>
+        <p>Carpentry and Joinery introduces learners to woodworking tools, measuring, cutting, assembling and finishing wooden items.</p>
+        <h4>Course-Specific Requirements</h4>
+        <ul>
+          <li>Tri-square, six inch — carpentry and joinery</li>
+          <li>Jua kali safety boots</li>
+          <li>Tape measure</li>
+        </ul>
+        <a class="btn btn-gold" href="#admissions">Apply Now</a>
+      </article>
+
+      <article class="detail-panel" id="detail-plumbing">
+        <button class="detail-close" onclick="closeCourseDetails()">✕ Close</button>
+        <h3>Plumbing</h3>
+        <img class="detail-photo" src="https://i.ibb.co/cSJZ4337/images-2.jpg" alt="Plumbing course training" loading="lazy">
+        <h4>About the Course</h4>
+        <p>Plumbing introduces learners to pipes, fittings, water supply systems, drainage and the safe use of plumbing tools.</p>
+        <h4>Course-Specific Requirements</h4>
+        <ul>
+          <li>Pipe wrench, small — plumbing</li>
+          <li>Hacksaw — plumbing</li>
+          <li>Tape measure</li>
+        </ul>
+        <a class="btn btn-gold" href="#admissions">Apply Now</a>
+      </article>
+
+      <article class="detail-panel" id="detail-fashion">
+        <button class="detail-close" onclick="closeCourseDetails()">✕ Close</button>
+        <h3>Fashion &amp; Design</h3>
+        <img class="detail-photo" src="https://i.ibb.co/ZpjdJkKF/FB-IMG-17898480060796655.jpg" alt="Fashion and design students" loading="lazy">
+        <h4>About the Course</h4>
+        <p>Fashion and Design introduces learners to garment construction, taking measurements, sewing, pattern work and clothing design.</p>
+        <h4>Course-Specific Requirements</h4>
+        <ul>
+          <li>A pair of scissors, number nine</li>
+          <li>Tape measure</li>
+          <li>One dozen needles, round, number fourteen</li>
+          <li>Hand needle</li>
+          <li>Bobbin and bobbin case</li>
+          <li>Dressmaking pins</li>
+        </ul>
+        <a class="btn btn-gold" href="#admissions">Apply Now</a>
+      </article>
+
+      <article class="detail-panel" id="detail-computer">
+        <button class="detail-close" onclick="closeCourseDetails()">✕ Close</button>
+        <h3>Computer &amp; IT</h3>
+        <img class="detail-photo" src="https://i.ibb.co/fYTW90GG/FB-IMG-17898479198166045.jpg" alt="Computer and IT training" loading="lazy">
+        <h4>About the Course</h4>
+        <p>Computer and IT introduces learners to digital literacy, computer applications, file management and essential information technology skills.</p>
+        <h4>Course-Specific Requirements</h4>
+        <p>No separate Computer &amp; IT equipment list was supplied. Please confirm any course-specific items with the college.</p>
+        <a class="btn btn-gold" href="#admissions">Apply Now</a>
+      </article>
+
+      <article class="detail-panel" id="detail-metal">
+        <button class="detail-close" onclick="closeCourseDetails()">✕ Close</button>
+        <h3>Metal Works</h3>
+        <img class="detail-photo" src="https://i.ibb.co/v6g1Cb3b/pallisa-dlg-young-woman-welder.jpg" alt="Metal works training" loading="lazy">
+        <h4>About the Course</h4>
+        <p>Metal Works introduces learners to metal shaping, fabrication, workshop tools and safe metalworking practices.</p>
+        <h4>Course-Specific Requirements</h4>
+        <ul>
+          <li>Goggles — welding</li>
+          <li>Two engineering files, rough and smooth — welding</li>
+          <li>Tri-square — welding</li>
+          <li>Tape measure</li>
+        </ul>
+        <a class="btn btn-gold" href="#admissions">Apply Now</a>
+      </article>
 
     </div>
-  </aside>
+  </section>
 
+  <section class="section" id="admissions">
+    <div class="section-heading">
+      <span class="tag">Join CVTC</span>
+      <h2>Admissions</h2>
+      <p>Interested in joining Cheptarit Vocational Training Center? Contact the college to confirm available courses, intake dates, entry requirements and application procedures.</p>
+    </div>
+    <div class="info-grid">
+      <article class="info-card">
+        <h3>1. Choose a Course</h3>
+        <p>Explore the course cards above and open View More to read about each course.</p>
+      </article>
+      <article class="info-card">
+        <h3>2. Confirm Requirements</h3>
+        <p>Check the course-specific items and contact the college to confirm current admission requirements.</p>
+      </article>
+      <article class="info-card">
+        <h3>3. Contact the College</h3>
+        <p>Call 0718008580 or email cheptaritpoly65@yahoo.com for admission guidance.</p>
+      </article>
+    </div>
+  </section>
+  
+  <section class="section" id="general-requirements">
+    <div class="section-heading">
+      <span class="tag">Before You Join</span>
+      <h2>General Requirements</h2>
+      <p>Prepare for admission by confirming the documents and items required for your selected course.</p>
+    </div>
+    <div class="requirement-grid">
+      <article class="requirement-card">
+        <h3>Admission Checklist</h3>
+        <ul>
+          <li>Confirm the entry requirements for your selected course.</li>
+          <li>Confirm the documents needed during registration.</li>
+          <li>Ask the college about the current intake dates.</li>
+          <li>Confirm the applicable fees with the college.</li>
+        </ul>
+      </article>
+      <article class="requirement-card">
+        <h3>Course Materials</h3>
+        <p>Review the course-specific requirements in the View More section for your chosen course. Confirm the official list with the college before purchasing equipment.</p>
+      </article>
+      <article class="requirement-card">
+        <h3>Need Assistance?</h3>
+        <p>Contact the college for the official admission checklist and any additional general requirements.</p>
+        <a class="btn btn-green" href="tel:0718008580">Call the College</a>
+      </article>
+    </div>
+  </section>
 
-  <!-- MAIN CONTENT -->
-  <main class="flex-1 p-4 md:p-8">
+  <section class="section gold-section" id="boarding">
+    <div class="section-heading">
+      <span class="tag">Student Accommodation</span>
+      <h2>Boarding Requirements</h2>
+      <p>Students planning to board can use this checklist to prepare their personal and accommodation items.</p>
+    </div>
+    <div class="requirement-grid">
+      <article class="requirement-card">
+        <h3>Bedding</h3>
+        <ul>
+          <li>Mattress — three inch</li>
+          <li>Two blankets</li>
+          <li>Two bedsheets</li>
+          <li>A towel</li>
+          <li>A bed cover</li>
+        </ul>
+      </article>
+      <article class="requirement-card">
+        <h3>Personal Items</h3>
+        <ul>
+          <li>A plate</li>
+          <li>A cup</li>
+          <li>A spoon</li>
+          <li>Two basins</li>
+          <li>A black pair of shoes</li>
+        </ul>
+      </article>
+      <article class="requirement-card">
+        <h3>Hygiene &amp; Games</h3>
+        <ul>
+          <li>Washing soap</li>
+          <li>Bathing soap</li>
+          <li>Tissue paper — three rolls per term</li>
+          <li>Toothpaste</li>
+          <li>Toothbrush</li>
+          <li>White rubber shoes for games</li>
+        </ul>
+      </article>
+    </div>
+  </section>
 
+  <section class="section" id="fees">
+    <div class="section-heading">
+      <span class="tag">Plan Your Studies</span>
+      <h2>Fees &amp; Fee Structure</h2>
+      <p>Find out about course fees and other applicable charges before joining the college.</p>
+    </div>
+    <div class="info-grid">
+      <article class="info-card">
+        <h3>Fee Structure</h3>
+        <p>The downloadable fee structure will be added here once the official document or download link is available.</p>
+        <p style="margin-top:12px;font-size:13px;">For current fees, please contact the college directly.</p>
+        <a class="btn btn-green" href="tel:0718008580">Enquire About Fees</a>
+      </article>
+      <article class="info-card">
+        <h3>Fee Enquiries</h3>
+        <p>Phone: 0718008580</p>
+        <p>Email: cheptaritpoly65@yahoo.com</p>
+        <a class="btn btn-gold" href="mailto:cheptaritpoly65@yahoo.com?subject=Fee%20Structure%20Enquiry">Email the College</a>
+      </article>
+    </div>
+  </section>
 
-    <!-- HERO -->
-    <section
-      class="bg-gradient-to-r from-green-800 to-green-600 text-white rounded-2xl p-8 md:p-12 mb-8">
-
-      <h2 class="text-3xl md:text-4xl font-bold mb-3">
-        Skills for Life
-      </h2>
-
-      <p class="text-green-100 text-lg mb-6 max-w-2xl">
-        Artisan and trade test courses in welding, motor vehicle mechanics,
-        electrical installation, hairdressing, fashion design, food and beverage,
-        masonry, carpentry, plumbing, computer and IT, and more.
-      </p>
-
-      <div class="flex flex-wrap gap-3">
-
-        <a
-          href="#courses"
-          class="bg-yellow-400 text-green-900 font-bold px-6 py-3 rounded-lg hover:bg-yellow-300">
-          Explore Courses
-        </a>
-
-        <a
-          href="#admissions"
-          class="border-2 border-white px-6 py-3 rounded-lg hover:bg-white hover:text-green-800">
-          Apply Now
-        </a>
-
-      </div>
-    </section>
-
-
-    <!-- COLLEGE IMAGE -->
-    <section class="mb-10">
-
+  <section class="section" id="gallery">
+    <div class="section-heading">
+      <span class="tag">Our College Community</span>
+      <h2>Graduation &amp; Ceremonies</h2>
+      <p>Celebrating student achievement, skills development and memorable moments at our college.</p>
+    </div>
+    <div class="gallery-grid">
       <img
-        src="https://i.ibb.co/qLKP2PZJ/Screenshot-2026-10-03-17-48-28-77.jpg"
-        alt="Cheptarit Vocational Training Center"
-        class="section-image rounded-2xl shadow-lg">
-
-    </section>
-
-
-    <!-- ABOUT US -->
-    <section id="about" class="mb-12">
-
-      <div class="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm">
-
-        <h2 class="text-2xl md:text-3xl font-bold text-green-800 mb-4">
-          About Us
-        </h2>
-
-        <p class="text-gray-700 leading-relaxed mb-4">
-          Cheptarit Vocational Training Center is committed to providing
-          practical technical and vocational skills that prepare learners
-          for employment, entrepreneurship, and further education.
-        </p>
-
-        <p class="text-gray-700 leading-relaxed">
-          Our training focuses on hands-on learning, professional skills,
-          discipline, and practical experience across a range of technical
-          and vocational courses.
-        </p>
-
-      </div>
-
-    </section>
-
-
-    <!-- ADMISSIONS -->
-    <section id="admissions" class="mb-12">
-
-      <div class="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm">
-
-        <h2 class="text-2xl md:text-3xl font-bold text-green-800 mb-4">
-          Admissions
-        </h2>
-
-        <p class="text-gray-700 mb-5">
-          Applications are open for students interested in joining our
-          technical and vocational training programs.
-        </p>
-
-        <div class="grid md:grid-cols-3 gap-5">
-
-          <div class="info-card bg-green-50 rounded-xl p-5">
-            <h3 class="font-bold text-green-800 mb-2">
-              1. Choose a Course
-            </h3>
-            <p class="text-sm text-gray-700">
-              Select the course that matches your interests and career goals.
-            </p>
-          </div>
-
-          <div class="info-card bg-yellow-50 rounded-xl p-5">
-            <h3 class="font-bold text-green-800 mb-2">
-              2. Apply
-            </h3>
-            <p class="text-sm text-gray-700">
-              Contact the institution and complete the admission process.
-            </p>
-          </div>
-
-          <div class="info-card bg-blue-50 rounded-xl p-5">
-            <h3 class="font-bold text-green-800 mb-2">
-              3. Begin Training
-            </h3>
-            <p class="text-sm text-gray-700">
-              Report to the center with the required documents and personal items.
-            </p>
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- FEES -->
-    <section id="fees" class="mb-12">
-
-      <div class="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm">
-
-        <h2 class="text-2xl md:text-3xl font-bold text-green-800 mb-4">
-          Fees
-        </h2>
-
-        <p class="text-gray-700 leading-relaxed">
-          For the latest course fees, payment instructions, and term requirements,
-          please contact Cheptarit Vocational Training Center directly.
-        </p>
-
-        <div class="mt-5 bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-r-lg">
-          <p class="font-semibold text-green-800">
-            Contact the center for the current fee structure.
-          </p>
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- COURSES -->
-    <section id="courses" class="mb-12">
-
-      <h2 class="text-2xl md:text-3xl font-bold text-green-800 mb-2">
-        Our Courses
-      </h2>
-
-      <p class="text-gray-600 mb-6">
-        Click <strong>View More</strong> on any course to see its description,
-        image, entry information, and course-specific requirements.
-      </p>
-
-
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-
-        <!-- COMPUTER & IT -->
-        <div class="course-card bg-white rounded-2xl overflow-hidden border border-gray-200">
-
-          <img
-            src="https://i.ibb.co/fYTW90GG/FB-IMG-17898479198166045.jpg"
-            alt="Computer and IT"
-            class="course-image">
-
-          <div class="p-6">
-
-            <h3 class="text-xl font-bold text-green-800 mb-2">
-              Computer & IT
-            </h3>
-
-            <p class="text-gray-600 text-sm mb-4">
-              Develop practical computer and information technology skills
-              for modern workplaces and digital environments.
-            </p>
-
-            <button
-              onclick="openCourseDetail('computer')"
-              class="w-full bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition">
-              View More
-            </button>
-
-          </div>
-        </div>
-
-
-        <!-- WELDING -->
-        <div class="course-card bg-white rounded-2xl overflow-hidden border border-gray-200">
-
-          <div class="h-48 bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center text-6xl">
-            🔥
-          </div>
-
-          <div class="p-6">
-
-            <h3 class="text-xl font-bold text-green-800 mb-2">
-              Welding & Fabrication
-            </h3>
-
-            <p class="text-gray-600 text-sm mb-4">
-              Master arc welding, gas welding, and metal fabrication
-              for construction and manufacturing.
-            </p>
-
-            <div class="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded-r-lg mb-4">
-
-              <p class="font-bold text-green-800 text-sm mb-1">
-                Entry Requirements
-              </p>
-
-              <p class="text-sm text-gray-700">
-                KCPE certificate or KCSE certificate with a minimum grade of D minus.
-              </p>
-
-            </div>
-
-            <button
-              onclick="openCourseDetail('welding')"
-              class="w-full bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition">
-              View More
-            </button>
-
-          </div>
-        </div>
-
-
-        <!-- FOOD & BEVERAGE -->
-        <div class="course-card bg-white rounded-2xl overflow-hidden border border-gray-200">
-
-          <img
-            src="https://i.ibb.co/7tpgb7Zh/FB-IMG-17898481565676636.jpg"
-            alt="Food and Beverage"
-            class="course-image">
-
-          <div class="p-6">
-
-            <h3 class="text-xl font-bold text-green-800 mb-2">
-              Food & Beverage
-            </h3>
-
-            <p class="text-gray-600 text-sm mb-4">
-              Train in food preparation, hygiene, hospitality service,
-              and professional kitchen operations.
-            </p>
-
-            <div class="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded-r-lg mb-4">
-
-              <p class="font-bold text-green-800 text-sm mb-1">
-                Entry Requirements
-              </p>
-
-              <p class="text-sm text-gray-700">
-                KCPE certificate or KCSE certificate with a minimum grade of D minus.
-              </p>
-
-            </div>
-
-            <button
-              onclick="openCourseDetail('food')"
-              class="w-full bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition">
-              View More
-            </button>
-
-          </div>
-        </div>
-
-
-        <!-- ELECTRICAL INSTALLATION -->
-        <div class="course-card bg-white rounded-2xl overflow-hidden border border-gray-200">
-
-          <div class="h-48 bg-gradient-to-br from-yellow-500 to-amber-800 flex items-center justify-center text-6xl">
-            ⚡
-          </div>
-
-          <div class="p-6">
-
-            <h3 class="text-xl font-bold text-green-800 mb-2">
-              Electrical Installation
-            </h3>
-
-            <p class="text-gray-600 text-sm mb-4">
-              Learn wiring, circuit installation, and electrical systems
-              for homes and commercial buildings.
-            </p>
-
-            <div class="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded-r-lg mb-4">
-
-              <p class="font-bold text-green-800 text-sm mb-1">
-                Entry Requirements
-              </p>
-
-              <p class="text-sm text-gray-700">
-                KCPE certificate or KCSE certificate with a minimum grade of D minus.
-              </p>
-
-            </div>
-
-            <button
-              onclick="openCourseDetail('electrical')"
-              class="w-full bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition">
-              View More
-            </button>
-
-          </div>
-        </div>
-
-
-        <!-- MOTOR VEHICLE -->
-        <div class="course-card bg-white rounded-2xl overflow-hidden border border-gray-200">
-
-          <div class="h-48 bg-gradient-to-br from-blue-700 to-blue-950 flex items-center justify-center text-6xl">
-            🔧
-          </div>
-
-          <div class="p-6">
-
-            <h3 class="text-xl font-bold text-green-800 mb-2">
-              Motor Vehicle Mechanics
-            </h3>
-
-            <p class="text-gray-600 text-sm mb-4">
-              Diagnose, repair, and maintain vehicle engines, brakes,
-              mechanical systems, and related components.
-            </p>
-
-            <div class="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded-r-lg mb-4">
-
-              <p class="font-bold text-green-800 text-sm mb-1">
-                Entry Requirements
-              </p>
-
-              <p class="text-sm text-gray-700">
-                KCPE certificate or KCSE certificate with a minimum grade of D minus.
-              </p>
-
-            </div>
-
-            <button
-              onclick="openCourseDetail('motor')"
-              class="w-full bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition">
-              View More
-            </button>
-
-          </div>
-        </div>
-
-
-        <!-- MASONRY -->
-        <div class="course-card bg-white rounded-2xl overflow-hidden border border-gray-200">
-
-          <img
-            src="https://i.ibb.co/QFTwMsY0/FB-IMG-17898480247074386.jpg"
-            alt="Masonry"
-            class="course-image">
-
-          <div class="p-6">
-
-            <h3 class="text-xl font-bold text-green-800 mb-2">
-              Masonry
-            </h3>
-
-            <p class="text-gray-600 text-sm mb-4">
-              Learn bricklaying, blockwork, plastering, foundations,
-              walls, and practical construction techniques.
-            </p>
-
-            <div class="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded-r-lg mb-4">
-
-              <p class="font-bold text-green-800 text-sm mb-1">
-                Entry Requirements
-              </p>
-
-              <p class="text-sm text-gray-700">
-                KCPE certificate or KCSE certificate with a minimum grade of D minus.
-              </p>
-
-            </div>
-
-            <button
-              onclick="openCourseDetail('masonry')"
-              class="w-full bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition">
-              View More
-            </button>
-
-          </div>
-      </div>
-              <!-- CARPENTRY & JOINERY -->
-        <div class="course-card bg-white rounded-2xl overflow-hidden border border-gray-200">
-
-          <img
-            src="https://i.ibb.co/LKsLrcc/FB-IMG-17898481683500763.jpg"
-            alt="Carpentry and Joinery"
-            class="course-image">
-
-          <div class="p-6">
-
-            <h3 class="text-xl font-bold text-green-800 mb-2">
-              Carpentry & Joinery
-            </h3>
-
-            <p class="text-gray-600 text-sm mb-4">
-              Practical woodworking, furniture making, joinery, and
-              structural timber construction.
-            </p>
-
-            <div class="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded-r-lg mb-4">
-              <p class="font-bold text-green-800 text-sm mb-1">
-                Entry Requirements
-              </p>
-              <p class="text-sm text-gray-700">
-                KCPE certificate or KCSE certificate with a minimum grade of D minus.
-              </p>
-            </div>
-
-            <button
-              onclick="openCourseDetail('carpentry')"
-              class="w-full bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition">
-              View More
-            </button>
-
-          </div>
-        </div>
-
-
-        <!-- PLUMBING -->
-        <div class="course-card bg-white rounded-2xl overflow-hidden border border-gray-200">
-
-          <div class="h-48 bg-gradient-to-br from-blue-500 to-blue-900 flex items-center justify-center text-6xl">
-            🔧
-          </div>
-
-          <div class="p-6">
-
-            <h3 class="text-xl font-bold text-green-800 mb-2">
-              Plumbing
-            </h3>
-
-            <p class="text-gray-600 text-sm mb-4">
-              Learn pipe installation, drainage systems, water supply,
-              maintenance, and plumbing practices.
-            </p>
-
-            <div class="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded-r-lg mb-4">
-              <p class="font-bold text-green-800 text-sm mb-1">
-                Entry Requirements
-              </p>
-              <p class="text-sm text-gray-700">
-                KCPE certificate or KCSE certificate with a minimum grade of D minus.
-              </p>
-            </div>
-
-            <button
-              onclick="openCourseDetail('plumbing')"
-              class="w-full bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition">
-              View More
-            </button>
-
-          </div>
-        </div>
-
-
-        <!-- FASHION & DESIGN -->
-        <div class="course-card bg-white rounded-2xl overflow-hidden border border-gray-200">
-
-          <img
-            src="https://i.ibb.co/ZpjdJkKF/FB-IMG-17898480060796655.jpg"
-            alt="Fashion and Design"
-            class="course-image">
-
-          <div class="p-6">
-
-            <h3 class="text-xl font-bold text-green-800 mb-2">
-              Fashion & Design
-            </h3>
-
-            <p class="text-gray-600 text-sm mb-4">
-              Garment making, pattern drafting, sewing, textile work,
-              and practical fashion design skills.
-            </p>
-
-            <div class="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded-r-lg mb-4">
-              <p class="font-bold text-green-800 text-sm mb-1">
-                Entry Requirements
-              </p>
-              <p class="text-sm text-gray-700">
-                KCPE certificate or KCSE certificate with a minimum grade of D minus.
-              </p>
-            </div>
-
-            <button
-              onclick="openCourseDetail('fashion')"
-              class="w-full bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition">
-              View More
-            </button>
-
-          </div>
-        </div>
-
-
-        <!-- HAIRDRESSING -->
-        <div class="course-card bg-white rounded-2xl overflow-hidden border border-gray-200">
-
-          <div class="h-48 bg-gradient-to-br from-pink-500 to-rose-700 flex items-center justify-center text-6xl">
-            ✂️
-          </div>
-
-          <div class="p-6">
-
-            <h3 class="text-xl font-bold text-green-800 mb-2">
-              Hairdressing & Beauty Therapy
-            </h3>
-
-            <p class="text-gray-600 text-sm mb-4">
-              Professional hair cutting, styling, coloring, beauty treatments,
-              manicure, pedicure, and salon skills.
-            </p>
-
-            <div class="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded-r-lg mb-4">
-              <p class="font-bold text-green-800 text-sm mb-1">
-                Entry Requirements
-              </p>
-              <p class="text-sm text-gray-700">
-                KCPE certificate or KCSE certificate with a minimum grade of D minus.
-              </p>
-            </div>
-
-            <button
-              onclick="openCourseDetail('hairdressing')"
-              class="w-full bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition">
-              View More
-            </button>
-
-          </div>
-        </div>
-
-
-        <!-- METAL WORK -->
-        <div class="course-card bg-white rounded-2xl overflow-hidden border border-gray-200">
-
-          <div class="h-48 bg-gradient-to-br from-slate-600 to-slate-900 flex items-center justify-center text-6xl">
-            🔩
-          </div>
-
-          <div class="p-6">
-
-            <h3 class="text-xl font-bold text-green-800 mb-2">
-              Metal Work
-            </h3>
-
-            <p class="text-gray-600 text-sm mb-4">
-              Practical metal fabrication, workshop practices, measuring,
-              cutting, filing, and welding-related skills.
-            </p>
-
-            <div class="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded-r-lg mb-4">
-              <p class="font-bold text-green-800 text-sm mb-1">
-                Entry Requirements
-              </p>
-              <p class="text-sm text-gray-700">
-                KCPE certificate or KCSE certificate with a minimum grade of D minus.
-              </p>
-            </div>
-
-            <button
-              onclick="openCourseDetail('metal')"
-              class="w-full bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition">
-              View More
-            </button>
-
-          </div>
-        </div>
-
-
-      </div>
-    </section>
-
-
-    <!-- GENERAL REQUIREMENTS -->
-    <section id="general-requirements" class="mb-12">
-
-      <div class="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm">
-
-        <h2 class="text-2xl md:text-3xl font-bold text-green-800 mb-4">
-          General Requirements
-        </h2>
-
-        <p class="text-gray-600 mb-5">
-          Students should have the necessary documents and personal items
-          required for admission and training.
-        </p>
-
-        <div class="requirements-box rounded-r-xl p-5">
-
-          <ol class="list-decimal list-inside space-y-2 text-gray-700">
-            <li>Valid identification or relevant student documents.</li>
-            <li>Academic certificate or result slip where applicable.</li>
-            <li>Completed admission documents.</li>
-            <li>Medical information/form where required.</li>
-            <li>Personal stationery and writing materials.</li>
-            <li>Required course-specific tools and equipment.</li>
-            <li>Any additional items communicated by the institution.</li>
-          </ol>
-
-        </div>
-
-      </div>
-    </section>
-
-
-    <!-- BOARDING REQUIREMENTS -->
-    <section id="boarding" class="mb-12">
-
-      <div class="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm">
-
-        <h2 class="text-2xl md:text-3xl font-bold text-green-800 mb-4">
-          Boarding Requirements
-        </h2>
-
-        <p class="text-gray-600 mb-5">
-          Students joining boarding should come with the following items:
-        </p>
-
-        <div class="boarding-box rounded-r-xl p-5">
-
-          <ol class="list-decimal list-inside space-y-2 text-gray-700">
-
-            <li>Mattress — three inch</li>
-            <li>Two blankets</li>
-            <li>Two bedsheets</li>
-            <li>A towel</li>
-            <li>A bed cover</li>
-            <li>A plate</li>
-            <li>A cup</li>
-            <li>A spoon</li>
-            <li>Two basins</li>
-            <li>A black pair of shoes</li>
-            <li>Washing soap</li>
-            <li>Bathing soap</li>
-            <li>Tissue paper — three rolls per term</li>
-            <li>Toothpaste</li>
-            <li>Toothbrush</li>
-            <li>White rubber shoes for games</li>
-
-          </ol>
-
-        </div>
-
-      </div>
-    </section>
-
-
-    <!-- CEREMONIAL / COLLEGE IMAGE -->
-    <section class="mb-12">
-
-      <div class="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm">
-
-        <img
-          src="https://i.ibb.co/7tpgb7Zh/FB-IMG-17898481565676636.jpg"
-          alt="Cheptarit Vocational Training Center"
-          class="section-image">
-
-        <div class="p-6">
-
-          <h2 class="text-2xl font-bold text-green-800 mb-2">
-            Cheptarit Vocational Training Center
-          </h2>
-
-          <p class="text-gray-600">
-            Practical skills, technical training, and opportunities for
-            personal and professional development.
-          </p>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- COURSE DETAIL PANELS -->
-
-    <!-- COMPUTER DETAIL -->
-    <section id="detail-computer" class="detail-panel mb-10">
-
-      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
-
-        <img
-          src="https://i.ibb.co/fYTW90GG/FB-IMG-17898479198166045.jpg"
-          alt="Computer and IT"
-          class="section-image">
-
-        <div class="p-6 md:p-8">
-
-          <button
-            onclick="closeCourseDetail('computer')"
-            class="mb-5 text-green-800 font-semibold">
-            ← Back to Courses
-          </button>
-
-          <h2 class="text-3xl font-bold text-green-800 mb-4">
-            Computer & IT
-          </h2>
-
-          <p class="text-gray-700 leading-relaxed mb-6">
-            The Computer & IT course introduces learners to practical
-            computer and information technology skills used in education,
-            business, communication, and modern workplaces.
-          </p>
-
-          <div class="requirements-box rounded-r-xl p-5">
-
-            <h3 class="font-bold text-green-800 text-lg mb-3">
-              Requirements
-            </h3>
-
-            <p class="text-gray-700">
-              KCPE certificate or KCSE certificate with a minimum grade
-              of D minus.
-            </p>
-
-          </div>
-
-        </div>
-      </div>
-
-    </section>
-
-
-    <!-- WELDING DETAIL -->
-    <section id="detail-welding" class="detail-panel mb-10">
-
-      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
-
-        <div class="h-64 bg-gradient-to-br from-gray-700 to-gray-950 flex items-center justify-center text-8xl">
-          🔥
-        </div>
-
-        <div class="p-6 md:p-8">
-
-          <button
-            onclick="closeCourseDetail('welding')"
-            class="mb-5 text-green-800 font-semibold">
-            ← Back to Courses
-          </button>
-
-          <h2 class="text-3xl font-bold text-green-800 mb-4">
-            Welding & Fabrication
-          </h2>
-
-          <p class="text-gray-700 leading-relaxed mb-6">
-            Master arc welding, gas welding, metal fabrication,
-            workshop safety, and practical metalwork techniques.
-          </p>
-
-          <div class="requirements-box rounded-r-xl p-5">
-
-            <h3 class="font-bold text-green-800 text-lg mb-3">
-              Entry Requirements
-            </h3>
-
-            <p class="text-gray-700">
-              KCPE certificate or KCSE certificate with a minimum grade
-              of D minus.
-            </p>
-
-          </div>
-
-        </div>
-      </div>
-
-    </section>
-
-
-    <!-- FOOD DETAIL -->
-    <section id="detail-food" class="detail-panel mb-10">
-
-      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
-
-        <img
-          src="https://i.ibb.co/7tpgb7Zh/FB-IMG-17898481565676636.jpg"
-          alt="Food and Beverage"
-          class="section-image">
-
-        <div class="p-6 md:p-8">
-
-          <button
-            onclick="closeCourseDetail('food')"
-            class="mb-5 text-green-800 font-semibold">
-            ← Back to Courses
-          </button>
-
-          <h2 class="text-3xl font-bold text-green-800 mb-4">
-            Food & Beverage
-          </h2>
-
-          <p class="text-gray-700 leading-relaxed mb-6">
-            Training in food preparation, kitchen hygiene, hospitality,
-            restaurant service, and professional food and beverage operations.
-          </p>
-
-          <div class="requirements-box rounded-r-xl p-5">
-
-            <h3 class="font-bold text-green-800 text-lg mb-3">
-              Course Requirements
-            </h3>
-
-            <ol class="list-decimal list-inside space-y-2 text-gray-700">
-
-              <li>Chef jacket, white</li>
-              <li>Apron, white</li>
-              <li>Black windbreaker</li>
-              <li>Black skirt — girls</li>
-              <li>Black pair of trousers — boys</li>
-              <li>Chef hat</li>
-              <li>Checked black pair of trousers — boys</li>
-              <li>Black skirts — girls</li>
-              <li>Chef knife</li>
-              <li>Kitchen cloth, towel, tea towel, dishcloth</li>
-              <li>Two buckets with lids, twenty liters</li>
-              <li>White long sleeve shirt or blouse</li>
-              <li>One glass cloth</li>
-              <li>Waiter's cloth</li>
-              <li>Bow tie</li>
-              <li>Slip cloth, damask red</li>
-              <li>Linen, red</li>
-              <li>Scarf, red neck</li>
-
-            </ol>
-
-          </div>
-
-        </div>
-      </div>
-
-    </section>
-
-
-    <!-- ELECTRICAL DETAIL -->
-    <section id="detail-electrical" class="detail-panel mb-10">
-
-      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
-
-        <div class="h-64 bg-gradient-to-br from-yellow-500 to-amber-800 flex items-center justify-center text-8xl">
-          ⚡
-        </div>
-
-        <div class="p-6 md:p-8">
-
-          <button
-            onclick="closeCourseDetail('electrical')"
-            class="mb-5 text-green-800 font-semibold">
-            ← Back to Courses
-          </button>
-
-          <h2 class="text-3xl font-bold text-green-800 mb-4">
-            Electrical Installation
-          </h2>
-
-          <p class="text-gray-700 leading-relaxed mb-6">
-            Learn electrical wiring, circuit installation, testing,
-            safety procedures, and electrical systems.
-          </p>
-
-          <div class="requirements-box rounded-r-xl p-5">
-
-            <h3 class="font-bold text-green-800 text-lg mb-3">
-              Course Requirements
-            </h3>
-
-            <ol class="list-decimal list-inside space-y-2 text-gray-700">
-
-              <li>Two screwdrivers, flat and star — electrical installation</li>
-              <li>Phase tester — electrical installation</li>
-              <li>Tape measure</li>
-
-            </ol>
-
-          </div>
-
-        </div>
-      </div>
-
-    </section>
-
-
-    <!-- MOTOR VEHICLE DETAIL -->
-    <section id="detail-motor" class="detail-panel mb-10">
-
-      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
-
-        <div class="h-64 bg-gradient-to-br from-blue-700 to-blue-950 flex items-center justify-center text-8xl">
-          🔧
-        </div>
-
-        <div class="p-6 md:p-8">
-
-          <button
-            onclick="closeCourseDetail('motor')"
-            class="mb-5 text-green-800 font-semibold">
-            ← Back to Courses
-          </button>
-
-          <h2 class="text-3xl font-bold text-green-800 mb-4">
-            Motor Vehicle Mechanics
-          </h2>
-
-          <p class="text-gray-700 leading-relaxed mb-6">
-            Develop practical skills in vehicle maintenance, engine systems,
-            diagnostics, repair, and workshop practices.
-          </p>
-
-          <div class="requirements-box rounded-r-xl p-5">
-
-            <h3 class="font-bold text-green-800 text-lg mb-3">
-              Course Requirements
-            </h3>
-
-            <ol class="list-decimal list-inside space-y-2 text-gray-700">
-
-              <li>Pliers — motor vehicle mechanics</li>
-
-            </ol>
-
-          </div>
-
-        </div>
-      </div>
-
-              </section>
-               <!-- MASONRY DETAIL -->
-    <section id="detail-masonry" class="detail-panel mb-10">
-
-      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
-
-        <img
-          src="https://i.ibb.co/QFTwMsY0/FB-IMG-17898480247074386.jpg"
-          alt="Masonry"
-          class="section-image">
-
-        <div class="p-6 md:p-8">
-
-          <button
-            onclick="closeCourseDetail('masonry')"
-            class="mb-5 text-green-800 font-semibold">
-            ← Back to Courses
-          </button>
-
-          <h2 class="text-3xl font-bold text-green-800 mb-4">
-            Masonry
-          </h2>
-
-          <p class="text-gray-700 leading-relaxed mb-6">
-            Practical training in brickwork, blockwork, plastering,
-            foundations, walls, and other construction techniques.
-          </p>
-
-          <div class="requirements-box rounded-r-xl p-5">
-
-            <h3 class="font-bold text-green-800 text-lg mb-3">
-              Course Requirements
-            </h3>
-
-            <ol class="list-decimal list-inside space-y-2 text-gray-700">
-
-              <li>Trowel and plumb bob — masonry</li>
-              <li>Jua kali safety boots</li>
-              <li>Tape measure</li>
-
-            </ol>
-
-          </div>
-
-        </div>
-      </div>
-
-    </section>
-
-
-    <!-- CARPENTRY DETAIL -->
-    <section id="detail-carpentry" class="detail-panel mb-10">
-
-      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
-
-        <img
-          src="https://i.ibb.co/LKsLrcc/FB-IMG-17898481683500763.jpg"
-          alt="Carpentry and Joinery"
-          class="section-image">
-
-        <div class="p-6 md:p-8">
-
-          <button
-            onclick="closeCourseDetail('carpentry')"
-            class="mb-5 text-green-800 font-semibold">
-            ← Back to Courses
-          </button>
-
-          <h2 class="text-3xl font-bold text-green-800 mb-4">
-            Carpentry & Joinery
-          </h2>
-
-          <p class="text-gray-700 leading-relaxed mb-6">
-            Practical training in woodworking, furniture making,
-            joinery, measuring, and timber construction.
-          </p>
-
-          <div class="requirements-box rounded-r-xl p-5">
-
-            <h3 class="font-bold text-green-800 text-lg mb-3">
-              Course Requirements
-            </h3>
-
-            <ol class="list-decimal list-inside space-y-2 text-gray-700">
-
-              <li>Tri-square, six inch — carpentry and joinery</li>
-              <li>Jua kali safety boots</li>
-              <li>Tape measure</li>
-
-            </ol>
-
-          </div>
-
-        </div>
-      </div>
-
-    </section>
-
-
-    <!-- PLUMBING DETAIL -->
-    <section id="detail-plumbing" class="detail-panel mb-10">
-
-      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
-
-        <div class="h-64 bg-gradient-to-br from-blue-500 to-blue-900 flex items-center justify-center text-8xl">
-          🔧
-        </div>
-
-        <div class="p-6 md:p-8">
-
-          <button
-            onclick="closeCourseDetail('plumbing')"
-            class="mb-5 text-green-800 font-semibold">
-            ← Back to Courses
-          </button>
-
-          <h2 class="text-3xl font-bold text-green-800 mb-4">
-            Plumbing
-          </h2>
-
-          <p class="text-gray-700 leading-relaxed mb-6">
-            Practical training in pipe installation, drainage,
-            water supply systems, maintenance, and plumbing work.
-          </p>
-
-          <div class="requirements-box rounded-r-xl p-5">
-
-            <h3 class="font-bold text-green-800 text-lg mb-3">
-              Course Requirements
-            </h3>
-
-            <ol class="list-decimal list-inside space-y-2 text-gray-700">
-
-              <li>Pipe wrench, small — plumbing</li>
-              <li>Hacksaw — plumbing</li>
-              <li>Tape measure</li>
-
-            </ol>
-
-          </div>
-
-        </div>
-      </div>
-
-    </section>
-
-
-    <!-- FASHION DETAIL -->
-    <section id="detail-fashion" class="detail-panel mb-10">
-
-      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
-
-        <img
-          src="https://i.ibb.co/ZpjdJkKF/FB-IMG-17898480060796655.jpg"
-          alt="Fashion and Design"
-          class="section-image">
-
-        <div class="p-6 md:p-8">
-
-          <button
-            onclick="closeCourseDetail('fashion')"
-            class="mb-5 text-green-800 font-semibold">
-            ← Back to Courses
-          </button>
-
-          <h2 class="text-3xl font-bold text-green-800 mb-4">
-            Fashion & Design
-          </h2>
-
-          <p class="text-gray-700 leading-relaxed mb-6">
-            Training in garment making, sewing, pattern drafting,
-            dressmaking, and practical fashion design.
-          </p>
-
-          <div class="requirements-box rounded-r-xl p-5">
-
-            <h3 class="font-bold text-green-800 text-lg mb-3">
-              Course Requirements
-            </h3>
-
-            <ol class="list-decimal list-inside space-y-2 text-gray-700">
-
-              <li>A pair of scissors, number nine</li>
-              <li>Tape measure</li>
-              <li>One dozen needles, round, number fourteen</li>
-              <li>Hand needle</li>
-              <li>Bobbin and bobbin case</li>
-              <li>Dressmaking pins</li>
-
-            </ol>
-
-          </div>
-
-        </div>
-      </div>
-
-    </section>
-
-
-    <!-- HAIRDRESSING DETAIL -->
-    <section id="detail-hairdressing" class="detail-panel mb-10">
-
-      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
-
-        <div class="h-64 bg-gradient-to-br from-pink-500 to-rose-700 flex items-center justify-center text-8xl">
-          ✂️
-        </div>
-
-        <div class="p-6 md:p-8">
-
-          <button
-            onclick="closeCourseDetail('hairdressing')"
-            class="mb-5 text-green-800 font-semibold">
-            ← Back to Courses
-          </button>
-
-          <h2 class="text-3xl font-bold text-green-800 mb-4">
-            Hairdressing & Beauty Therapy
-          </h2>
-
-          <p class="text-gray-700 leading-relaxed mb-6">
-            Professional training in hairdressing, styling, beauty therapy,
-            manicure, pedicure, makeup, and salon practices.
-          </p>
-
-          <div class="requirements-box rounded-r-xl p-5">
-
-            <h3 class="font-bold text-green-800 text-lg mb-3">
-              Course Requirements
-            </h3>
-
-            <ol class="list-decimal list-inside space-y-2 text-gray-700">
-
-              <li>Towels — small, medium, big (two)</li>
-              <li>Assorted combs (three)</li>
-              <li>Apron</li>
-              <li>Pins, styling pins</li>
-              <li>Pedicure and manicure set</li>
-              <li>Plastic chair, white</li>
-              <li>One hair dummy</li>
-              <li>Clips</li>
-              <li>Makeup kit</li>
-              <li>Nail polish, assorted</li>
-              <li>Top coat and base coat</li>
-
-            </ol>
-
-          </div>
-
-        </div>
-      </div>
-
-    </section>
-
-
-    <!-- METAL WORK DETAIL -->
-    <section id="detail-metal" class="detail-panel mb-10">
-
-      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
-
-        <div class="h-64 bg-gradient-to-br from-slate-600 to-slate-900 flex items-center justify-center text-8xl">
-          🔩
-        </div>
-
-        <div class="p-6 md:p-8">
-
-          <button
-            onclick="closeCourseDetail('metal')"
-            class="mb-5 text-green-800 font-semibold">
-            ← Back to Courses
-          </button>
-
-          <h2 class="text-3xl font-bold text-green-800 mb-4">
-            Metal Work
-          </h2>
-
-          <p class="text-gray-700 leading-relaxed mb-6">
-            Practical metalwork training including measuring, cutting,
-            filing, welding, fabrication, and workshop safety.
-          </p>
-
-          <div class="requirements-box rounded-r-xl p-5">
-
-            <h3 class="font-bold text-green-800 text-lg mb-3">
-              Course Requirements
-            </h3>
-
-            <ol class="list-decimal list-inside space-y-2 text-gray-700">
-
-              <li>Goggles — welding</li>
-              <li>Two engineering files, rough and smooth — welding</li>
-              <li>Tri-square — welding</li>
-              <li>Tape measure</li>
-
-            </ol>
-
-          </div>
-
-        </div>
-      </div>
-
-    </section>
-
-
-    <!-- CEREMONIAL & GRADUATION -->
-    <section id="ceremonials" class="mb-12">
-
-      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
-
-        <div class="p-6 md:p-8">
-
-          <h2 class="text-2xl md:text-3xl font-bold text-green-800 mb-3">
-            Ceremonials & Graduation
-          </h2>
-
-          <p class="text-gray-600 mb-6">
-            Celebrating our students, achievements, skills, and milestones.
-          </p>
-
-          <div class="grid md:grid-cols-2 gap-5">
-
-            <img
-              src="https://i.ibb.co/Q37VqRnt/FB-IMG-17910388378768951.jpg"
-              alt="Ceremonial event"
-              class="w-full h-72 object-cover rounded-xl shadow">
-
-            <img
-              src="https://i.ibb.co/rRT0M3mf/FB-IMG-17910388326692727.jpg"
-              alt="Graduation"
-              class="w-full h-72 object-cover rounded-xl shadow">
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- CONTACT -->
-    <section id="contact" class="mb-12">
-
-      <div class="bg-green-800 text-white rounded-2xl p-6 md:p-8">
-
-        <h2 class="text-2xl md:text-3xl font-bold mb-5">
-          Contact Us
-        </h2>
-
-        <div class="grid md:grid-cols-3 gap-5">
-
-          <div>
-            <p class="text-green-200 text-sm">Phone</p>
-            <p class="font-semibold">0718008580</p>
-          </div>
-
-          <div>
-            <p class="text-green-200 text-sm">Email</p>
-            <p class="font-semibold break-all">
-              cheptaritpoly65@yahoo.com
-            </p>
-          </div>
-
-          <div>
-            <p class="text-green-200 text-sm">Location</p>
-            <p class="font-semibold">
-              Eldoret-Kapsabet Road, Mosoriot, Nandi County
-            </p>
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-  </main>
-</div>
-
-
-<!-- FOOTER -->
-<footer class="bg-green-950 text-white mt-10">
-
-  <div class="max-w-7xl mx-auto px-4 py-8 text-center">
-
-    <h2 class="text-xl font-bold mb-2">
-      Cheptarit Vocational Training Center
-    </h2>
-
-    <p class="text-green-200 text-sm">
-      Skills for Life • Technical Training • Vocational Education
-    </p>
-
-    <p class="text-green-300 text-xs mt-4">
-      © 2026 Cheptarit Vocational Training Center. All rights reserved.
-    </p>
-
-  </div>
-
+        src="https://i.ibb.co/Q37VqRnt/FB-IMG-17910388378768951.jpg"
+        alt="Cheptarit college ceremony"
+        loading="lazy">
+      <img
+        src="https://i.ibb.co/rRT0M3mf/FB-IMG-17910388326692727.jpg"
+        alt="Cheptarit college graduation"
+        loading="lazy">
+      <img
+        src="https://i.ibb.co/LKsLrcc/FB-IMG-17898481683500763.jpg"
+        alt="College sports and games"
+        loading="lazy">
+      <img
+        src="https://i.ibb.co/7tpgb7Zh/FB-IMG-17898481565676636.jpg"
+        alt="College sports and student activities"
+        loading="lazy">
+    </div>
+  </section>
+
+  <section class="section" id="contact">
+    <div class="section-heading">
+      <span class="tag">Get in Touch</span>
+      <h2>Contact Cheptarit VTC</h2>
+      <p>Contact the college for course enquiries, admission information, fee details and other assistance.</p>
+    </div>
+    <div class="info-grid">
+      <article class="info-card">
+        <h3>Visit Us</h3>
+        <p>Eldoret–Kapsabet Road, Mosoriot, Nandi County, Kenya.</p>
+      </article>
+      <article class="info-card">
+        <h3>Call Us</h3>
+        <p>0718008580</p>
+        <a class="btn btn-green" href="tel:0718008580">Call Now</a>
+      </article>
+      <article class="info-card">
+        <h3>Email Us</h3>
+        <p>cheptaritpoly65@yahoo.com</p>
+        <a class="btn btn-gold" href="mailto:cheptaritpoly65@yahoo.com">Send Email</a>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-title">Cheptarit Vocational Training Center</div>
+  <p>Skills for Life • Practical Training • Brighter Futures</p>
+  <p>TVETA Registration: TVETA/PUBLIC/VTC/0157/2016</p>
+  <p>
+    <a href="#home">Home</a> ·
+    <a href="#courses">Courses</a> ·
+    <a href="#admissions">Admissions</a> ·
+    <a href="#contact">Contact</a>
+  </p>
+  <hr style="border:0;border-top:1px solid #ffffff30;max-width:700px;margin:22px auto;">
+  <p>© <span id="copyrightYear">2026</span> Cheptarit Vocational Training Center. All Rights Reserved.</p>
+  <p>Website by <strong style="color:#fcd34d;">Darius Kipchoge</strong></p>
+  <p>Contact: <a href="tel:+254701234990">+254701234990</a></p>
 </footer>
 
-
-<!-- JAVASCRIPT -->
 <script>
+function toggleSidebar(forceState) {
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("sidebarOverlay");
+  const shouldOpen = typeof forceState === "boolean"
+    ? forceState
+    : !sidebar.classList.contains("open");
 
-  /* ================================
-     SIDEBAR
-  ================================= */
+  sidebar.classList.toggle("open", shouldOpen);
+  overlay.classList.toggle("show", shouldOpen);
+  document.body.style.overflow = shouldOpen ? "hidden" : "";
+}
 
-  function toggleSidebar() {
+function openCourseDetail(course) {
+  const panels = document.querySelectorAll(".detail-panel");
+  panels.forEach(panel => panel.classList.remove("active"));
 
-    const sidebar = document.getElementById("sidebar");
-    const overlay = document.getElementById("sidebar-overlay");
+  const selectedPanel = document.getElementById("detail-" + course);
+  if (!selectedPanel) return;
 
-    sidebar.classList.toggle("open");
-    overlay.classList.toggle("open");
+  selectedPanel.classList.add("active");
+  selectedPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+}
 
-  }
-
-
-  function closeSidebar() {
-
-    const sidebar = document.getElementById("sidebar");
-    const overlay = document.getElementById("sidebar-overlay");
-
-    sidebar.classList.remove("open");
-    overlay.classList.remove("open");
-
-  }
-
-
-  /* ================================
-     COURSE DETAILS
-  ================================= */
-
-  function openCourseDetail(course) {
-
-    const panels = document.querySelectorAll(".detail-panel");
-
-    panels.forEach(function(panel) {
-      panel.classList.remove("active");
-    });
-
-
-    const panel = document.getElementById("detail-" + course);
-
-    if (panel) {
-
-      panel.classList.add("active");
-
-      setTimeout(function() {
-
-        panel.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-
-      }, 50);
-
-    }
-
-  }
-
-
-  function closeCourseDetail(course) {
-
-    const panel = document.getElementById("detail-" + course);
-
-    if (panel) {
-      panel.classList.remove("active");
-    }
-
-    const courses = document.getElementById("courses");
-
-    if (courses) {
-
-      courses.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
-
-    }
-
-  }
-
-
-  /* ================================
-     CLOSE SIDEBAR WHEN ESC IS PRESSED
-  ================================= */
-
-  document.addEventListener("keydown", function(event) {
-
-    if (event.key === "Escape") {
-      closeSidebar();
-    }
-
+function closeCourseDetails() {
+  document.querySelectorAll(".detail-panel").forEach(panel => {
+    panel.classList.remove("active");
   });
+}
 
+document.addEventListener("keydown", function(event) {
+  if (event.key === "Escape") {
+    toggleSidebar(false);
+    closeCourseDetails();
+  }
+});
 
-  /* ================================
-     CLOSE SIDEBAR AFTER CLICKING
-     A LINK ON SMALL SCREENS
-  ================================= */
-
-  document.querySelectorAll("#sidebar a").forEach(function(link) {
-
-    link.addEventListener("click", function() {
-
-      if (window.innerWidth < 1024) {
-        closeSidebar();
-      }
-
-    });
-
-  });
-
+document.getElementById("copyrightYear").textContent = new Date().getFullYear();
 </script>
 
 </body>
-            </html>   
+  </html>
+  
