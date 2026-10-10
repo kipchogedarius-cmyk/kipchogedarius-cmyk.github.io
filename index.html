@@ -3,798 +3,628 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#166534">
 <title>Cheptarit Vocational Training Center</title>
 <script src="https://cdn.tailwindcss.com"></script>
-
 <style>
-:root {
-  --green: #166534;
-  --dark-green: #064e3b;
-  --gold: #f59e0b;
-  --cream: #fefce8;
+:root{--green:#166534;--dark:#064e3b;--gold:#f59e0b;--cream:#fefce8}
+*{box-sizing:border-box;scroll-behavior:smooth}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--cream);color:#1f2937}
+button,a{ -webkit-tap-highlight-color:transparent}
+a{text-decoration:none}
+button{cursor:pointer}
+.header{position:sticky;top:0;z-index:500;background:var(--green);color:#fff;box-shadow:0 4px 16px #0002}
+.header-inner{max-width:1200px;margin:auto;padding:12px 16px;display:flex;align-items:center;gap:12px}
+.logo{width:46px;height:46px;flex-shrink:0;border-radius:14px;background:var(--gold);color:var(--dark);display:grid;place-items:center;font-size:20px;font-weight:900}
+.brand{flex:1;min-width:0}.brand h1{font-size:clamp(15px,2.5vw,23px);margin:0;font-weight:900}.brand p{margin:4px 0 0;font-size:11px;color:#dcfce7}
+.menu-button{border:0;background:var(--gold);color:var(--dark);padding:11px 14px;border-radius:11px;font-size:21px}
+.overlay{position:fixed;inset:0;background:#0008;z-index:800;opacity:0;visibility:hidden;transition:.25s}
+.overlay.show{opacity:1;visibility:visible}
+.sidebar{position:fixed;top:0;bottom:0;left:0;z-index:900;width:min(315px,88vw);padding:22px 17px;background:var(--dark);color:white;overflow-y:auto;transform:translateX(-105%);transition:transform .3s}
+.sidebar.open{transform:translateX(0)}
+.side-top{display:flex;justify-content:space-between;align-items:center}.side-top h2{color:var(--gold);font-weight:900;font-size:21px}
+.close-menu{font-size:30px;background:none;border:0;color:white}
+.side-nav{display:grid;gap:8px;margin-top:22px}
+.side-nav button{width:100%;text-align:left;padding:13px 14px;border:1px solid #ffffff15;border-radius:11px;background:#ffffff0d;color:white;font-weight:700}
+.side-nav button:hover,.side-nav button.active{background:var(--gold);color:var(--dark)}
+.side-note{font-size:12px;line-height:1.8;color:#d1fae5;margin-top:22px}
+main{min-height:65vh}
+.page{display:none;animation:fadein .25s ease}
+.page.active{display:block}
+@keyframes fadein{from{opacity:.3;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.wrap{max-width:1180px;margin:auto;padding:42px 18px}
+.hero{position:relative;min-height:360px;display:flex;align-items:center;justify-content:center;text-align:center;color:white;background:linear-gradient(120deg,#064e3b,#166534);padding:45px 18px;overflow:hidden}
+.hero-slide{display:none;max-width:850px;animation:fadein .5s}
+.hero-slide.active{display:block}
+.hero h2{font-size:clamp(33px,6vw,57px);font-weight:900;line-height:1.1;margin:16px 0}
+.hero h2 span{color:var(--gold)}
+.hero p{font-size:16px;line-height:1.8;color:#ecfdf5;max-width:720px;margin:0 auto}
+.pill{display:inline-block;border:1px solid #fcd34d88;background:#f59e0b20;color:#fcd34d;padding:8px 14px;border-radius:30px;font-size:11px;font-weight:900;letter-spacing:1.5px}
+.dots{display:flex;justify-content:center;gap:8px;margin-top:22px}
+.dot{width:9px;height:9px;border:0;border-radius:20px;background:#ffffff70;padding:0}
+.dot.active{background:var(--gold);width:25px}
+.btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:11px;padding:13px 18px;font-weight:800;transition:.2s}
+.btn:hover{transform:translateY(-2px)}
+.gold{background:var(--gold);color:var(--dark)}.green{background:var(--green);color:white}.white{background:white;color:var(--green)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.heading{text-align:center;margin-bottom:26px}
+.heading small{color:#b45309;font-weight:900;letter-spacing:2px;text-transform:uppercase}
+.heading h2{font-size:clamp(27px,5vw,38px);font-weight:900;color:var(--dark);margin:8px 0}
+.heading p{color:#64748b;line-height:1.75;max-width:760px;margin:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.card{background:white;border:1px solid #e5e7eb;border-radius:17px;overflow:hidden;box-shadow:0 7px 20px #064e3b0b}
+.card-body{padding:20px}.card h3{font-size:19px;font-weight:900;color:var(--green);margin:0 0 9px}
+.card p{line-height:1.7;color:#64748b;margin:0 0 12px}
+.photo{display:block;width:100%;height:190px;object-fit:cover;background:#dcfce7}
+.course-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(225px,1fr));gap:18px}
+.course-card{background:#fff;border:1px solid #e5e7eb;border-radius:17px;overflow:hidden;box-shadow:0 7px 20px #064e3b0b;transition:.2s}
+.course-card:hover{transform:translateY(-4px);box-shadow:0 15px 30px #064e3b1a}
+.course-card .card-body{padding:16px}
+.course-card h3{font-size:18px;min-height:42px}
+.course-card .btn{width:100%}
+.placeholder{height:190px;display:grid;place-items:center;background:linear-gradient(135deg,#dcfce7,#fef3c7);font-size:55px}
+.panel{background:white;border:1px solid #e5e7eb;border-radius:17px;padding:22px;margin-top:18px}
+.panel h3{color:var(--green);font-size:22px;font-weight:900;margin:0 0 12px}
+.panel h4{color:var(--dark);font-size:17px;font-weight:900;margin:22px 0 8px}
+.panel p,.panel li{line-height:1.8}
+.panel li{margin-bottom:4px}
+.course-detail-photo{width:100%;max-height:390px;object-fit:cover;border-radius:14px;margin:10px 0}
+.back-btn{margin-bottom:18px}
+.notice{background:#fffbeb;border-left:4px solid var(--gold);padding:14px;border-radius:8px;line-height:1.7}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.field{display:flex;flex-direction:column;gap:7px}
+.field.full{grid-column:1/-1}
+.field label{font-weight:800;color:#374151;font-size:14px}
+.field input,.field textarea,.field select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px;background:#fff;font:inherit}
+.field input:focus,.field textarea:focus,.field select:focus{outline:2px solid #86efac;border-color:var(--green)}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;background:white;font-size:14px}
+th,td{border:1px solid #e5e7eb;padding:10px;text-align:left;white-space:nowrap}
+th{background:var(--green);color:white}
+.total-row{font-weight:900;background:#fef3c7}
+.fee-viewer{width:100%;height:650px;border:1px solid #d1d5db;border-radius:12px;background:white}
+.slideshow{position:relative}
+.gallery-slide{display:none}
+.gallery-slide.active{display:block;animation:fadein .4s}
+.gallery-slide img{display:block;width:100%;height:320px;object-fit:cover;border-radius:16px}
+.gallery-caption{text-align:center;color:#64748b;font-size:13px;margin-top:9px}
+footer{background:#052e16;color:white;padding:30px 18px;text-align:center}
+footer p{line-height:1.8;color:#d1fae5;margin:7px 0}
+footer a{color:#fcd34d}
+.footer-title{font-size:21px;font-weight:900;color:white}
+@media(max-width:600px){
+ .header-inner{padding:10px}.logo{width:40px;height:40px}.brand p{font-size:10px}
+ .wrap{padding:32px 13px}.hero{min-height:390px;padding:35px 15px}
+ .form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}
+ .photo{height:155px}.course-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+ .course-card .card-body{padding:12px}.course-card h3{font-size:15px;min-height:0}
+ .course-card p{font-size:12px}.course-card .btn{font-size:12px;padding:11px 6px}
+ .gallery-slide img{height:235px}.fee-viewer{height:520px}
 }
-* { box-sizing: border-box; scroll-behavior: smooth; }
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: var(--cream);
-  color: #1f2937;
-}
-img { max-width: 100%; }
-button, a { -webkit-tap-highlight-color: transparent; }
-a { text-decoration: none; }
-.site-header {
-  position: sticky; top: 0; z-index: 1000;
-  background: var(--green); color: white;
-  box-shadow: 0 4px 16px #0002;
-}
-.header-inner {
-  max-width: 1200px; margin: auto; padding: 12px 18px;
-  display: flex; align-items: center; gap: 14px;
-}
-.logo-mark {
-  background: var(--gold); color: #14532d; width: 48px; height: 48px;
-  border-radius: 14px; display: grid; place-items: center;
-  font-size: 21px; font-weight: 900; flex-shrink: 0;
-}
-.brand { flex: 1; min-width: 0; }
-.brand h1 { font-size: clamp(16px, 2.5vw, 23px); margin: 0; font-weight: 900; }
-.brand p { margin: 4px 0 0; font-size: 12px; color: #dcfce7; }
-.menu-btn {
-  border: 0; background: var(--gold); color: #14532d;
-  border-radius: 12px; padding: 12px 15px; font-size: 22px;
-  font-weight: bold; cursor: pointer;
-}
-.sidebar-overlay {
-  position: fixed; inset: 0; z-index: 1100;
-  background: #0008; opacity: 0; visibility: hidden;
-  transition: .3s;
-}
-.sidebar-overlay.show { opacity: 1; visibility: visible; }
-.sidebar {
-  position: fixed; z-index: 1200; left: 0; top: 0; bottom: 0;
-  width: min(310px, 86vw); background: #064e3b; color: white;
-  padding: 24px 18px; transform: translateX(-105%);
-  transition: transform .3s ease; overflow-y: auto;
-  box-shadow: 8px 0 28px #0003;
-}
-.sidebar.open { transform: translateX(0); }
-.sidebar-top { display: flex; align-items: center; justify-content: space-between; }
-.sidebar h2 { color: var(--gold); font-size: 21px; font-weight: 900; }
-.close-btn { background: transparent; color: white; border: 0; font-size: 30px; cursor: pointer; }
-.sidebar nav { display: grid; gap: 9px; margin-top: 22px; }
-.sidebar nav a {
-  display: block; padding: 14px; border-radius: 12px;
-  color: white; background: #ffffff12; font-weight: bold;
-}
-.sidebar nav a:hover { background: var(--gold); color: #14532d; }
-.sidebar-note { font-size: 13px; line-height: 1.7; color: #d1fae5; margin-top: 24px; }
-.hero {
-  background: linear-gradient(120deg, #064e3b, #166534 65%, #15803d);
-  color: white; padding: 56px 20px 62px; text-align: center;
-}
-.hero-content { max-width: 900px; margin: auto; }
-.eyebrow {
-  display: inline-block; background: #f59e0b20; color: #fcd34d;
-  border: 1px solid #fcd34d88; border-radius: 100px;
-  padding: 8px 15px; font-size: 12px; font-weight: bold; letter-spacing: 1px;
-}
-.hero h2 { font-size: clamp(34px, 7vw, 60px); line-height: 1.08; margin: 22px 0 15px; font-weight: 900; }
-.hero h2 span { color: var(--gold); }
-.hero p { max-width: 720px; margin: 0 auto; line-height: 1.8; color: #ecfdf5; font-size: 16px; }
-.hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 27px; }
-.btn {
-  display: inline-flex; justify-content: center; align-items: center;
-  padding: 14px 21px; border-radius: 12px; font-weight: 800;
-  border: 2px solid transparent; cursor: pointer; transition: .2s;
-}
-.btn:hover { transform: translateY(-2px); }
-.btn-gold { background: var(--gold); color: #14532d; }
-.btn-light { background: white; color: var(--green); }
-.btn-green { background: var(--green); color: white; }
-.section { max-width: 1200px; padding: 52px 18px; margin: auto; }
-.section-heading { text-align: center; margin-bottom: 28px; }
-.section-heading .tag {
-  color: #b45309; font-size: 12px; letter-spacing: 2px;
-  text-transform: uppercase; font-weight: 900;
-}
-.section-heading h2 { color: var(--dark-green); font-size: clamp(27px, 5vw, 39px); margin: 9px 0; font-weight: 900; }
-.section-heading p { color: #64748b; line-height: 1.7; max-width: 720px; margin: 0 auto; }
-.banner-photo {
-  width: 100%; max-height: 510px; object-fit: cover; display: block;
-  border-radius: 20px; box-shadow: 0 14px 36px #064e3b20;
-}
-.banner-caption { text-align: center; color: #64748b; font-size: 13px; margin-top: 10px; }
-.info-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 18px; }
-.info-card {
-  background: white; border: 1px solid #e5e7eb; border-radius: 18px;
-  padding: 23px; box-shadow: 0 7px 20px #064e3b09;
-}
-.info-card h3 { color: var(--green); font-size: 19px; margin: 0 0 10px; font-weight: 900; }
-.info-card p { line-height: 1.75; color: #64748b; margin: 0; }
-.course-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(235px,1fr)); gap: 22px; }
-.course-card {
-  background: white; border: 1px solid #e5e7eb; border-radius: 19px;
-  overflow: hidden; box-shadow: 0 6px 22px #00000009;
-  transition: transform .25s, box-shadow .25s;
-}
-.course-card:hover { transform: translateY(-4px); box-shadow: 0 15px 30px #064e3b18; }
-.course-image { width: 100%; height: 190px; object-fit: cover; display: block; background: #dcfce7; }
-.course-image-placeholder {
-  height: 190px; display: grid; place-items: center;
-  background: linear-gradient(135deg,#dcfce7,#fef3c7); font-size: 56px;
-}
-.course-content { padding: 19px; }
-.course-content h3 { margin: 0 0 9px; font-size: 19px; color: var(--dark-green); font-weight: 900; }
-.course-content p { color: #64748b; font-size: 14px; line-height: 1.65; min-height: 45px; }
-.view-btn { width: 100%; margin-top: 8px; }
-.detail-panel {
-  display: none; margin-top: 25px; padding: 24px;
-  background: white; border: 1px solid #d1fae5; border-radius: 20px;
-  box-shadow: 0 10px 30px #064e3b10;
-}
-.detail-panel.active { display: block; animation: reveal .25s ease; }
-@keyframes reveal { from {opacity:0;transform:translateY(8px)} to {opacity:1;transform:translateY(0)} }
-.detail-panel h3 { color: var(--green); font-size: 26px; font-weight: 900; margin: 0 0 12px; }
-.detail-panel h4 { color: var(--dark-green); font-size: 18px; font-weight: 800; margin: 22px 0 9px; }
-.detail-panel p, .detail-panel li { line-height: 1.75; }
-.detail-panel li { margin-bottom: 5px; }
-.detail-photo { width: 100%; max-height: 390px; object-fit: cover; border-radius: 15px; margin: 12px 0; }
-.detail-close { float: right; border: 0; background: #fee2e2; color: #991b1b; padding: 9px 13px; border-radius: 9px; cursor: pointer; font-weight: bold; }
-.requirement-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap: 18px; }
-.requirement-card { background: white; border-radius: 16px; padding: 22px; border: 1px solid #e5e7eb; }
-.requirement-card h3 { color: var(--green); font-size: 19px; margin-top: 0; font-weight: 900; }
-.requirement-card li { line-height: 1.8; }
-.gold-section { background: #fef3c7; }
-.notice { padding: 15px; background: #fffbeb; border-left: 4px solid var(--gold); border-radius: 8px; line-height: 1.7; }
-.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(230px,1fr)); gap: 18px; }
-.gallery-grid img { width: 100%; height: 245px; object-fit: cover; border-radius: 17px; box-shadow: 0 8px 22px #0002; }
-footer { background: #052e16; color: white; padding: 32px 18px; text-align: center; }
-footer p { line-height: 1.8; margin: 7px 0; color: #d1fae5; }
-footer a { color: #fcd34d; font-weight: bold; }
-.footer-title { font-size: 21px; color: white; font-weight: 900; }
-@media (max-width: 600px) {
-  .header-inner { padding: 10px 12px; gap: 9px; }
-  .logo-mark { width: 42px; height: 42px; }
-  .brand p { font-size: 10px; }
-  .menu-btn { padding: 9px 12px; }
-  .hero { padding: 42px 17px 48px; }
-  .section { padding: 39px 14px; }
-  .course-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
-  .course-image, .course-image-placeholder { height: 135px; }
-  .course-content { padding: 12px; }
-  .course-content h3 { font-size: 15px; }
-  .course-content p { font-size: 12px; min-height: 0; }
-  .course-content .btn { font-size: 12px; padding: 11px 7px; }
-  .detail-panel { padding: 17px; }
-}
-@media (max-width: 360px) {
-  .course-grid { grid-template-columns: 1fr; }
-  .course-image, .course-image-placeholder { height: 190px; }
-}
+@media(max-width:350px){.course-grid{grid-template-columns:1fr}}
 </style>
 </head>
-
 <body>
-
-<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar(false)"></div>
-
-<aside class="sidebar" id="sidebar" aria-label="Main navigation">
-  <div class="sidebar-top">
-    <h2>CVTC MENU</h2>
-    <button class="close-btn" onclick="toggleSidebar(false)" aria-label="Close menu">&times;</button>
-  </div>
-  <nav>
-    <a href="#home" onclick="toggleSidebar(false)">Home</a>
-    <a href="#courses" onclick="toggleSidebar(false)">Our Courses</a>
-    <a href="#about" onclick="toggleSidebar(false)">About Us</a>
-    <a href="#admissions" onclick="toggleSidebar(false)">Admissions</a>
-    <a href="#general-requirements" onclick="toggleSidebar(false)">General Requirements</a>
-    <a href="#boarding" onclick="toggleSidebar(false)">Boarding Requirements</a>
-    <a href="#fees" onclick="toggleSidebar(false)">Fees / Fee Structure</a>
-    <a href="#gallery" onclick="toggleSidebar(false)">Graduation & Ceremonies</a>
-    <a href="#contact" onclick="toggleSidebar(false)">Contact Us</a>
+<div class="overlay" id="overlay" onclick="toggleMenu(false)"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="side-top"><h2>CVTC MENU</h2><button class="close-menu" onclick="toggleMenu(false)" aria-label="Close menu">×</button></div>
+  <nav class="side-nav" id="sideNav">
+    <button data-page="home" onclick="showPage('home')">⌂ Home</button>
+    <button data-page="admissions" onclick="showPage('admissions')">▣ Admissions</button>
+    <button data-page="courses" onclick="showPage('courses')">▤ Courses</button>
+    <button data-page="exams" onclick="showPage('exams')">✓ Examinations</button>
+    <button data-page="about" onclick="showPage('about')">ⓘ About Us</button>
+    <button data-page="sponsorship" onclick="showPage('sponsorship')">♡ Sponsorship</button>
+    <button data-page="boarding" onclick="showPage('boarding')">⌂ Boarding & Accommodation</button>
+    <button data-page="fees" onclick="showPage('fees')">▤ Fees / Fee Structure</button>
+    <button data-page="apply" onclick="showPage('apply')">✎ Apply Now</button>
+    <button data-page="management" onclick="showPage('management')">♙ Management</button>
+    <button data-page="scholarships" onclick="showPage('scholarships')">★ Scholarship Program</button>
+    <button data-page="contact" onclick="showPage('contact')">☎ Contact</button>
   </nav>
-  <div class="sidebar-note">
-    <strong>Cheptarit Vocational Training Center</strong><br>
-    TVETA Registration: TVETA/PUBLIC/VTC/0157/2016<br>
-    Phone: 0718008580
-  </div>
+  <div class="side-note">Cheptarit Vocational Training Center<br>TVETA Registration: TVETA/PUBLIC/VTC/0157/2016<br>Phone: 0718008580</div>
 </aside>
 
-<header class="site-header">
-  <div class="header-inner">
-    <div class="logo-mark">CV</div>
-    <div class="brand">
-      <h1>Cheptarit Vocational Training Center</h1>
-      <p>Eldoret–Kapsabet Road, Mosoriot, Nandi County</p>
-    </div>
-    <button class="menu-btn" onclick="toggleSidebar(true)" aria-label="Open menu">☰</button>
-  </div>
+<header class="header">
+ <div class="header-inner">
+  <div class="logo">CV</div>
+  <div class="brand"><h1>Cheptarit Vocational Training Center</h1><p>Mosoriot, Nandi County, Kenya</p></div>
+  <button class="menu-button" onclick="toggleMenu(true)" aria-label="Open menu">☰</button>
+ </div>
 </header>
 
-<main id="home">
-  <section class="hero">
-    <div class="hero-content">
-      <span class="eyebrow">SKILLS • TRAINING • OPPORTUNITY</span>
-      <h2>Skills for <span>Life</span></h2>
-      <p>
-        Build practical skills for your future at Cheptarit Vocational Training Center.
-        Explore technical, creative, hospitality and trade courses designed to help
-        learners develop confidence and workplace-ready abilities.
-      </p>
-      <div class="hero-actions">
-        <a class="btn btn-gold" href="#courses">Explore Courses ↓</a>
-        <a class="btn btn-light" href="#admissions">Apply for Admission</a>
-      </div>
+<main>
+<section class="page active" id="page-home">
+ <div class="hero">
+  <div>
+   <div class="hero-slide active">
+    <span class="pill">SKILLS • TRAINING • OPPORTUNITY</span>
+    <h2>Skills for <span>Life</span></h2>
+    <p>Practical skills and quality vocational training to empower learners for a brighter future.</p>
+    <div class="actions"><button class="btn gold" onclick="showPage('courses')">Explore Courses</button><button class="btn white" onclick="showPage('apply')">Apply Now</button></div>
+   </div>
+   <div class="hero-slide">
+    <span class="pill">EMPOWERMENT • INDEPENDENCE</span>
+    <h2>Learn Skills.<br><span>Empower Yourself.</span></h2>
+    <p>Build confidence, develop practical abilities, and take steps toward self-reliance and self-employment.</p>
+    <div class="actions"><button class="btn gold" onclick="showPage('courses')">Find Your Course</button></div>
+   </div>
+   <div class="hero-slide">
+    <span class="pill">CAREERS • ENTREPRENEURSHIP</span>
+    <h2>Build Your <span>Career</span></h2>
+    <p>Turn your talents into useful skills for employment, entrepreneurship, and lifelong learning.</p>
+    <div class="actions"><button class="btn gold" onclick="showPage('admissions')">Admission Information</button></div>
+   </div>
+   <div class="dots"><button class="dot active" onclick="setHeroSlide(0)" aria-label="Slide 1"></button><button class="dot" onclick="setHeroSlide(1)" aria-label="Slide 2"></button><button class="dot" onclick="setHeroSlide(2)" aria-label="Slide 3"></button></div>
+  </div>
+ </div>
+ <div class="wrap">
+  <img class="photo" style="height:auto;max-height:480px;border-radius:17px" src="https://i.ibb.co/dJfp18xS/Screenshot-2026-10-09-17-03-07-09.jpg" alt="Cheptarit Vocational Training Center">
+  <div class="heading" style="margin-top:35px"><small>Welcome to CVTC</small><h2>Learn Skills. Build Your Future.</h2><p>Explore practical training in technical trades, hospitality, beauty, design and computing.</p></div>
+  <div class="grid">
+   <article class="card"><div class="card-body"><h3>Practical Training</h3><p>Develop hands-on skills across a range of vocational courses.</p><button class="btn green" onclick="showPage('courses')">View Courses</button></div></article>
+   <article class="card"><div class="card-body"><h3>Student Admissions</h3><p>Review admission requirements and prepare your documents.</p><button class="btn green" onclick="showPage('admissions')">Admission Details</button></div></article>
+   <article class="card"><div class="card-body"><h3>Fees & Accommodation</h3><p>Review the fee structure and boarding information.</p><button class="btn green" onclick="showPage('fees')">View Fees</button></div></article>
+  </div>
+ </div>
+</section>
+
+<section class="page" id="page-admissions">
+ <div class="wrap">
+  <div class="heading"><small>Join CVTC</small><h2>Admission Requirements</h2><p>Prepare the documents and payment confirmation needed when reporting to college.</p></div>
+  <div class="panel">
+   <h3>Documents to Bring</h3>
+   <ol>
+    <li>KCSE or KCPE certificate, or results slip.</li>
+    <li>Admission letter.</li>
+    <li>Photocopy of national ID, where applicable.</li>
+    <li>Two passport-size photographs.</li>
+    <li>Doctor-approved medical form.</li>
+    <li>First-term fee payment slip.</li>
+    <li>Copy of academic or leaving certificate.</li>
+    <li>Copy of birth certificate.</li>
+    <li>Recommendation letter from your priest, pastor, or area chief.</li>
+   </ol>
+   <p class="notice">Please confirm the exact documents and any age-specific identification requirements with the college before reporting.</p>
+   <button class="btn gold" onclick="showPage('apply')">Complete Application Form</button>
+  </div>
+ </div>
+</section>
+
+<section class="page" id="page-courses">
+ <div class="wrap">
+  <div class="heading"><small>Explore Your Options</small><h2>Our Courses</h2><p>Select any course to open its own detail page, including course information, duration, examinations, and the equipment list supplied by the college.</p></div>
+  <div class="course-grid" id="courseGrid"></div>
+ </div>
+</section>
+
+<section class="page" id="page-course-detail">
+ <div class="wrap">
+  <button class="btn green back-btn" onclick="showPage('courses')">← Back to Courses</button>
+  <div id="courseDetailContent"></div>
+ </div>
+</section>
+
+<section class="page" id="page-exams">
+ <div class="wrap">
+  <div class="heading"><small>Assessment & Certification</small><h2>Examinations</h2><p>Students are assessed through practical work and examinations as applicable to their training programs.</p></div>
+  <div class="grid">
+   <article class="card"><div class="card-body"><h3>1. Internal Assessments</h3><p>Theory and practicals form part of training. Continuous Assessment Tests (CATs) are conducted at the school as internal examinations.</p></div></article>
+   <article class="card"><div class="card-body"><h3>2. NITA Examinations</h3><p>NITA stands for <strong>National Industrial Training Authority</strong>. These examinations assess relevant trade and practical skills.</p></div></article>
+   <article class="card"><div class="card-body"><h3>3. National Examinations</h3><p>The college information provided identifies NEC examinations as Kenya National Examination Council examinations. Please confirm the official examination body and level with the college.</p></div></article>
+  </div>
+  <div class="panel">
+   <h3>Examination Schedule</h3>
+   <p>External examinations are scheduled for <strong>July and November</strong>, as provided by the college. Registration is done through the school.</p>
+   <h4>Examination Registration Fees</h4>
+   <div class="table-wrap"><table><thead><tr><th>Student Category</th><th>Registration Fee</th></tr></thead><tbody>
+    <tr><td>Self-sponsored students</td><td>KSh 5,000</td></tr>
+    <tr><td>KCB-sponsored students</td><td>Free</td></tr>
+   </tbody></table></div>
+   <h4>Documents Needed for Exam Registration</h4>
+   <ul><li>KCSE or KCPE leaving certificate, or results slip.</li><li>Registration is submitted through the school.</li></ul>
+   <p class="notice">Confirm current examination dates, eligibility, and registration charges with the college before making payment.</p>
+  </div>
+ </div>
+</section>
+
+<section class="page" id="page-about">
+ <div class="wrap">
+  <div class="heading"><small>Our Institution</small><h2>About Cheptarit VTC</h2></div>
+  <div class="panel">
+   <h3>Our School</h3>
+   <p>Cheptarit Vocational Training Center provides vocational and practical skills training intended to prepare learners for work, self-employment, and further skills development.</p>
+   <p>The college is located along the Eldoret–Kapsabet Road in Mosoriot, Nandi County, Kenya.</p>
+   <h4>Church Sponsorship</h4>
+   <p>The school is described as being sponsored by St. Francis Chapel Catholic Parish under the Roman Catholic Diocese of Kapsabet.</p>
+   <h4>Registration</h4>
+   <p>TVETA registration reference: TVETA/PUBLIC/VTC/0157/2016.</p>
+   <p class="notice">The school's founding year and detailed history have not yet been supplied. Add the verified details here when available.</p>
+  </div>
+ </div>
+</section>
+
+<section class="page" id="page-sponsorship">
+ <div class="wrap">
+  <div class="heading"><small>Our Partners</small><h2>Sponsorship & Partnerships</h2><p>Our sponsorship and partnership information is presented below.</p></div>
+  <div class="grid">
+   <article class="card"><div class="card-body"><h3>Catholic Church</h3><p>The college is sponsored by St. Francis Chapel Catholic Parish under the Roman Catholic Diocese of Kapsabet.</p></div></article>
+   <article class="card"><div class="card-body"><h3>Chandaria Foundation</h3><p>Chandaria Foundation, in partnership with marathoner Eliud Kipchoge, is listed among the school's sponsorship partners.</p></div></article>
+   <article class="card"><div class="card-body"><h3>KCB Foundation — Tujiiajiri</h3><p>The KCB Tujiiajiri program supports skills development and vocational training opportunities. Contact the college to confirm current sponsorship eligibility and available places.</p></div></article>
+  </div>
+ </div>
+</section>
+
+<section class="page" id="page-boarding">
+ <div class="wrap">
+  <div class="heading"><small>Student Accommodation</small><h2>Boarding & Accommodation</h2><p>The college offers accommodation for both boys and girls. Confirm hostel availability and current arrangements with the administration.</p></div>
+  <div class="grid">
+   <article class="card"><div class="card-body"><h3>Boarding for Boys</h3><p>Contact the college to confirm available places, accommodation arrangements, and reporting details.</p></div></article>
+   <article class="card"><div class="card-body"><h3>Boarding for Girls</h3><p>Contact the college to confirm available places, accommodation arrangements, and reporting details.</p></div></article>
+  </div>
+  <div class="panel">
+   <h3>Boarding Requirements Checklist</h3>
+   <div class="grid">
+    <div><h4>Bedding</h4><ul><li>Mattress — three inch</li><li>Two blankets</li><li>Two bedsheets</li><li>A towel</li><li>A bed cover</li></ul></div>
+    <div><h4>Personal Items</h4><ul><li>A plate</li><li>A cup</li><li>A spoon</li><li>Two basins</li><li>A black pair of shoes</li></ul></div>
+    <div><h4>Hygiene & Games</h4><ul><li>Washing soap</li><li>Bathing soap</li><li>Tissue paper — three rolls per term</li><li>Toothpaste</li><li>Toothbrush</li><li>White rubber shoes for games</li></ul></div>
+   </div>
+  </div>
+  <div class="panel">
+   <h3>Scholarship Opportunities</h3>
+   <p>Students interested in the KCB Tujiiajiri program should contact the college to ask about current opportunities, course eligibility, sponsorship coverage, and application deadlines.</p>
+   <button class="btn gold" onclick="showPage('scholarships')">View Scholarship Information</button>
+  </div>
+ </div>
+</section>
+
+<section class="page" id="page-scholarships">
+ <div class="wrap">
+  <div class="heading"><small>Training Opportunities</small><h2>Scholarship Program</h2></div>
+  <div class="panel">
+   <h3>KCB Tujiiajiri Program</h3>
+   <p>The KCB Tujiiajiri program is a vocational skills and enterprise development initiative. Students interested in sponsorship should contact the college to confirm current intakes, qualifying courses, selection criteria, and whether fees or other training costs are covered.</p>
+   <p>Students sponsored by KCB are listed as exempt from the KSh 5,000 examination registration fee in the examination information supplied for this website. Confirm that this applies to your current sponsorship arrangement.</p>
+   <p class="notice">No specific official program URL was supplied. Use the KCB Group website to find current program information: <a href="https://ke.kcbgroup.com/" target="_blank" rel="noopener" style="color:#166534;text-decoration:underline;font-weight:bold">KCB Group official website</a>.</p>
+   <button class="btn green" onclick="showPage('contact')">Ask the College</button>
+  </div>
+ </div>
+</section>
+
+<section class="page" id="page-management">
+ <div class="wrap">
+  <div class="heading"><small>Our People</small><h2>Management</h2><p>Supporting students and the delivery of vocational training.</p></div>
+  <div class="grid">
+   <article class="card"><div class="card-body"><h3>Fancy Killel</h3><p><strong>Manager</strong></p><p>Contact the college administration for management, admissions, and training enquiries.</p></div></article>
+   <article class="card"><div class="card-body"><h3>Our Trainees</h3><p>The college has more than 20 trainees, as provided for this website. Update this figure when an official current enrollment count is available.</p></div></article>
+  </div>
+ </div>
+</section>
+
+<section class="page" id="page-fees">
+ <div class="wrap">
+  <div class="heading"><small>Plan Your Studies</small><h2>Fee Structure</h2><p>Boarding and day scholar fees as shown in the uploaded fee structure document.</p></div>
+  <div class="panel">
+   <h3>Boarding Section</h3>
+   <div class="table-wrap"><table><thead><tr><th>Fee Item</th><th>First Term (KSh)</th><th>Second Term (KSh)</th><th>Third Term (KSh)</th><th>Total (KSh)</th></tr></thead><tbody>
+    <tr><td>Boarding</td><td>6,000</td><td>4,395</td><td>3,000</td><td>13,395</td></tr>
+    <tr><td>Personal Emoluments</td><td>5,095</td><td>4,500</td><td>—</td><td>9,595</td></tr>
+    <tr><td>Admission Fee</td><td>500</td><td>—</td><td>—</td><td>500</td></tr>
+    <tr><td>Student ID</td><td>200</td><td>—</td><td>—</td><td>200</td></tr>
+    <tr><td>PIA</td><td>2,580</td><td>—</td><td>—</td><td>2,580</td></tr>
+    <tr><td>EWC</td><td>500</td><td>500</td><td>—</td><td>1,000</td></tr>
+    <tr><td>L.T &amp; T</td><td>500</td><td>—</td><td>—</td><td>500</td></tr>
+    <tr><td>ICT</td><td>500</td><td>—</td><td>—</td><td>500</td></tr>
+    <tr><td>Assessment Materials</td><td>2,050</td><td>750</td><td>—</td><td>2,800</td></tr>
+    <tr><td>Contingencies</td><td>500</td><td>300</td><td>—</td><td>800</td></tr>
+    <tr class="total-row"><td>TOTAL</td><td>18,425</td><td>10,445</td><td>3,000</td><td>31,870</td></tr>
+   </tbody></table></div>
+  </div>
+  <div class="panel">
+   <h3>Day Scholar Section</h3>
+   <div class="table-wrap"><table><thead><tr><th>Fee Item</th><th>First Term (KSh)</th><th>Second Term (KSh)</th><th>Third Term (KSh)</th><th>Total (KSh)</th></tr></thead><tbody>
+    <tr><td>Day Scholar</td><td>3,500</td><td>2,200</td><td>1,000</td><td>6,700</td></tr>
+    <tr><td>Personal Emoluments</td><td>5,095</td><td>4,500</td><td>—</td><td>9,595</td></tr>
+    <tr><td>Admission Fee</td><td>500</td><td>—</td><td>—</td><td>500</td></tr>
+    <tr><td>Student ID</td><td>200</td><td>—</td><td>—</td><td>200</td></tr>
+    <tr><td>PIA</td><td>2,580</td><td>—</td><td>—</td><td>2,580</td></tr>
+    <tr><td>EWC</td><td>500</td><td>500</td><td>—</td><td>1,000</td></tr>
+    <tr><td>L.T &amp; T</td><td>500</td><td>—</td><td>—</td><td>500</td></tr>
+    <tr><td>ICT</td><td>500</td><td>—</td><td>—</td><td>500</td></tr>
+    <tr><td>Assessment Materials</td><td>2,050</td><td>750</td><td>—</td><td>2,800</td></tr>
+    <tr><td>Contingencies</td><td>500</td><td>300</td><td>—</td><td>800</td></tr>
+    <tr class="total-row"><td>TOTAL</td><td>15,925</td><td>8,250</td><td>1,000</td><td>25,175</td></tr>
+   </tbody></table></div>
+  </div>
+  <div class="panel">
+   <h3>Payment Instructions</h3>
+   <ol>
+    <li>Pay school fees to Kenya Commercial Bank (KCB), Kapsabet Branch, Account Number <strong>1102039330</strong>; or use Paybill Number <strong>408036</strong>, with the student's admission number as the account number.</li>
+    <li>The supplied fee structure states: <strong>NO CASH.</strong></li>
+    <li>The document states that students will not be admitted without paying full fees for each term on opening day.</li>
+    <li>Students are expected to meet their own medical bills.</li>
+   </ol>
+   <div class="actions" style="justify-content:flex-start">
+    <a class="btn green" href="boarding_and_day_scholar_fee_structure.pdf" target="_blank" rel="noopener">View Fee Structure PDF</a>
+    <a class="btn gold" href="boarding_and_day_scholar_fee_structure.pdf" download>Download Fee Structure</a>
+   </div>
+   <p class="notice">PDF links work when the uploaded PDF is published in the same website directory as this HTML file. If your website host uses a different file path, update both links.</p>
+   <h4>PDF Preview</h4>
+   <iframe class="fee-viewer" src="boarding_and_day_scholar_fee_structure.pdf#toolbar=1" title="School fee structure PDF"></iframe>
+  </div>
+ </div>
+</section>
+
+<section class="page" id="page-apply">
+ <div class="wrap">
+  <div class="heading"><small>Start Your Journey</small><h2>Student Admission Form</h2><p>Complete the form carefully. Fields marked required must be filled before submission.</p></div>
+  <div class="panel">
+   <h3>Cheptarit Vocational Training Center</h3>
+   <p>PO Box 45 – 30304, Mosoriot<br>Telephone: 0113 981097<br>Website: chapteritcollege.co.ke<br>Email: cheptaritpoly65@yahoo.com</p>
+   <form action="https://formspree.io/f/moejwkwk" method="POST">
+    <div class="form-grid">
+     <div class="field"><label for="student_name">Name of Student *</label><input id="student_name" name="student_name" type="text" autocomplete="name" required></div>
+     <div class="field"><label for="former_school">Former School *</label><input id="former_school" name="former_school" type="text" required></div>
+     <div class="field"><label for="student_contact">Student Contact *</label><input id="student_contact" name="student_contact" type="tel" autocomplete="tel" required></div>
+     <div class="field"><label for="guardian_name">Parent's / Guardian's Name *</label><input id="guardian_name" name="guardian_name" type="text" required></div>
+     <div class="field"><label for="guardian_contact">Parent's / Guardian's Contact *</label><input id="guardian_contact" name="guardian_contact" type="tel" required></div>
+     <div class="field"><label for="email">Email Address *</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+     <div class="field full"><label for="home_address">Home Address *</label><textarea id="home_address" name="home_address" rows="3" required></textarea></div>
+     <div class="field"><label for="course">Course Name *</label>
+      <select id="course" name="course" required>
+       <option value="">Select a course</option>
+       <option>Welding &amp; Fabrication</option>
+       <option>Food &amp; Beverage</option>
+       <option>Electrical Installation</option>
+       <option>Motor Vehicle Mechanics</option>
+       <option>Masonry</option>
+       <option>Hairdressing &amp; Beauty Therapy</option>
+       <option>Carpentry &amp; Joinery</option>
+       <option>Plumbing</option>
+       <option>Fashion &amp; Design</option>
+       <option>Computer &amp; IT</option>
+       <option>Metal Works</option>
+      </select>
+     </div>
+     <div class="field"><label for="study_type">Study / Sponsorship Type</label>
+      <select id="study_type" name="study_type">
+       <option value="">Select if applicable</option>
+       <option>Self-sponsored</option>
+       <option>KCB-sponsored</option>
+      </select>
+     </div>
+     <div class="field full"><label for="home_address_extra">Additional Information (optional)</label><textarea id="home_address_extra" name="additional_information" rows="3" placeholder="Any other information for the college"></textarea></div>
     </div>
-  </section>
+    <p class="notice" style="margin:18px 0">Submitting this online form does not replace reporting to college with the required documents. Please confirm your admission and payment arrangements with the administration.</p>
+    <button class="btn gold" type="submit">Submit Application →</button>
+   </form>
+  </div>
+  <div class="panel">
+   <h3>Documents to Bring on Admission Day</h3>
+   <ul><li>Two copies of national ID, where applicable.</li><li>Copy of academic / leaving certificate or results slip.</li><li>Copy of birth certificate.</li><li>Admission letter, two passport photographs, medical form and first-term fee payment slip.</li></ul>
+   <p>You are required to attach a recommendation letter from your priest, pastor, or area chief.</p>
+   <p><strong>— Fancy Killel, Manager —</strong></p>
+  </div>
+ </div>
+</section>
 
-  <section class="section" aria-label="College banner">
-    <img class="banner-photo"
-      src="https://i.ibb.co/dJfp18xS/Screenshot-2026-10-09-17-03-07-09.jpg"
-      alt="Cheptarit Vocational Training Center banner"
-      loading="eager">
-    <p class="banner-caption">Welcome to Cheptarit Vocational Training Center.</p>
-  </section>
-
-  <section class="section" id="about">
-    <div class="section-heading">
-      <span class="tag">Welcome to CVTC</span>
-      <h2>Learn Skills. Build Your Future.</h2>
-      <p>Practical training can open doors to employment, entrepreneurship and lifelong learning.</p>
-    </div>
-    <div class="info-grid">
-      <article class="info-card">
-        <h3>Practical Training</h3>
-        <p>Explore hands-on learning across technical trades, hospitality, beauty, design and computing.</p>
-      </article>
-      <article class="info-card">
-        <h3>Career Development</h3>
-        <p>Develop useful skills and prepare for opportunities in the workplace or self-employment.</p>
-      </article>
-      <article class="info-card">
-        <h3>TVETA Registration</h3>
-        <p>Registration reference: TVETA/PUBLIC/VTC/0157/2016.</p>
-      </article>
-    </div>
-  </section>
-
-  <section class="section" id="courses">
-    <div class="section-heading">
-      <span class="tag">Find Your Course</span>
-      <h2>Our Courses</h2>
-      <p>Select a course to view its description and the available course-specific requirements.</p>
-    </div>
-
-    <div class="course-grid">
-      <!-- Welding -->
-      <article class="course-card">
-        <img class="course-image" src="https://i.ibb.co/DHHYhRxK/Screenshot-2026-10-09-17-03-32-78.jpg" alt="Welding and fabrication training" loading="lazy">
-        <div class="course-content">
-          <h3>Welding &amp; Fabrication</h3>
-          <p>Learn metal joining, fabrication techniques and workshop safety.</p>
-          <button class="btn btn-green view-btn" onclick="openCourseDetail('welding')">View More</button>
-        </div>
-      </article>
-
-      <!-- Food and Beverage -->
-      <article class="course-card">
-        <img class="course-image" src="https://i.ibb.co/W4NYZWL3/Screenshot-2026-10-09-17-03-45-59.jpg" alt="Food and beverage training" loading="lazy">
-        <div class="course-content">
-          <h3>Food &amp; Beverage</h3>
-          <p>Explore food preparation, kitchen practice and hospitality service.</p>
-          <button class="btn btn-green view-btn" onclick="openCourseDetail('food')">View More</button>
-        </div>
-      </article>
-
-      <!-- Electrical Installation -->
-      <article class="course-card">
-        <div class="course-image-placeholder" role="img" aria-label="Electrical installation course">⚡</div>
-        <div class="course-content">
-          <h3>Electrical Installation</h3>
-          <p>Discover electrical wiring, installation practices and safety principles.</p>
-          <button class="btn btn-green view-btn" onclick="openCourseDetail('electrical')">View More</button>
-        </div>
-      </article>
-
-      <!-- Motor Vehicle Mechanics -->
-      <article class="course-card">
-        <div class="course-image-placeholder" role="img" aria-label="Motor vehicle mechanics course">🚗</div>
-        <div class="course-content">
-          <h3>Motor Vehicle Mechanics</h3>
-          <p>Learn about vehicle systems, maintenance and workshop practice.</p>
-          <button class="btn btn-green view-btn" onclick="openCourseDetail('motor')">View More</button>
-        </div>
-      </article>
-
-      <!-- Masonry -->
-      <article class="course-card">
-        <img class="course-image" src="https://i.ibb.co/QFTwMsY0/Masonry.jpg" alt="Masonry course" loading="lazy" onerror="this.outerHTML='<div class=&quot;course-image-placeholder&quot; role=&quot;img&quot; aria-label=&quot;Masonry course&quot;>🧱</div>'">
-        <div class="course-content">
-          <h3>Masonry</h3>
-          <p>Explore brickwork, blockwork, concrete and construction skills.</p>
-          <button class="btn btn-green view-btn" onclick="openCourseDetail('masonry')">View More</button>
-        </div>
-      </article>
-
-      <!-- Hairdressing -->
-      <article class="course-card">
-        <img class="course-image" src="https://i.ibb.co/cSy4Pd95/images.jpg" alt="Hairdressing and beauty therapy training" loading="lazy">
-        <div class="course-content">
-          <h3>Hairdressing &amp; Beauty Therapy</h3>
-          <p>Discover hair care, styling, beauty treatments and salon practice.</p>
-          <button class="btn btn-green view-btn" onclick="openCourseDetail('hair')">View More</button>
-        </div>
-      </article>
-      
-      <!-- Carpentry and Joinery -->
-      <article class="course-card">
-        <div class="course-image-placeholder" role="img" aria-label="Carpentry and joinery course">🪚</div>
-        <div class="course-content">
-          <h3>Carpentry &amp; Joinery</h3>
-          <p>Explore woodworking, measuring, cutting and joining techniques.</p>
-          <button class="btn btn-green view-btn" onclick="openCourseDetail('carpentry')">View More</button>
-        </div>
-      </article>
-
-      <!-- Plumbing -->
-      <article class="course-card">
-        <img class="course-image" src="https://i.ibb.co/cSJZ4337/images-2.jpg" alt="Plumbing training" loading="lazy">
-        <div class="course-content">
-          <h3>Plumbing</h3>
-          <p>Learn about pipes, fittings, plumbing tools and water systems.</p>
-          <button class="btn btn-green view-btn" onclick="openCourseDetail('plumbing')">View More</button>
-        </div>
-      </article>
-
-      <!-- Fashion and Design -->
-      <article class="course-card">
-        <img class="course-image" src="https://i.ibb.co/ZpjdJkKF/FB-IMG-17898480060796655.jpg" alt="Fashion and design training" loading="lazy">
-        <div class="course-content">
-          <h3>Fashion &amp; Design</h3>
-          <p>Explore garment construction, sewing, measurements and design.</p>
-          <button class="btn btn-green view-btn" onclick="openCourseDetail('fashion')">View More</button>
-        </div>
-      </article>
-
-      <!-- Computer and IT -->
-      <article class="course-card">
-        <img class="course-image" src="https://i.ibb.co/fYTW90GG/FB-IMG-17898479198166045.jpg" alt="Computer and information technology training" loading="lazy">
-        <div class="course-content">
-          <h3>Computer &amp; IT</h3>
-          <p>Discover computer basics, digital skills and information technology.</p>
-          <button class="btn btn-green view-btn" onclick="openCourseDetail('computer')">View More</button>
-        </div>
-      </article>
-
-      <!-- Metal Works -->
-      <article class="course-card">
-        <img class="course-image" src="https://i.ibb.co/v6g1Cb3b/pallisa-dlg-young-woman-welder.jpg" alt="Metal works practical training" loading="lazy">
-        <div class="course-content">
-          <h3>Metal Works</h3>
-          <p>Explore metalworking, fabrication and safe workshop practice.</p>
-          <button class="btn btn-green view-btn" onclick="openCourseDetail('metal')">View More</button>
-        </div>
-      </article>
-    </div>
-
-    <!-- Course detail panels -->
-    <div id="courseDetails">
-
-      <article class="detail-panel" id="detail-welding">
-        <button class="detail-close" onclick="closeCourseDetails()">✕ Close</button>
-        <h3>Welding &amp; Fabrication</h3>
-        <img class="detail-photo" src="https://i.ibb.co/DHHYhRxK/Screenshot-2026-10-09-17-03-32-78.jpg" alt="Welding and fabrication students" loading="lazy">
-        <h4>About the Course</h4>
-        <p>Welding and Fabrication introduces learners to joining metals, workshop tools, fabrication techniques and safe working practices. Training can prepare learners for work in metal workshops, fabrication businesses and related technical trades.</p>
-        <h4>Course-Specific Requirements</h4>
-        <ul>
-          <li>Goggles — welding</li>
-          <li>Two engineering files, rough and smooth — welding</li>
-          <li>Tri-square — welding</li>
-          <li>Tape measure</li>
-        </ul>
-        <p class="notice">See the General Requirements section below for additional information.</p>
-        <a class="btn btn-gold" href="#admissions">Apply Now</a>
-      </article>
-
-      <article class="detail-panel" id="detail-food">
-        <button class="detail-close" onclick="closeCourseDetails()">✕ Close</button>
-        <h3>Food &amp; Beverage</h3>
-        <img class="detail-photo" src="https://i.ibb.co/W4NYZWL3/Screenshot-2026-10-09-17-03-45-59.jpg" alt="Food and beverage students" loading="lazy">
-        <h4>About the Course</h4>
-        <p>This course introduces food preparation, kitchen organization, hygiene, table setting and hospitality service. Learners explore practical skills used in kitchens, restaurants and hospitality establishments.</p>
-        <h4>Course-Specific Requirements</h4>
-        <ul>
-          <li>Chef jacket, white</li>
-          <li>Apron, white</li>
-          <li>Black windbreaker</li>
-          <li>Black skirt — girls</li>
-          <li>Black pair of trousers — boys</li>
-          <li>Chef hat</li>
-          <li>Checked black pair of trousers — boys</li>
-          <li>Black skirts — girls</li>
-          <li>Chef knife</li>
-          <li>Kitchen cloth, towel, tea towel, dishcloth</li>
-          <li>Two buckets with lids, twenty liters</li>
-          <li>White long sleeve shirt or blouse</li>
-          <li>One glass cloth</li>
-          <li>Waiter's cloth</li>
-          <li>Bow tie</li>
-          <li>Slip cloth, damask red</li>
-          <li>Linen, red</li>
-          <li>Scarf, red neck</li>
-        </ul>
-        <a class="btn btn-gold" href="#admissions">Apply Now</a>
-      </article>
-
-      <article class="detail-panel" id="detail-electrical">
-        <button class="detail-close" onclick="closeCourseDetails()">✕ Close</button>
-        <h3>Electrical Installation</h3>
-        <div class="course-image-placeholder">⚡</div>
-        <h4>About the Course</h4>
-        <p>Electrical Installation introduces learners to electrical wiring, installation tools, basic electrical systems and safe working practices.</p>
-        <h4>Course-Specific Requirements</h4>
-        <ul>
-          <li>Two screwdrivers, flat and star — electrical installation</li>
-          <li>Phase tester — electrical installation</li>
-          <li>Tape measure</li>
-        </ul>
-        <a class="btn btn-gold" href="#admissions">Apply Now</a>
-      </article>
-
-      <article class="detail-panel" id="detail-motor">
-        <button class="detail-close" onclick="closeCourseDetails()">✕ Close</button>
-        <h3>Motor Vehicle Mechanics</h3>
-        <div class="course-image-placeholder">🚗</div>
-        <h4>About the Course</h4>
-        <p>This course introduces learners to vehicle components, maintenance, mechanical systems, fault identification and workshop safety.</p>
-        <h4>Course-Specific Requirements</h4>
-        <ul>
-          <li>Pliers — motor vehicle mechanics</li>
-        </ul>
-        <a class="btn btn-gold" href="#admissions">Apply Now</a>
-      </article>
-
-      <article class="detail-panel" id="detail-masonry">
-        <button class="detail-close" onclick="closeCourseDetails()">✕ Close</button>
-        <h3>Masonry</h3>
-        <img class="detail-photo" src="https://i.ibb.co/QFTwMsY0/Masonry.jpg" alt="Masonry training" loading="lazy" onerror="this.style.display='none'">
-        <h4>About the Course</h4>
-        <p>Masonry introduces learners to bricklaying, blockwork, concrete work, measuring and basic construction practices. The entry information previously provided for this course was KCPE or KCSE with a minimum grade of D minus; confirm current admission requirements with the college.</p>
-        <h4>Course-Specific Requirements</h4>
-        <ul>
-          <li>Jua kali safety boots</li>
-          <li>Tape measure</li>
-          <li>Trowel and plumb bob — masonry</li>
-        </ul>
-        <a class="btn btn-gold" href="#admissions">Apply Now</a>
-      </article>
-
-      <article class="detail-panel" id="detail-hair">
-        <button class="detail-close" onclick="closeCourseDetails()">✕ Close</button>
-        <h3>Hairdressing &amp; Beauty Therapy</h3>
-        <img class="detail-photo" src="https://i.ibb.co/cSy4Pd95/images.jpg" alt="Hairdressing and beauty therapy" loading="lazy">
-        <h4>About the Course</h4>
-        <p>Learn about hair care, styling, salon practice and beauty treatments. Practical learning can help prepare students for salon work or starting a beauty business.</p>
-        <h4>Course-Specific Requirements</h4>
-        <ul>
-          <li>Towels — small, medium, big (two)</li>
-          <li>Assorted combs (three)</li>
-          <li>Apron</li>
-          <li>Pins, styling pins</li>
-          <li>Pedicure and manicure set</li>
-          <li>Plastic chair, white</li>
-          <li>One hair dummy</li>
-          <li>Clips</li>
-          <li>Makeup kit</li>
-          <li>Nail polish, assorted</li>
-          <li>Top coat and base coat</li>
-        </ul>
-        <a class="btn btn-gold" href="#admissions">Apply Now</a>
-      </article>
-
-      <article class="detail-panel" id="detail-carpentry">
-        <button class="detail-close" onclick="closeCourseDetails()">✕ Close</button>
-        <h3>Carpentry &amp; Joinery</h3>
-        <div class="course-image-placeholder">🪚</div>
-        <h4>About the Course</h4>
-        <p>Carpentry and Joinery introduces learners to woodworking tools, measuring, cutting, assembling and finishing wooden items.</p>
-        <h4>Course-Specific Requirements</h4>
-        <ul>
-          <li>Tri-square, six inch — carpentry and joinery</li>
-          <li>Jua kali safety boots</li>
-          <li>Tape measure</li>
-        </ul>
-        <a class="btn btn-gold" href="#admissions">Apply Now</a>
-      </article>
-
-      <article class="detail-panel" id="detail-plumbing">
-        <button class="detail-close" onclick="closeCourseDetails()">✕ Close</button>
-        <h3>Plumbing</h3>
-        <img class="detail-photo" src="https://i.ibb.co/cSJZ4337/images-2.jpg" alt="Plumbing course training" loading="lazy">
-        <h4>About the Course</h4>
-        <p>Plumbing introduces learners to pipes, fittings, water supply systems, drainage and the safe use of plumbing tools.</p>
-        <h4>Course-Specific Requirements</h4>
-        <ul>
-          <li>Pipe wrench, small — plumbing</li>
-          <li>Hacksaw — plumbing</li>
-          <li>Tape measure</li>
-        </ul>
-        <a class="btn btn-gold" href="#admissions">Apply Now</a>
-      </article>
-
-      <article class="detail-panel" id="detail-fashion">
-        <button class="detail-close" onclick="closeCourseDetails()">✕ Close</button>
-        <h3>Fashion &amp; Design</h3>
-        <img class="detail-photo" src="https://i.ibb.co/ZpjdJkKF/FB-IMG-17898480060796655.jpg" alt="Fashion and design students" loading="lazy">
-        <h4>About the Course</h4>
-        <p>Fashion and Design introduces learners to garment construction, taking measurements, sewing, pattern work and clothing design.</p>
-        <h4>Course-Specific Requirements</h4>
-        <ul>
-          <li>A pair of scissors, number nine</li>
-          <li>Tape measure</li>
-          <li>One dozen needles, round, number fourteen</li>
-          <li>Hand needle</li>
-          <li>Bobbin and bobbin case</li>
-          <li>Dressmaking pins</li>
-        </ul>
-        <a class="btn btn-gold" href="#admissions">Apply Now</a>
-      </article>
-
-      <article class="detail-panel" id="detail-computer">
-        <button class="detail-close" onclick="closeCourseDetails()">✕ Close</button>
-        <h3>Computer &amp; IT</h3>
-        <img class="detail-photo" src="https://i.ibb.co/fYTW90GG/FB-IMG-17898479198166045.jpg" alt="Computer and IT training" loading="lazy">
-        <h4>About the Course</h4>
-        <p>Computer and IT introduces learners to digital literacy, computer applications, file management and essential information technology skills.</p>
-        <h4>Course-Specific Requirements</h4>
-        <p>No separate Computer &amp; IT equipment list was supplied. Please confirm any course-specific items with the college.</p>
-        <a class="btn btn-gold" href="#admissions">Apply Now</a>
-      </article>
-
-      <article class="detail-panel" id="detail-metal">
-        <button class="detail-close" onclick="closeCourseDetails()">✕ Close</button>
-        <h3>Metal Works</h3>
-        <img class="detail-photo" src="https://i.ibb.co/v6g1Cb3b/pallisa-dlg-young-woman-welder.jpg" alt="Metal works training" loading="lazy">
-        <h4>About the Course</h4>
-        <p>Metal Works introduces learners to metal shaping, fabrication, workshop tools and safe metalworking practices.</p>
-        <h4>Course-Specific Requirements</h4>
-        <ul>
-          <li>Goggles — welding</li>
-          <li>Two engineering files, rough and smooth — welding</li>
-          <li>Tri-square — welding</li>
-          <li>Tape measure</li>
-        </ul>
-        <a class="btn btn-gold" href="#admissions">Apply Now</a>
-      </article>
-
-    </div>
-  </section>
-
-  <section class="section" id="admissions">
-    <div class="section-heading">
-      <span class="tag">Join CVTC</span>
-      <h2>Admissions</h2>
-      <p>Interested in joining Cheptarit Vocational Training Center? Contact the college to confirm available courses, intake dates, entry requirements and application procedures.</p>
-    </div>
-    <div class="info-grid">
-      <article class="info-card">
-        <h3>1. Choose a Course</h3>
-        <p>Explore the course cards above and open View More to read about each course.</p>
-      </article>
-      <article class="info-card">
-        <h3>2. Confirm Requirements</h3>
-        <p>Check the course-specific items and contact the college to confirm current admission requirements.</p>
-      </article>
-      <article class="info-card">
-        <h3>3. Contact the College</h3>
-        <p>Call 0718008580 or email cheptaritpoly65@yahoo.com for admission guidance.</p>
-      </article>
-    </div>
-  </section>
-  
-  <section class="section" id="general-requirements">
-    <div class="section-heading">
-      <span class="tag">Before You Join</span>
-      <h2>General Requirements</h2>
-      <p>Prepare for admission by confirming the documents and items required for your selected course.</p>
-    </div>
-    <div class="requirement-grid">
-      <article class="requirement-card">
-        <h3>Admission Checklist</h3>
-        <ul>
-          <li>Confirm the entry requirements for your selected course.</li>
-          <li>Confirm the documents needed during registration.</li>
-          <li>Ask the college about the current intake dates.</li>
-          <li>Confirm the applicable fees with the college.</li>
-        </ul>
-      </article>
-      <article class="requirement-card">
-        <h3>Course Materials</h3>
-        <p>Review the course-specific requirements in the View More section for your chosen course. Confirm the official list with the college before purchasing equipment.</p>
-      </article>
-      <article class="requirement-card">
-        <h3>Need Assistance?</h3>
-        <p>Contact the college for the official admission checklist and any additional general requirements.</p>
-        <a class="btn btn-green" href="tel:0718008580">Call the College</a>
-      </article>
-    </div>
-  </section>
-
-  <section class="section gold-section" id="boarding">
-    <div class="section-heading">
-      <span class="tag">Student Accommodation</span>
-      <h2>Boarding Requirements</h2>
-      <p>Students planning to board can use this checklist to prepare their personal and accommodation items.</p>
-    </div>
-    <div class="requirement-grid">
-      <article class="requirement-card">
-        <h3>Bedding</h3>
-        <ul>
-          <li>Mattress — three inch</li>
-          <li>Two blankets</li>
-          <li>Two bedsheets</li>
-          <li>A towel</li>
-          <li>A bed cover</li>
-        </ul>
-      </article>
-      <article class="requirement-card">
-        <h3>Personal Items</h3>
-        <ul>
-          <li>A plate</li>
-          <li>A cup</li>
-          <li>A spoon</li>
-          <li>Two basins</li>
-          <li>A black pair of shoes</li>
-        </ul>
-      </article>
-      <article class="requirement-card">
-        <h3>Hygiene &amp; Games</h3>
-        <ul>
-          <li>Washing soap</li>
-          <li>Bathing soap</li>
-          <li>Tissue paper — three rolls per term</li>
-          <li>Toothpaste</li>
-          <li>Toothbrush</li>
-          <li>White rubber shoes for games</li>
-        </ul>
-      </article>
-    </div>
-  </section>
-
-  <section class="section" id="fees">
-    <div class="section-heading">
-      <span class="tag">Plan Your Studies</span>
-      <h2>Fees &amp; Fee Structure</h2>
-      <p>Find out about course fees and other applicable charges before joining the college.</p>
-    </div>
-    <div class="info-grid">
-      <article class="info-card">
-        <h3>Fee Structure</h3>
-        <p>The downloadable fee structure will be added here once the official document or download link is available.</p>
-        <p style="margin-top:12px;font-size:13px;">For current fees, please contact the college directly.</p>
-        <a class="btn btn-green" href="tel:0718008580">Enquire About Fees</a>
-      </article>
-      <article class="info-card">
-        <h3>Fee Enquiries</h3>
-        <p>Phone: 0718008580</p>
-        <p>Email: cheptaritpoly65@yahoo.com</p>
-        <a class="btn btn-gold" href="mailto:cheptaritpoly65@yahoo.com?subject=Fee%20Structure%20Enquiry">Email the College</a>
-      </article>
-    </div>
-  </section>
-
-  <section class="section" id="gallery">
-    <div class="section-heading">
-      <span class="tag">Our College Community</span>
-      <h2>Graduation &amp; Ceremonies</h2>
-      <p>Celebrating student achievement, skills development and memorable moments at our college.</p>
-    </div>
-    <div class="gallery-grid">
-      <img
-        src="https://i.ibb.co/Q37VqRnt/FB-IMG-17910388378768951.jpg"
-        alt="Cheptarit college ceremony"
-        loading="lazy">
-      <img
-        src="https://i.ibb.co/rRT0M3mf/FB-IMG-17910388326692727.jpg"
-        alt="Cheptarit college graduation"
-        loading="lazy">
-      <img
-        src="https://i.ibb.co/LKsLrcc/FB-IMG-17898481683500763.jpg"
-        alt="College sports and games"
-        loading="lazy">
-      <img
-        src="https://i.ibb.co/7tpgb7Zh/FB-IMG-17898481565676636.jpg"
-        alt="College sports and student activities"
-        loading="lazy">
-    </div>
-  </section>
-
-  <section class="section" id="contact">
-    <div class="section-heading">
-      <span class="tag">Get in Touch</span>
-      <h2>Contact Cheptarit VTC</h2>
-      <p>Contact the college for course enquiries, admission information, fee details and other assistance.</p>
-    </div>
-    <div class="info-grid">
-      <article class="info-card">
-        <h3>Visit Us</h3>
-        <p>Eldoret–Kapsabet Road, Mosoriot, Nandi County, Kenya.</p>
-      </article>
-      <article class="info-card">
-        <h3>Call Us</h3>
-        <p>0718008580</p>
-        <a class="btn btn-green" href="tel:0718008580">Call Now</a>
-      </article>
-      <article class="info-card">
-        <h3>Email Us</h3>
-        <p>cheptaritpoly65@yahoo.com</p>
-        <a class="btn btn-gold" href="mailto:cheptaritpoly65@yahoo.com">Send Email</a>
-      </article>
-    </div>
-  </section>
+<section class="page" id="page-contact">
+ <div class="wrap">
+  <div class="heading"><small>Get in Touch</small><h2>Contact Us</h2><p>Reach out for course information, admissions, fees, boarding, and sponsorship enquiries.</p></div>
+  <div class="grid">
+   <article class="card"><div class="card-body"><h3>Visit the College</h3><p>Eldoret–Kapsabet Road, Mosoriot, Nandi County, Kenya.</p></div></article>
+   <article class="card"><div class="card-body"><h3>Call Us</h3><p>0113 981097</p><a class="btn green" href="tel:0113981097">Call College</a></div></article>
+   <article class="card"><div class="card-body"><h3>Email Us</h3><p>cheptaritpoly65@yahoo.com</p><a class="btn gold" href="mailto:cheptaritpoly65@yahoo.com">Send Email</a></div></article>
+  </div>
+ </div>
+</section>
 </main>
 
 <footer>
-  <div class="footer-title">Cheptarit Vocational Training Center</div>
-  <p>Skills for Life • Practical Training • Brighter Futures</p>
-  <p>TVETA Registration: TVETA/PUBLIC/VTC/0157/2016</p>
-  <p>
-    <a href="#home">Home</a> ·
-    <a href="#courses">Courses</a> ·
-    <a href="#admissions">Admissions</a> ·
-    <a href="#contact">Contact</a>
-  </p>
-  <hr style="border:0;border-top:1px solid #ffffff30;max-width:700px;margin:22px auto;">
-  <p>© <span id="copyrightYear">2026</span> Cheptarit Vocational Training Center. All Rights Reserved.</p>
-  <p>Website by <strong style="color:#fcd34d;">Darius Kipchoge</strong></p>
-  <p>Contact: <a href="tel:+254701234990">+254701234990</a></p>
+ <div class="footer-title">Cheptarit Vocational Training Center</div>
+ <p>Skills for Life • Empowerment • Self-Employment • Careers</p>
+
+ <div class="wrap" style="padding-top:20px;padding-bottom:20px">
+  <div class="slideshow" id="footerSlideshow">
+   <div class="gallery-slide active">
+    <img src="https://i.ibb.co/Q37VqRnt/FB-IMG-17910388378768951.jpg" alt="College graduation and ceremony" loading="lazy">
+    <p class="gallery-caption">Celebrating student achievements</p>
+   </div>
+   <div class="gallery-slide">
+    <img src="https://i.ibb.co/rRT0M3mf/FB-IMG-17910388326692727.jpg" alt="College graduation event" loading="lazy">
+    <p class="gallery-caption">Graduation and college life</p>
+   </div>
+   <div class="gallery-slide">
+    <img src="https://i.ibb.co/LKsLrcc/FB-IMG-17898481683500763.jpg" alt="College games and activities" loading="lazy">
+    <p class="gallery-caption">Student activities and community</p>
+   </div>
+   <div class="gallery-slide">
+    <img src="https://i.ibb.co/7tpgb7Zh/FB-IMG-17898481565676636.jpg" alt="College sports and student activities" loading="lazy">
+    <p class="gallery-caption">Learning beyond the classroom</p>
+   </div>
+  </div>
+ </div>
+
+ <p>TVETA Registration: TVETA/PUBLIC/VTC/0157/2016</p>
+ <p><a href="javascript:void(0)" onclick="showPage('home')">Home</a> · <a href="javascript:void(0)" onclick="showPage('courses')">Courses</a> · <a href="javascript:void(0)" onclick="showPage('admissions')">Admissions</a> · <a href="javascript:void(0)" onclick="showPage('fees')">Fees</a></p>
+ <hr style="border:0;border-top:1px solid #ffffff30;max-width:700px;margin:20px auto">
+ <p>© <span id="copyrightYear">2026</span> Cheptarit Vocational Training Center. All Rights Reserved.</p>
+ <p>Website by <strong style="color:#fcd34d">Darius Kipchoge</strong></p>
+ <p>Contact: <a href="tel:+254701234990">+254701234990</a></p>
 </footer>
 
 <script>
-function toggleSidebar(forceState) {
-  const sidebar = document.getElementById("sidebar");
-  const overlay = document.getElementById("sidebarOverlay");
-  const shouldOpen = typeof forceState === "boolean"
-    ? forceState
-    : !sidebar.classList.contains("open");
+const courses = [
+ {
+  id:"welding", name:"Welding & Fabrication", icon:"🔥",
+  image:"https://i.ibb.co/DHHYhRxK/Screenshot-2026-10-09-17-03-32-78.jpg",
+  about:"Learn metal joining, fabrication techniques, workshop tools and safe working practices. The skills are relevant to metal workshops and fabrication work.",
+  requirements:["Goggles — welding","Two engineering files, rough and smooth — welding","Tri-square — welding","Tape measure"]
+ },
+ {
+  id:"food", name:"Food & Beverage", icon:"🍽️",
+  image:"https://i.ibb.co/W4NYZWL3/Screenshot-2026-10-09-17-03-45-59.jpg",
+  about:"Explore food preparation, kitchen organization, hygiene, table setting and hospitality service.",
+  requirements:["Chef jacket, white","Apron, white","Black windbreaker","Black skirt — girls","Black pair of trousers — boys","Chef hat","Checked black pair of trousers — boys","Black skirts — girls","Chef knife","Kitchen cloth, towel, tea towel, dishcloth","Two buckets with lids, twenty liters","White long sleeve shirt or blouse","One glass cloth","Waiter's cloth","Bow tie","Slip cloth, damask red","Linen, red","Scarf, red neck"]
+ },
+ {
+  id:"electrical", name:"Electrical Installation", icon:"⚡",
+  image:"",
+  about:"Introduction to electrical wiring, installation tools, electrical systems and safe workshop practices.",
+  requirements:["Two screwdrivers, flat and star — electrical installation","Phase tester — electrical installation","Tape measure"]
+ },
+ {
+  id:"motor", name:"Motor Vehicle Mechanics", icon:"🚗",
+  image:"",
+  about:"Explore vehicle components, mechanical systems, maintenance, fault identification and workshop practice.",
+  requirements:["Pliers — motor vehicle mechanics"]
+ },
+ {
+  id:"masonry", name:"Masonry", icon:"🧱",
+  image:"https://i.ibb.co/QFTwMsY0/FB-IMG-17898480247074386.jpg",
+  about:"Learn brickwork, blockwork, concrete work, measuring and construction practices. The earlier course information supplied a minimum entry grade of D minus in KCSE or KCPE; confirm the current entry requirements with the college.",
+  requirements:["Jua kali safety boots","Tape measure","Trowel and plumb bob — masonry"]
+ },
+ {
+  id:"hair", name:"Hairdressing & Beauty Therapy", icon:"💇",
+  image:"https://i.ibb.co/cSy4Pd95/images.jpg",
+  about:"Learn hair care, styling, salon practice, beauty treatments and related practical skills.",
+  requirements:["Towels — small, medium, big (two)","Assorted combs (three)","Apron","Pins, styling pins","Pedicure and manicure set","Plastic chair, white","One hair dummy","Clips","Makeup kit","Nail polish, assorted","Top coat and base coat"]
+ },
+ {
+  id:"carpentry", name:"Carpentry & Joinery", icon:"🪚",
+  image:"",
+  about:"Learn woodworking, measuring, cutting, assembling and finishing wooden items.",
+  requirements:["Tri-square, six inch — carpentry and joinery","Jua kali safety boots","Tape measure"]
+ },
+ {
+  id:"plumbing", name:"Plumbing", icon:"🚰",
+  image:"https://i.ibb.co/cSJZ4337/images-2.jpg",
+  about:"Learn about pipes, fittings, water supply, drainage and safe plumbing tool use.",
+  requirements:["Pipe wrench, small — plumbing","Hacksaw — plumbing","Tape measure"]
+ },
+ {
+  id:"fashion", name:"Fashion & Design", icon:"🧵",
+  image:"https://i.ibb.co/ZpjdJkKF/FB-IMG-17898480060796655.jpg",
+  about:"Explore garment construction, taking measurements, sewing, pattern work and clothing design.",
+  requirements:["A pair of scissors, number nine","Tape measure","One dozen needles, round, number fourteen","Hand needle","Bobbin and bobbin case","Dressmaking pins"]
+ },
+ {
+  id:"computer", name:"Computer & IT", icon:"💻",
+  image:"https://i.ibb.co/fYTW90GG/FB-IMG-17898479198166045.jpg",
+  about:"Introduction to digital literacy, computer applications, file management and essential information technology skills.",
+  requirements:[]
+ },
+ {
+  id:"metal", name:"Metal Works", icon:"🔩",
+  image:"https://i.ibb.co/v6g1Cb3b/pallisa-dlg-young-woman-welder.jpg",
+  about:"Explore metalworking, shaping, fabrication tools and safe workshop practices.",
+  requirements:["Goggles — welding","Two engineering files, rough and smooth — welding","Tri-square — welding","Tape measure"]
+ }
+];
 
-  sidebar.classList.toggle("open", shouldOpen);
-  overlay.classList.toggle("show", shouldOpen);
-  document.body.style.overflow = shouldOpen ? "hidden" : "";
+function escapeHTML(value){
+ return String(value).replace(/[&<>"']/g, character => ({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[character]));
 }
 
-function openCourseDetail(course) {
-  const panels = document.querySelectorAll(".detail-panel");
-  panels.forEach(panel => panel.classList.remove("active"));
-
-  const selectedPanel = document.getElementById("detail-" + course);
-  if (!selectedPanel) return;
-
-  selectedPanel.classList.add("active");
-  selectedPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+function renderCourseCards(){
+ const grid=document.getElementById("courseGrid");
+ grid.innerHTML=courses.map(course=>{
+  const image=course.image
+   ? `<img class="photo" src="${escapeHTML(course.image)}" alt="${escapeHTML(course.name)}" loading="lazy">`
+   : `<div class="placeholder" role="img" aria-label="${escapeHTML(course.name)}">${course.icon}</div>`;
+  return `<article class="course-card">${image}<div class="card-body"><h3>${escapeHTML(course.name)}</h3><p>Duration: 1 year</p><button class="btn green" style="width:100%" onclick="openCourse('${course.id}')">View Course &amp; Requirements</button></div></article>`;
+ }).join("");
 }
 
-function closeCourseDetails() {
-  document.querySelectorAll(".detail-panel").forEach(panel => {
-    panel.classList.remove("active");
-  });
+function openCourse(id){
+ const course=courses.find(item=>item.id===id);
+ if(!course)return;
+ const image=course.image
+  ? `<img class="course-detail-photo" src="${escapeHTML(course.image)}" alt="${escapeHTML(course.name)}">`
+  : `<div class="placeholder" style="border-radius:14px">${course.icon}</div>`;
+ const requirementList=course.requirements.length
+  ? `<ul>${course.requirements.map(item=>`<li>${escapeHTML(item)}</li>`).join("")}</ul>`
+  : `<p>No course-specific equipment list was supplied for this course. Please confirm the required items with the college.</p>`;
+
+ document.getElementById("courseDetailContent").innerHTML=`
+  <div class="panel">
+   <h3>${escapeHTML(course.name)}</h3>
+   ${image}
+   <h4>About the Course</h4>
+   <p>${escapeHTML(course.about)}</p>
+   <h4>Course Duration</h4>
+   <p>1 year, as specified for this website.</p>
+   <h4>Examinations</h4>
+   <p>Course assessment may include theory, practicals, and Continuous Assessment Tests (CATs). External examinations listed for the college include NITA (National Industrial Training Authority) and NEC, described in the supplied information as Kenya National Examination Council examinations. Confirm the applicable examination body and level with the college.</p>
+   <h4>Admission Documents</h4>
+   <p>KCSE or KCPE certificate, or results slip. Also review the Admissions page for the other documents required on reporting day.</p>
+   <h4>Course-Specific Equipment Requirements</h4>
+   ${requirementList}
+   <div class="actions" style="justify-content:flex-start">
+    <button class="btn gold" onclick="showPage('apply');document.getElementById('course').value=${JSON.stringify(course.name)}">Apply for This Course</button>
+    <button class="btn green" onclick="showPage('admissions')">Full Admission Requirements</button>
+   </div>
+  </div>`;
+ showPage("course-detail");
 }
 
-document.addEventListener("keydown", function(event) {
-  if (event.key === "Escape") {
-    toggleSidebar(false);
-    closeCourseDetails();
-  }
+function showPage(pageName){
+ const target=document.getElementById("page-"+pageName);
+ if(!target)return;
+ document.querySelectorAll(".page").forEach(page=>page.classList.remove("active"));
+ target.classList.add("active");
+ document.querySelectorAll("#sideNav button").forEach(button=>{
+  button.classList.toggle("active",button.dataset.page===pageName);
+ });
+ toggleMenu(false);
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function toggleMenu(forceOpen){
+ const sidebar=document.getElementById("sidebar");
+ const overlay=document.getElementById("overlay");
+ const shouldOpen=typeof forceOpen==="boolean"?forceOpen:!sidebar.classList.contains("open");
+ sidebar.classList.toggle("open",shouldOpen);
+ overlay.classList.toggle("show",shouldOpen);
+ document.body.style.overflow=shouldOpen?"hidden":"";
+}
+
+let heroIndex=0;
+let galleryIndex=0;
+
+function setHeroSlide(index){
+ const slides=document.querySelectorAll(".hero-slide");
+ const dots=document.querySelectorAll(".dot");
+ if(!slides.length)return;
+ heroIndex=(index+slides.length)%slides.length;
+ slides.forEach((slide,i)=>slide.classList.toggle("active",i===heroIndex));
+ dots.forEach((dot,i)=>dot.classList.toggle("active",i===heroIndex));
+}
+
+function nextHeroSlide(){
+ setHeroSlide(heroIndex+1);
+}
+
+function nextGallerySlide(){
+ const slides=document.querySelectorAll(".gallery-slide");
+ if(!slides.length)return;
+ slides[galleryIndex].classList.remove("active");
+ galleryIndex=(galleryIndex+1)%slides.length;
+ slides[galleryIndex].classList.add("active");
+}
+
+document.addEventListener("keydown",event=>{
+ if(event.key==="Escape")toggleMenu(false);
 });
 
-document.getElementById("copyrightYear").textContent = new Date().getFullYear();
+document.getElementById("copyrightYear").textContent=new Date().getFullYear();
+renderCourseCards();
+setInterval(nextHeroSlide,3000);
+setInterval(nextGallerySlide,4000);
 </script>
-
 </body>
-  </html>
-  
+</html>
