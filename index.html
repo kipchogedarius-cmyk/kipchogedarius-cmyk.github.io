@@ -11,19 +11,22 @@
 :root{--green:#166534;--dark:#064e3b;--gold:#f59e0b;--cream:#fefce8}
 *{box-sizing:border-box;scroll-behavior:smooth}
 body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--cream);color:#1f2937}
-button,a{ -webkit-tap-highlight-color:transparent}
+button,a{-webkit-tap-highlight-color:transparent}
 a{text-decoration:none}
 button{cursor:pointer}
 .header{position:sticky;top:0;z-index:500;background:var(--green);color:#fff;box-shadow:0 4px 16px #0002}
 .header-inner{max-width:1200px;margin:auto;padding:12px 16px;display:flex;align-items:center;gap:12px}
 .logo{width:46px;height:46px;flex-shrink:0;border-radius:14px;background:var(--gold);color:var(--dark);display:grid;place-items:center;font-size:20px;font-weight:900}
-.brand{flex:1;min-width:0}.brand h1{font-size:clamp(15px,2.5vw,23px);margin:0;font-weight:900}.brand p{margin:4px 0 0;font-size:11px;color:#dcfce7}
+.brand{flex:1;min-width:0}
+.brand h1{font-size:clamp(15px,2.5vw,23px);margin:0;font-weight:900}
+.brand p{margin:4px 0 0;font-size:11px;color:#dcfce7}
 .menu-button{border:0;background:var(--gold);color:var(--dark);padding:11px 14px;border-radius:11px;font-size:21px}
 .overlay{position:fixed;inset:0;background:#0008;z-index:800;opacity:0;visibility:hidden;transition:.25s}
 .overlay.show{opacity:1;visibility:visible}
 .sidebar{position:fixed;top:0;bottom:0;left:0;z-index:900;width:min(315px,88vw);padding:22px 17px;background:var(--dark);color:white;overflow-y:auto;transform:translateX(-105%);transition:transform .3s}
 .sidebar.open{transform:translateX(0)}
-.side-top{display:flex;justify-content:space-between;align-items:center}.side-top h2{color:var(--gold);font-weight:900;font-size:21px}
+.side-top{display:flex;justify-content:space-between;align-items:center}
+.side-top h2{color:var(--gold);font-weight:900;font-size:21px}
 .close-menu{font-size:30px;background:none;border:0;color:white}
 .side-nav{display:grid;gap:8px;margin-top:22px}
 .side-nav button{width:100%;text-align:left;padding:13px 14px;border:1px solid #ffffff15;border-radius:11px;background:#ffffff0d;color:white;font-weight:700}
@@ -46,7 +49,9 @@ main{min-height:65vh}
 .dot.active{background:var(--gold);width:25px}
 .btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:11px;padding:13px 18px;font-weight:800;transition:.2s}
 .btn:hover{transform:translateY(-2px)}
-.gold{background:var(--gold);color:var(--dark)}.green{background:var(--green);color:white}.white{background:white;color:var(--green)}
+.gold{background:var(--gold);color:var(--dark)}
+.green{background:var(--green);color:white}
+.white{background:white;color:var(--green)}
 .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
 .heading{text-align:center;margin-bottom:26px}
 .heading small{color:#b45309;font-weight:900;letter-spacing:2px;text-transform:uppercase}
@@ -54,7 +59,8 @@ main{min-height:65vh}
 .heading p{color:#64748b;line-height:1.75;max-width:760px;margin:auto}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
 .card{background:white;border:1px solid #e5e7eb;border-radius:17px;overflow:hidden;box-shadow:0 7px 20px #064e3b0b}
-.card-body{padding:20px}.card h3{font-size:19px;font-weight:900;color:var(--green);margin:0 0 9px}
+.card-body{padding:20px}
+.card h3{font-size:19px;font-weight:900;color:var(--green);margin:0 0 9px}
 .card p{line-height:1.7;color:#64748b;margin:0 0 12px}
 .photo{display:block;width:100%;height:190px;object-fit:cover;background:#dcfce7}
 .course-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(225px,1fr));gap:18px}
@@ -84,6 +90,7 @@ th,td{border:1px solid #e5e7eb;padding:10px;text-align:left;white-space:nowrap}
 th{background:var(--green);color:white}
 .total-row{font-weight:900;background:#fef3c7}
 .fee-viewer{width:100%;height:650px;border:1px solid #d1d5db;border-radius:12px;background:white}
+.external-viewer{width:100%;height:650px;border:1px solid #d1d5db;border-radius:12px;background:white}
 .slideshow{position:relative}
 .gallery-slide{display:none}
 .gallery-slide.active{display:block;animation:fadein .4s}
@@ -94,13 +101,21 @@ footer p{line-height:1.8;color:#d1fae5;margin:7px 0}
 footer a{color:#fcd34d}
 .footer-title{font-size:21px;font-weight:900;color:white}
 @media(max-width:600px){
- .header-inner{padding:10px}.logo{width:40px;height:40px}.brand p{font-size:10px}
- .wrap{padding:32px 13px}.hero{min-height:390px;padding:35px 15px}
- .form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}
- .photo{height:155px}.course-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
- .course-card .card-body{padding:12px}.course-card h3{font-size:15px;min-height:0}
- .course-card p{font-size:12px}.course-card .btn{font-size:12px;padding:11px 6px}
- .gallery-slide img{height:235px}.fee-viewer{height:520px}
+ .header-inner{padding:10px}
+ .logo{width:40px;height:40px}
+ .brand p{font-size:10px}
+ .wrap{padding:32px 13px}
+ .hero{min-height:390px;padding:35px 15px}
+ .form-grid{grid-template-columns:1fr}
+ .field.full{grid-column:auto}
+ .photo{height:155px}
+ .course-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+ .course-card .card-body{padding:12px}
+ .course-card h3{font-size:15px;min-height:0}
+ .course-card p{font-size:12px}
+ .course-card .btn{font-size:12px;padding:11px 6px}
+ .gallery-slide img{height:235px}
+ .fee-viewer,.external-viewer{height:520px}
 }
 @media(max-width:350px){.course-grid{grid-template-columns:1fr}}
 </style>
@@ -108,22 +123,22 @@ footer a{color:#fcd34d}
 <body>
 <div class="overlay" id="overlay" onclick="toggleMenu(false)"></div>
 <aside class="sidebar" id="sidebar">
-  <div class="side-top"><h2>CVTC MENU</h2><button class="close-menu" onclick="toggleMenu(false)" aria-label="Close menu">×</button></div>
-  <nav class="side-nav" id="sideNav">
-    <button data-page="home" onclick="showPage('home')">⌂ Home</button>
-    <button data-page="admissions" onclick="showPage('admissions')">▣ Admissions</button>
-    <button data-page="courses" onclick="showPage('courses')">▤ Courses</button>
-    <button data-page="exams" onclick="showPage('exams')">✓ Examinations</button>
-    <button data-page="about" onclick="showPage('about')">ⓘ About Us</button>
-    <button data-page="sponsorship" onclick="showPage('sponsorship')">♡ Sponsorship</button>
-    <button data-page="boarding" onclick="showPage('boarding')">⌂ Boarding & Accommodation</button>
-    <button data-page="fees" onclick="showPage('fees')">▤ Fees / Fee Structure</button>
-    <button data-page="apply" onclick="showPage('apply')">✎ Apply Now</button>
-    <button data-page="management" onclick="showPage('management')">♙ Management</button>
-    <button data-page="scholarships" onclick="showPage('scholarships')">★ Scholarship Program</button>
-    <button data-page="contact" onclick="showPage('contact')">☎ Contact</button>
-  </nav>
-  <div class="side-note">Cheptarit Vocational Training Center<br>TVETA Registration: TVETA/PUBLIC/VTC/0157/2016<br>Phone: 0718008580</div>
+ <div class="side-top"><h2>CVTC MENU</h2><button class="close-menu" onclick="toggleMenu(false)" aria-label="Close menu">×</button></div>
+ <nav class="side-nav" id="sideNav">
+  <button data-page="home" onclick="showPage('home')">⌂ Home</button>
+  <button data-page="admissions" onclick="showPage('admissions')">▣ Admissions</button>
+  <button data-page="courses" onclick="showPage('courses')">▤ Courses</button>
+  <button data-page="exams" onclick="showPage('exams')">✓ Examinations</button>
+  <button data-page="about" onclick="showPage('about')">ⓘ About Us</button>
+  <button data-page="sponsorship" onclick="showPage('sponsorship')">♡ Sponsorship</button>
+  <button data-page="boarding" onclick="showPage('boarding')">⌂ Boarding & Accommodation</button>
+  <button data-page="fees" onclick="showPage('fees')">▤ Fees / Fee Structure</button>
+  <button data-page="apply" onclick="showPage('apply')">✎ Apply Now</button>
+  <button data-page="management" onclick="showPage('management')">♙ Management</button>
+  <button data-page="scholarships" onclick="showPage('scholarships')">★ Scholarship Program</button>
+  <button data-page="contact" onclick="showPage('contact')">☎ Contact</button>
+ </nav>
+ <div class="side-note">Cheptarit Vocational Training Center<br>TVETA Registration: TVETA/PUBLIC/VTC/0157/2016<br>Phone: 0718008580</div>
 </aside>
 
 <header class="header">
@@ -258,10 +273,10 @@ footer a{color:#fcd34d}
 
 <section class="page" id="page-boarding">
  <div class="wrap">
-  <div class="heading"><small>Student Accommodation</small><h2>Boarding & Accommodation</h2><p>The college offers accommodation for both boys and girls. Confirm hostel availability and current arrangements with the administration.</p></div>
+  <div class="heading"><small>Student Accommodation</small><h2>Boarding & Accommodation</h2><p>The college offers accommodation for both male and female students. Confirm hostel availability and current arrangements with the administration.</p></div>
   <div class="grid">
-   <article class="card"><div class="card-body"><h3>Boarding for Boys</h3><p>Contact the college to confirm available places, accommodation arrangements, and reporting details.</p></div></article>
-   <article class="card"><div class="card-body"><h3>Boarding for Girls</h3><p>Contact the college to confirm available places, accommodation arrangements, and reporting details.</p></div></article>
+   <article class="card"><div class="card-body"><h3>Boarding for Male Students</h3><p>Contact the college to confirm available places, accommodation arrangements, and reporting details.</p></div></article>
+   <article class="card"><div class="card-body"><h3>Boarding for Female Students</h3><p>Contact the college to confirm available places, accommodation arrangements, and reporting details.</p></div></article>
   </div>
   <div class="panel">
    <h3>Boarding Requirements Checklist</h3>
@@ -281,12 +296,24 @@ footer a{color:#fcd34d}
 
 <section class="page" id="page-scholarships">
  <div class="wrap">
-  <div class="heading"><small>Training Opportunities</small><h2>Scholarship Program</h2></div>
+  <div class="heading"><small>Training Opportunities</small><h2>Scholarship Program</h2><p>Explore the KCB Foundation's official vocational skills and enterprise development program.</p></div>
   <div class="panel">
-   <h3>KCB Tujiiajiri Program</h3>
-   <p>The KCB Tujiiajiri program is a vocational skills and enterprise development initiative. Students interested in sponsorship should contact the college to confirm current intakes, qualifying courses, selection criteria, and whether fees or other training costs are covered.</p>
+   <h3>KCB Tujiiajiri / 2Jiajiri Program</h3>
+   <p>The KCB Foundation's 2Jiajiri program is a vocational skills and enterprise development initiative. It supports vocational training and may offer business development services, mentorship, and other support to eligible participants through participating institutions.</p>
+   <p>Students interested in sponsorship should contact Cheptarit Vocational Training Center to confirm current intakes, qualifying courses, selection criteria, and whether fees or other training costs are covered.</p>
    <p>Students sponsored by KCB are listed as exempt from the KSh 5,000 examination registration fee in the examination information supplied for this website. Confirm that this applies to your current sponsorship arrangement.</p>
-   <p class="notice">No specific official program URL was supplied. Use the KCB Group website to find current program information: <a href="https://ke.kcbgroup.com/" target="_blank" rel="noopener" style="color:#166534;text-decoration:underline;font-weight:bold">KCB Group official website</a>.</p>
+
+   <h4>Official KCB Foundation Program</h4>
+   <p>Use the official KCB Foundation page below to learn more about the 2Jiajiri program.</p>
+   <div class="actions" style="justify-content:flex-start">
+    <a class="btn green" href="https://foundation.kcbgroup.com/programs/2jiajiri/?program=2jiajiri" target="_blank" rel="noopener noreferrer">Visit Official 2Jiajiri Website ↗</a>
+    <a class="btn gold" href="https://foundation.kcbgroup.com/faqs/" target="_blank" rel="noopener noreferrer">KCB Foundation FAQs ↗</a>
+   </div>
+
+   <h4>Explore the Program Here</h4>
+   <iframe class="external-viewer" src="https://foundation.kcbgroup.com/programs/2jiajiri/?program=2jiajiri" title="Official KCB Foundation 2Jiajiri program" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+   <p class="notice">Some websites prevent their pages from opening inside another website. If the viewer above is blank or displays an error, use the official 2Jiajiri link above to open the page directly.</p>
+   <p class="notice">Scholarship availability, eligibility, recruitment dates, and funding coverage can change. Please verify current details with KCB Foundation and the college before applying. The official program page does not guarantee that Cheptarit VTC has an open sponsored intake.</p>
    <button class="btn green" onclick="showPage('contact')">Ask the College</button>
   </div>
  </div>
@@ -304,7 +331,7 @@ footer a{color:#fcd34d}
 
 <section class="page" id="page-fees">
  <div class="wrap">
-  <div class="heading"><small>Plan Your Studies</small><h2>Fee Structure</h2><p>Boarding and day scholar fees as shown in the uploaded fee structure document.</p></div>
+  <div class="heading"><small>Plan Your Studies</small><h2>Fee Structure</h2><p>Boarding and day scholar fees as provided in the college fee structure. View the online fee document below.</p></div>
   <div class="panel">
    <h3>Boarding Section</h3>
    <div class="table-wrap"><table><thead><tr><th>Fee Item</th><th>First Term (KSh)</th><th>Second Term (KSh)</th><th>Third Term (KSh)</th><th>Total (KSh)</th></tr></thead><tbody>
@@ -321,6 +348,7 @@ footer a{color:#fcd34d}
     <tr class="total-row"><td>TOTAL</td><td>18,425</td><td>10,445</td><td>3,000</td><td>31,870</td></tr>
    </tbody></table></div>
   </div>
+
   <div class="panel">
    <h3>Day Scholar Section</h3>
    <div class="table-wrap"><table><thead><tr><th>Fee Item</th><th>First Term (KSh)</th><th>Second Term (KSh)</th><th>Third Term (KSh)</th><th>Total (KSh)</th></tr></thead><tbody>
@@ -337,6 +365,7 @@ footer a{color:#fcd34d}
     <tr class="total-row"><td>TOTAL</td><td>15,925</td><td>8,250</td><td>1,000</td><td>25,175</td></tr>
    </tbody></table></div>
   </div>
+
   <div class="panel">
    <h3>Payment Instructions</h3>
    <ol>
@@ -346,12 +375,13 @@ footer a{color:#fcd34d}
     <li>Students are expected to meet their own medical bills.</li>
    </ol>
    <div class="actions" style="justify-content:flex-start">
-    <a class="btn green" href="boarding_and_day_scholar_fee_structure.pdf" target="_blank" rel="noopener">View Fee Structure PDF</a>
-    <a class="btn gold" href="boarding_and_day_scholar_fee_structure.pdf" download>Download Fee Structure</a>
+    <a class="btn green" href="https://online.flippingbook.com/view/759404405/" target="_blank" rel="noopener noreferrer">View Fee Structure Online ↗</a>
+    <a class="btn gold" href="https://online.flippingbook.com/view/759404405/" target="_blank" rel="noopener noreferrer">Open Fee Structure</a>
    </div>
-   <p class="notice">PDF links work when the uploaded PDF is published in the same website directory as this HTML file. If your website host uses a different file path, update both links.</p>
-   <h4>PDF Preview</h4>
-   <iframe class="fee-viewer" src="boarding_and_day_scholar_fee_structure.pdf#toolbar=1" title="School fee structure PDF"></iframe>
+   <p class="notice">The fee document is hosted on FlippingBook. Use the buttons above to open it online. Download availability depends on the options provided by the document publisher.</p>
+   <h4>Online Fee Structure Preview</h4>
+   <iframe class="fee-viewer" src="https://online.flippingbook.com/view/759404405/" title="Cheptarit VTC fee structure online viewer" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+   <p class="notice">If the document does not appear inside this preview, use the View Fee Structure Online button to open it directly. Please confirm the current fee amounts with the college before payment.</p>
   </div>
  </div>
 </section>
@@ -424,7 +454,6 @@ footer a{color:#fcd34d}
 <footer>
  <div class="footer-title">Cheptarit Vocational Training Center</div>
  <p>Skills for Life • Empowerment • Self-Employment • Careers</p>
-
  <div class="wrap" style="padding-top:20px;padding-bottom:20px">
   <div class="slideshow" id="footerSlideshow">
    <div class="gallery-slide active">
@@ -445,7 +474,6 @@ footer a{color:#fcd34d}
    </div>
   </div>
  </div>
-
  <p>TVETA Registration: TVETA/PUBLIC/VTC/0157/2016</p>
  <p><a href="javascript:void(0)" onclick="showPage('home')">Home</a> · <a href="javascript:void(0)" onclick="showPage('courses')">Courses</a> · <a href="javascript:void(0)" onclick="showPage('admissions')">Admissions</a> · <a href="javascript:void(0)" onclick="showPage('fees')">Fees</a></p>
  <hr style="border:0;border-top:1px solid #ffffff30;max-width:700px;margin:20px auto">
@@ -470,13 +498,13 @@ const courses = [
  },
  {
   id:"electrical", name:"Electrical Installation", icon:"⚡",
-  image:"",
+  image:"https://i.ibb.co/mZxmsF9/IMG-20261006-173352.jpg",
   about:"Introduction to electrical wiring, installation tools, electrical systems and safe workshop practices.",
   requirements:["Two screwdrivers, flat and star — electrical installation","Phase tester — electrical installation","Tape measure"]
  },
  {
   id:"motor", name:"Motor Vehicle Mechanics", icon:"🚗",
-  image:"",
+  image:"https://i.ibb.co/9mcccq62/IMG-20261004-085710.jpg",
   about:"Explore vehicle components, mechanical systems, maintenance, fault identification and workshop practice.",
   requirements:["Pliers — motor vehicle mechanics"]
  },
@@ -494,7 +522,7 @@ const courses = [
  },
  {
   id:"carpentry", name:"Carpentry & Joinery", icon:"🪚",
-  image:"",
+  image:"https://i.ibb.co/v4hKrvTN/images-1.jpg",
   about:"Learn woodworking, measuring, cutting, assembling and finishing wooden items.",
   requirements:["Tri-square, six inch — carpentry and joinery","Jua kali safety boots","Tape measure"]
  },
@@ -610,7 +638,7 @@ function nextHeroSlide(){
 }
 
 function nextGallerySlide(){
- const slides=document.querySelectorAll(".gallery-slide");
+ const slides=document.querySelectorAll("#footerSlideshow .gallery-slide");
  if(!slides.length)return;
  slides[galleryIndex].classList.remove("active");
  galleryIndex=(galleryIndex+1)%slides.length;
